@@ -8,7 +8,8 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#include "lib_date.c"
+#include "lib_defs.h"
+#include "lib_date.h"
 
 
 MODULE = Date::DateCalc		PACKAGE = Date::DateCalc
@@ -265,11 +266,23 @@ month_name_tab(mm)
 
 
 void
+days_in_month(year,mm)
+    N_int	year
+    N_int	mm
+    PPCODE:
+    {
+        mm %= 13;
+        EXTEND(sp,1);
+        PUSHs(sv_2mortal(newSVnv((int) month_length[leap(year)][mm])));
+    }
+
+
+void
 Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("1.2b",0)));
+        PUSHs(sv_2mortal(newSVpv("1.3",0)));
     }
 
 

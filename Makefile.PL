@@ -3,7 +3,9 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'	=> 'Date::DateCalc',
-    'VERSION'	=> '1.2b',
+    'VERSION'	=> '1.3',
+    'DISTNAME'	=> 'DateCalc',
+    'OBJECT'	=> '$(O_FILES)',
     'LIBS'	=> [''],   # e.g., '-lm' 
     'DEFINE'	=> '',     # e.g., '-DHAVE_SOMETHING' 
     'INC'	=> '',     # e.g., '-I/usr/include/other' 

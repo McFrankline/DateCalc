@@ -3,8 +3,8 @@
 # typemap for Perl 5 interface to Date::DateCalc package
 #
 # written by Steffen Beyer (sb@sdm.de)
-# last modified 25th November 1995
-# version 1.2b
+# last modified 7th December 1995
+# version 1.3
 #
 #################################### Date::DateCalc SECTION
 #

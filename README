@@ -1,6 +1,6 @@
-========================================
-  Module "Date::DateCalc" Version 1.2b
-========================================
+=======================================
+  Module "Date::DateCalc" Version 1.3
+=======================================
 
 --------------------------------------------------------------------------------
  Extension package for Perl 5.001m (should work with Perl 5.000 and up as well)
@@ -65,7 +65,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-1.2b").
+    package ("DateCalc-1.3").
 
  2) Type "perl5 Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
@@ -95,10 +95,10 @@ tree!!
 
     The output should look somewhat like this:
 
-    PERL_DL_NONLAZY=1 /opt/bin/perl5 -I./blib/sun4-sunos -I./blib
-    -I/opt/lib/perl5.001m/sun4-sunos -I/opt/lib/perl5.001m -e 'use
-    Test::Harness qw(&runtests $verbose); $verbose=0; runtests @ARGV;'
-    t/*.t
+    /opt/bin/perl5 -I./blib -I./blib -I/opt/lib/perl5.001m/hpux
+    -I/opt/lib/perl5.001m -e 'use Test::Harness qw(&runtests $verbose);
+    $verbose=0; runtests @ARGV;' t/*.t
+    t/f000..............ok
     t/f001..............ok
     t/f002..............ok
     t/f003..............ok
@@ -119,7 +119,7 @@ tree!!
     t/f018..............ok
     t/f019..............ok
     All tests successful.
-    Files=19,  Tests=139,  7 secs ( 3.13 cusr  2.00 csys =  5.13 cpu)
+    Files=20,  Tests=165,  4 secs ( 2.37 cusr  1.06 csys =  3.43 cpu)
 
  5) Currently there are two versions of the man page "Date::DateCalc.3":
     "Date::DateCalc.3.deutsch" and "Date::DateCalc.3.english". Rename the
@@ -190,6 +190,10 @@ succeeded in fixing the system "typedef"s problem, I am re-releasing it
 (with only marginal corrections (like the one above, for example) and some
 small refinements of the documentation) as version 1.2b ("b" for "beta").
 
+Version 1.3 now compiles the C library "lib_date.c" separately; it is no
+longer '#include'd in the XS file. Moreover, the function "days_in_month"
+has been added.
+
 
 Thanks:
 -------
@@ -201,12 +205,14 @@ you for doing such a tremendous (and very time-consuming) job!!
 Also many thanks to David Jenkins for reviewing this README file and the
 english man page.
 
+Thanks to Jarkko Hietaniemi for suggesting the "days_in_month" function.
+
 
 Final note:
 -----------
 
 Please report any comments, problems, suggestions, findings, complaints,
-questions, enlightenments ;-) and so on (not necessarily in this order) to:
+questions, insights, compliments or donations ;-) and so on to:
 
 sb@sdm.de (Steffen Beyer)
 

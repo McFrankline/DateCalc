@@ -43,6 +43,12 @@ boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd);
 /* RESOURCES                          */
 /**************************************/
 
+N_int   month_length[2][13] =
+    {
+        { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+        { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+    };
+
 N_char  day_short[7][4] =
     {
         "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
@@ -75,12 +81,6 @@ blockdef(rsrc_date_003,64) = "<no date>";   /* verbose form */
 /**************************************/
 /* IMPLEMENTATION                     */
 /**************************************/
-
-static  N_int   month_length[2][13] =
-    {
-        { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-        { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-    };
 
 static  N_int   days_in_months[2][14] =
     {
@@ -489,7 +489,7 @@ boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
 /**************************************/
 /* CREATED      01.11.93              */
 /**************************************/
-/* MODIFIED     21.11.95              */
+/* MODIFIED     07.12.95              */
 /**************************************/
 /* COPYRIGHT    Steffen Beyer         */
 /**************************************/

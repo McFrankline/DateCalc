@@ -9,6 +9,7 @@ demo
 lib_date.c
 lib_date.h
 lib_defs.h
+t/f000.t
 t/f001.t
 t/f002.t
 t/f003.t

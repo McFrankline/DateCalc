@@ -385,6 +385,70 @@ Dabei gilt:
                11       =       November
                12       =       December
 
+=====================================
+  $days = days_in_month($year,$mm);
+=====================================
+
+Diese Funktion greift auf die interne Tabelle der verschiedenen Monats-
+laengen zu und liefert zum gegebenen Jahr "$year" und Monat "$mm" die
+Laenge dieses Monats in Tagen zurueck.
+
+Die Angabe des Jahres ist erforderlich, da die Laenge des Februars in
+Schaltjahren 29 statt 28 Tage betraegt.
+
+Diese Funktion ist z.B. dann nuetzlich, wenn man den letzten Tag des Monats
+oder den letzten Werktag des Monats (Zahltag!) berechnen will.
+
+Letzter Werktag des Monats (jedoch ohne Beruecksichtigung von Feiertagen):
+
+  $dd = days_in_month($year,$mm);
+  $dw = day_of_week($year,$mm,$dd);
+  if ($dw > 4)
+  {
+      ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,4-$dw);
+  }
+
+Letzter Werktag des Monats (mit Beruecksichtigung von Feiertagen):
+
+(Seien alle Feiertage im Feld $Feiertag[$year][$mm][$dd] = 1; gespeichert)
+
+  $dd = days_in_month($year,$mm);
+  while (1)
+  {
+      while ($Feiertag[$year][$mm][$dd])
+      {
+          ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,-1);
+      }
+      $dw = day_of_week($year,$mm,$dd);
+      if ($dw > 4)
+      {
+          ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,4-$dw);
+      }
+      else { last; }
+  }
+
+Der Wert "$mm" wird intern (zum Schutz vor Zugriffen ausserhalb der Tabelle)
+Modulo 13 (!) genommen.
+
+Dabei gilt:
+
+                                 normales           Schalt-
+                Monat              Jahr              Jahr
+
+                  0                  0                 0
+                  1                 31                31
+                  2                 28                29
+                  3                 31                31
+                  4                 30                30
+                  5                 31                31
+                  6                 30                30
+                  7                 31                31
+                  8                 31                31
+                  9                 30                30
+                 10                 31                31
+                 11                 30                30
+                 12                 31                31
+
 =========================================
   $version = Date::DateCalc::Version();
 =========================================
@@ -406,7 +470,7 @@ referenziert werden (Date::DateCalc::...).
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( leap encode decode valid_date date_string check_date calc_days dates_difference day_of_week calc_new_date date_to_short date_to_string week_number first_in_week weeks_in_year decode_date day_short_tab day_name_tab month_short_tab month_name_tab );
+use Date::DateCalc qw( leap encode decode valid_date date_string check_date calc_days dates_difference day_of_week calc_new_date date_to_short date_to_string week_number first_in_week weeks_in_year decode_date day_short_tab day_name_tab month_short_tab month_name_tab days_in_month );
 
 print "\n";
 
@@ -463,7 +527,7 @@ __END__
 ////////////////////////////////////////
 // CREATED      09.11.95              //
 ////////////////////////////////////////
-// MODIFIED     18.11.95              //
+// MODIFIED     10.12.95              //
 ////////////////////////////////////////
 // COPYRIGHT    Steffen Beyer         //
 ////////////////////////////////////////

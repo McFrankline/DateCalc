@@ -9,5 +9,5 @@ WriteMakefile(
     'LIBS'		=> [''],   # e.g., '-lm' 
     'DEFINE'		=> '',     # e.g., '-DHAVE_SOMETHING' 
     'INC'		=> '',     # e.g., '-I/opt/pkg/perl5.002/dist' 
-    'dist'		=> { COMPRESS=>"gzip", SUFFIX=>"gz" }
+    'dist'		=> { COMPRESS=>"gzip -9", SUFFIX=>"gz" }
 );

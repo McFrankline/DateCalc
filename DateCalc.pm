@@ -19,7 +19,7 @@ require DynaLoader;
 # "Version" is available but not exported!
 # Call with "Date::DateCalc::Version()"!
 
-$VERSION = '2.1';
+$VERSION = '2.2';
 
 bootstrap Date::DateCalc $VERSION;
 
@@ -58,8 +58,6 @@ C<use DateCalc qw(:all);>
 (which imports everything)
 
 =head1 DESCRIPTION
-
-=over 4
 
 =head2 ===========
 
@@ -488,7 +486,7 @@ If there is no match, zero is returned.
 This function is roughly equivalent to an associative array:
 
 	%day_tab = ( 'Mon' => 1, 'Tue' => 2, 'Wed' => 3, 'Thu' => 4,
-	'Fri' => 5, 'Sat' => 6, 'Sun' => 7);
+	             'Fri' => 5, 'Sat' => 6, 'Sun' => 7);
 
 	$weekday = $day_tab{$buffer};
 
@@ -532,8 +530,8 @@ If there is no match, zero is returned.
 This function is roughly equivalent to an associative array:
 
 	%month_tab = ( 'Jan' => 1, 'Feb' => 2, 'Mar' => 3, 'Apr' => 4,
-	'May' => 5, 'Jun' => 6, 'Jul' => 7, 'Aug' => 8,
-	'Sep' => 9, 'Oct' => 10, 'Nov' => 11, 'Dec' => 12);
+	               'May' => 5, 'Jun' => 6, 'Jul' => 7, 'Aug' => 8,
+	               'Sep' => 9, 'Oct' => 10, 'Nov' => 11, 'Dec' => 12);
 
 	$month = $month_tab{$buffer};
 
@@ -749,7 +747,7 @@ perl(1), perlsub(1), perlmod(1), perlxs(1), perlxstut(1), perlguts(1).
 
 =head1 VERSION
 
-This man page documents Date::DateCalc, version 2.1.
+This man page documents Date::DateCalc, version 2.2.
 
 =head1 AUTHOR
 

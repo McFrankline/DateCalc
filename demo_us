@@ -133,7 +133,7 @@ sub decode_date_us
                 {
                     $unique = 0;
                 }
-                $found = $months{$tt}; # relies on months' number being > 0
+                $found = $months{$tt}; # relies on month's number being > 0
             }
         }
         unless ($found && $unique)

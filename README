@@ -1,5 +1,5 @@
 =======================================
-  Module "Date::DateCalc" Version 2.1
+  Module "Date::DateCalc" Version 2.2
 =======================================
 
 ------------------------------------------------------------------------------
@@ -120,6 +120,23 @@ file DateCalc.pm in POD format, where it will automatically be found
 and installed in your "man" directory by "make install".
 
 
+Preliminary steps for use with Perl prior to version 5.002:
+-----------------------------------------------------------
+
+Edit the file "Makefile.PL" in this package and the change the line
+    'VERSION_FROM'	=> 'DateCalc.pm',
+to
+    'VERSION'		=> '2.2',
+
+Then edit the file "DateCalc.pm" and change the line
+    bootstrap Date::DateCalc $VERSION;
+to
+    bootstrap Date::DateCalc;
+
+Finally, edit the file "DateCalc.xs" and delete the line
+    PROTOTYPES: DISABLE
+
+
 How to install it:
 ------------------
 
@@ -127,7 +144,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-2.1").
+    package ("DateCalc-2.2").
 
  2) Type "perl Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
@@ -216,8 +233,9 @@ tree!!
     t/f022..............ok
     t/f023..............ok
     t/f024..............ok
+    t/f025..............ok
     All tests successful.
-    Files=25,  Tests=298,  6 secs ( 4.10 cusr  1.62 csys =  5.72 cpu)
+    Files=26,  Tests=299,  8 secs ( 4.05 cusr  2.02 csys =  6.07 cpu)
 
  5) At last, type "make install".
         
@@ -340,11 +358,25 @@ which include not only year, month and day, but also hour, minute,
 and second. They are extensions of the functions "dates_difference"
 and "calc_new_date" (which they also use).
 
-Version 2.1 fixes a minor bug in lib_date.c:
+Version 2.1 fixed a minor bug in lib_date.c:
 wrong:    if ((*ss <= 60) and (*mm <= 60) and (*hh <= 24) and
 right:    if ((*ss < 60) and (*mm < 60) and (*hh < 24) and
 among other minor adjustments in orthography and style, plus
 adaptations to conform with new Perl 5.002 module standards.
+
+Version 2.2 fixes a bug concerning arrays as parameters: enabling
+prototypes in DateCalc.xs caused
+
+    ($year,$mm,$dd) = first_in_week(week_number($year,$mm,$dd));
+
+to generate Perl compilation errors, because "week_number" passes
+an array to "first_in_week". To circumvent this, you had to pass
+arrays explicitly, element by element:
+
+    @w = week_number($year,$mm,$dd);
+    ($year,$mm,$dd) = first_in_week( $w[0], $w[1] );
+
+With version 2.2, this workaround is obsolete.
 
 
 Thanks:
@@ -379,6 +411,10 @@ the incorporation of time calculations into this module. (Sorry that I
 didn't include the handling of time zones, which can be taken care of
 more easily by adding/subtracting the appropriate time value in an extra,
 preliminary step!)
+
+Many thanks to Jonathan Lemon <jlemon@americantv.com> for reporting
+the bug (and how to fix it!) concerning arrays as parameters, fixed
+in version 2.2!
 
 
 Final note:

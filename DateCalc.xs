@@ -16,7 +16,7 @@
 MODULE = Date::DateCalc		PACKAGE = Date::DateCalc
 
 
-PROTOTYPES: ENABLE
+PROTOTYPES: DISABLE
 
 
 boolean
@@ -348,7 +348,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("2.1",0)));
+        PUSHs(sv_2mortal(newSVpv("2.2",0)));
     }
 
 

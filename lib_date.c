@@ -448,7 +448,7 @@ N_int weeks_in_year(N_int year)
 }
 /****************************************************************************/
 
-static boolean scan(byteptr s, int len, int i, boolean alpha)
+static boolean scan(byteptr s, Z_int len, Z_int i, boolean alpha)
 {
     if ((s != NULL) and (i >= 0) and (i < len))
         return( (isdigit(s[i]) != 0) XOR alpha );
@@ -456,7 +456,7 @@ static boolean scan(byteptr s, int len, int i, boolean alpha)
         return( false );
 }
 
-static boolean scanx(byteptr s, int len, int i, boolean delim)
+static boolean scanx(byteptr s, Z_int len, Z_int i, boolean delim)
 {
     if ((s != NULL) and (i >= 0) and (i < len))
         return( (isalnum(s[i]) != 0) XOR delim );
@@ -464,7 +464,7 @@ static boolean scanx(byteptr s, int len, int i, boolean delim)
         return( false );
 }
 
-static N_int getval(byteptr src, int len)
+static N_int getval(byteptr src, Z_int len)
 {
     blockdef(buf,5);
 
@@ -538,8 +538,8 @@ N_int decode_month(byteptr buffer, N_int len) /* 0 = unable to decode month */
 
 boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
 {
-    int i,j;
-    int buflen;
+    Z_int   i,j;
+    Z_int   buflen;
 
     *year = *mm = *dd = 0;
     buflen = strlen((char *)buffer);
@@ -649,7 +649,7 @@ boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
 /**************************************/
 /* CREATED      01.11.93              */
 /**************************************/
-/* MODIFIED     26.05.96              */
+/* MODIFIED     27.05.96              */
 /**************************************/
 /* COPYRIGHT    Steffen Beyer         */
 /**************************************/

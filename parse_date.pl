@@ -7,6 +7,13 @@ use Date::DateCalc qw( decode_month );
 
 # Usage (examples):
 #
+# use lib '/opt/lib/perl5.002/site_perl/Date';
+#
+# (or whatever the path to your perl library directory is)
+# (see items 'installsitelib' and 'sitelibexp' in config.sh)
+#
+# require "parse_date.pl";
+#
 # - Parse today's date:
 #
 # ($year,$month,$day) = parse_date(`date`);

@@ -83,14 +83,14 @@ blockdef(rsrc_date_003,64) = "<no date>"; /* verbose form */
 /* IMPLEMENTATION                     */
 /**************************************/
 
+#define     YEAR0       70              /* year of reference */
+#define     CENT0       1900            /* century of reference */
+
 static  N_int   days_in_months[2][14] =
     {
         { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 },
         { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
     };
-
-#define     YEAR0       70              /* year of reference */
-#define     CENT0       1900            /* century of reference */
 
 /****************************************************************************/
 
@@ -230,7 +230,7 @@ N_int day_of_week(N_int year, N_int mm, N_int dd)
 }
 
 Z_long dates_difference(N_int year1, N_int mm1, N_int dd1,
-                      N_int year2, N_int mm2, N_int dd2)
+                        N_int year2, N_int mm2, N_int dd2)
 {
     return( calc_days(year2, mm2, dd2) - calc_days(year1, mm1, dd1) );
 }
@@ -283,12 +283,12 @@ void date_time_difference
     boolean sign;
 
     *hh = *mm = *ss = 0;
-    if ((ss1 > 59) or (mm1 > 59) or (hh1 > 23) or
+    if ((ss1 >= 60) or (mm1 >= 60) or (hh1 >= 24) or
         !check_date(year1,month1,day1))
     {
         year1 = month1 = day1 = hh1 = mm1 = ss1 = 0;
     }
-    if ((ss2 > 59) or (mm2 > 59) or (hh2 > 23) or
+    if ((ss2 >= 60) or (mm2 >= 60) or (hh2 >= 24) or
         !check_date(year2,month2,day2))
     {
         year2 = month2 = day2 = hh2 = mm2 = ss2 = 0;
@@ -347,7 +347,7 @@ void calc_new_date_time
     Z_long  sum;
     Z_long  quot;
 
-    if ((*ss <= 60) and (*mm <= 60) and (*hh <= 24) and
+    if ((*ss < 60) and (*mm < 60) and (*hh < 24) and
         check_date(*year,*month,*day))
     {
         sum = ((((*hh * 60L) + *mm) * 60L) + *ss) +
@@ -649,7 +649,7 @@ boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
 /**************************************/
 /* CREATED      01.11.93              */
 /**************************************/
-/* MODIFIED     25.05.96              */
+/* MODIFIED     26.05.96              */
 /**************************************/
 /* COPYRIGHT    Steffen Beyer         */
 /**************************************/

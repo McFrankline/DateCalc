@@ -27,7 +27,7 @@ sub parse_date
 {
     my($date) = @_;
     my($yy,$mm,$dd);
-    unless ($date =~ /\b([JFMAJSOND][aepuco][nbrynlgptvc])\s+([0123]??\d)\b/)
+    unless ($date =~ /\b([JFMASOND][aepuco][nbrynlgptvc])\s+([0123]??\d)\b/)
     {
         return(0,0,0);
     }

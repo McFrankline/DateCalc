@@ -13,7 +13,7 @@ use Date::DateCalc qw( calc_new_date_time );
 #   );
 # ======================================================================
 
-print "1..5\n";
+print "1..8\n";
 
 $n = 1;
 ($yy,$mm,$dd,$h,$m,$s) = calc_new_date_time(1995,2,28,18,12,8,0,0,0,999983);
@@ -21,6 +21,18 @@ if (($yy == 1995) && ($mm == 3) && ($dd == 12) && ($h == 7) && ($m == 58) && ($s
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
 ($yy,$mm,$dd,$h,$m,$s) = calc_new_date_time(1995,2,29,18,12,8,0,0,0,999983);
+if (($yy == 0) && ($mm == 0) && ($dd == 0) && ($h == 0) && ($m == 0) && ($s == 0))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+($yy,$mm,$dd,$h,$m,$s) = calc_new_date_time(1995,2,28,24,12,8,0,0,0,999983);
+if (($yy == 0) && ($mm == 0) && ($dd == 0) && ($h == 0) && ($m == 0) && ($s == 0))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+($yy,$mm,$dd,$h,$m,$s) = calc_new_date_time(1995,2,28,18,60,8,0,0,0,999983);
+if (($yy == 0) && ($mm == 0) && ($dd == 0) && ($h == 0) && ($m == 0) && ($s == 0))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+($yy,$mm,$dd,$h,$m,$s) = calc_new_date_time(1995,2,28,18,12,60,0,0,0,999983);
 if (($yy == 0) && ($mm == 0) && ($dd == 0) && ($h == 0) && ($m == 0) && ($s == 0))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;

@@ -1,5 +1,5 @@
 =======================================
-  Module "Date::DateCalc" Version 2.0
+  Module "Date::DateCalc" Version 2.1
 =======================================
 
 ------------------------------------------------------------------------------
@@ -107,10 +107,17 @@ you to parse dates as returned by the UNIX "date" command. You can also
 parse the date of submitment of mails this way. This allows you to deter-
 mine the time the mail took to arrive, or you can automatically increase
 the priority of problem reports as time passes by, for instance. (This
-latter tool can be obtained by sending me a mail <sb@sdm.de>.)
+latter tool can be obtained by sending me a mail to <sb@sdm.de>.)
 
 The german man-page is gone, it is too much effort to maintain two
 versions of the man-page. Sorry.
+
+What's new in version 2.1:
+--------------------------
+
+The man page is no separate file anymore, it is now included in the
+file DateCalc.pm in POD format, where it will automatically be found
+and installed in your "man" directory by "make install".
 
 
 How to install it:
@@ -120,7 +127,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-2.0").
+    package ("DateCalc-2.1").
 
  2) Type "perl Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
@@ -143,7 +150,7 @@ tree!!
 
     Should you encounter any compiler warnings or errors (like the redefini-
     tion of certain types already defined by your system), please contact
-    me by mail at 'sb@sdm.de', sending me your compiler output (both STDOUT
+    me by mail at <sb@sdm.de>, sending me your compiler output (both STDOUT
     and STDERR). Thank you!
 
     ======================================================================
@@ -210,21 +217,11 @@ tree!!
     t/f023..............ok
     t/f024..............ok
     All tests successful.
-    Files=25,  Tests=295,  7 secs ( 4.15 cusr  1.75 csys =  5.90 cpu)
+    Files=25,  Tests=298,  6 secs ( 4.10 cusr  1.62 csys =  5.72 cpu)
 
- 5) After this, you will have to manually copy the man page,
-    "Date::DateCalc.3", to your man directory, probably one of
-    "/usr/lang/man/cat3", "/usr/local/man/cat3", "/usr/man/cat3",
-    or the like (consult your MANPATH environment variable).
-
-    It might be useful, although a certain violation of approved Perl
-    concepts, to add links "ln -s Date::DateCalc.3 DateCalc.3" and
-    "ln -s Date::DateCalc.3 datecalc.3" in order to facilitate the
-    access to the man page.
-
- 6) At last, type "make install".
+ 5) At last, type "make install".
         
- 7) Now you can try to run the "demo". Start it with "perl demo" (or what-
+ 6) Now you can try to run the "demo". Start it with "perl demo" (or what-
     ever the name and path of your Perl 5 binary is).
 
     It will ask you for your birthday and the current date and calculate your
@@ -267,17 +264,17 @@ tree!!
     28 29 30
 
 
- 8) Enjoy!
+ 7) Enjoy!
 
 
 Version history:
 ----------------
 
 Version 1.0 was the initial release (released as an article in the news-
-groups comp.lang.perl.misc and de.comp.lang.perl (cross-posting)).
+groups comp.lang.perl.misc and de.comp.lang.perl).
 
 Version 1.01 tried to fix some "violations" of programming standards for
-Perl extension modules I wasn't aware of. (I'm rather new at all this!)
+Perl extension modules I wasn't aware of. (Everything was very new to me!)
 
 Version 1.1 supplied a much more elaborate set of test scripts which are
 run and evaluated automatically by Test::Harness when "make test" is
@@ -323,7 +320,7 @@ and a third demo was added which shows how to calculate, for instance,
 the 2nd Thursday of a given month and year. This version has never been
 published on the Internet, however.
 
-Version 2.0 offers new features, such as date/time calculations and a
+Version 2.0 offered new features, such as date/time calculations and a
 few other new functions. The german man page was dropped because the
 expense of maintaining two man pages is not bearable in the long run.
 The functions "day_short_tab" and "month_short_tab" are gone, these
@@ -342,6 +339,12 @@ are new, they allow to calculate differences in dates and new dates
 which include not only year, month and day, but also hour, minute,
 and second. They are extensions of the functions "dates_difference"
 and "calc_new_date" (which they also use).
+
+Version 2.1 fixes a minor bug in lib_date.c:
+wrong:    if ((*ss <= 60) and (*mm <= 60) and (*hh <= 24) and
+right:    if ((*ss < 60) and (*mm < 60) and (*hh < 24) and
+among other minor adjustments in orthography and style, plus
+adaptations to conform with new Perl 5.002 module standards.
 
 
 Thanks:
@@ -365,7 +368,7 @@ problem he encountered concerning the inclusion of the Perl distribution
 ("Unable to find include file ...") and for suggesting a solution for this
 problem. (That's the most pleasant kind of problem report, of course! ;-) )
 
-Many thanks to Tom Limoncelli <tal@plts.org> for raising the question on
+Many thanks to Tom Limoncelli <tal@plts.org> for raising the question of
 how to calculate the 2nd Thursday of a given month and year!
 
 Many thanks to Bart Robinson <lomew@cs.utah.edu> for suggesting the "all"

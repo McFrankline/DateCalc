@@ -1,16 +1,16 @@
 =======================================
-  Module "Date::DateCalc" Version 1.5
+  Module "Date::DateCalc" Version 2.0
 =======================================
 
---------------------------------------------------------------------------------
- Extension package for Perl 5.001m (should work with Perl 5.000 and up as well)
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+ Extension Module for Perl 5.002 (should work with Perl 5.000 and up as well)
+------------------------------------------------------------------------------
 
 
 Legal stuff:
 ------------
 
-Copyright (c) 1995 by Steffen Beyer. All rights reserved.
+Copyright (c) 1996 by Steffen Beyer. All rights reserved.
 This package is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
@@ -18,8 +18,8 @@ modify it under the same terms as Perl itself.
 Requirements:
 -------------
 
-Perl version 5.001m or higher, a compiler complying with ANSI C standards.
-
+Perl version 5.000 or higher, a compiler complying with ANSI C standards (!).
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 What does it do:
 ----------------
@@ -31,38 +31,86 @@ occur, how the week numbers are defined, what's the first day of the week,
 how many weeks (52 or 53) a given year has, and so on (Gregorian calendar,
 as opposed to the Julian calendar, which was used until 1582).
 
-Many users have craved for a simple module that uses the XS interface to
-incorporate a C library, in order to be able to learn from it, since the
-PERLAPI and PERLGUTS sections of the Perl 5 manual are not complete and
-easy to put into practice. So here it is!
-
 To give you an idea of what the package can do, here a list of all the
 functions it exports:
 
   $flag = leap($year);
-  $date = encode($yy,$mm,$dd);
-  ($cc,$yy,$mm,$dd) = decode($date);
-  $flag = valid_date($date);
-  $datestr = date_string($date);
+  $date = compress($yy,$mm,$dd);
+  ($cc,$yy,$mm,$dd) = uncompress($date);
+  $flag = check_compressed($date);
+  $datestr = compressed_to_short($date);
   $flag = check_date($year,$mm,$dd);
   $days = calc_days($year,$mm,$dd);
-  $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
   $weekday = day_of_week($year,$mm,$dd);
+  $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
   ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
+  ($days,$hh,$mm,$ss) = date_time_difference
+  (
+      $year1,$month1,$day1,$hh1,$mm1,$ss1,
+      $year2,$month2,$day2,$hh2,$mm2,$ss2
+  );
+  ($year,$month,$day,$hh,$mm,$ss) = calc_new_date_time
+  (
+      $year,$month,$day,$hh,$mm,$ss,
+      $days_offset,$hh_offset,$mm_offset,$ss_offset
+  );
   $datestr = date_to_short($year,$mm,$dd);
   $datestr = date_to_string($year,$mm,$dd);
   ($week,$year) = week_number($year,$mm,$dd);
   ($year,$mm,$dd) = first_in_week($week,$year);
   $weeks = weeks_in_year($year);
-  ($year,$mm,$dd) = decode_date($buffer);
-  $day = day_short_tab($weekday);
-  $day = day_name_tab($weekday);
-  $month = month_short_tab($mm);
-  $month = month_name_tab($mm);
+  $day_name = day_name_tab($weekday);
+  $month_name = month_name_tab($month);
+  $weekday = decode_day($day_name);
+  $month = decode_month($month_name);
+  ($year,$mm,$dd) = decode_date($date);
   $days = days_in_month($year,$mm);
   $version = Date::DateCalc::Version();
 
 For more details, see the Date::DateCalc(3) man page!
+
+
+What's new in version 2.0:
+--------------------------
+
+The two functions "day_short_tab" and "month_short_tab" are gone,
+these tables are not needed any longer internally. Substitute them
+with substr(day_name_tab($dd),0,3) and substr(month_name_tab($mm),0,3),
+respectively.
+
+The functions "encode", "decode", "valid_date" and "date_string"
+have been renamed to "compress", "uncompress", "check_compressed"
+and "compressed_to_short", respectively, to reflect the fact that
+they belong together and to make the user interface more consistent.
+
+Two new functions have been added: "decode_day" and "decode_month".
+They take the name of a day or month as their argument and return
+its number.
+
+The function "day_of_week" has been changed. It now returns values
+in the range 1..7 (as opposed to 0..6 previously). This is to make
+things more consistent and to make the function "decode_day" work
+exactly as "decode_month" (which was already present in previous
+versions but was not exported, btw).
+
+Since the table "day_name_tab" has been changed accordingly, you
+probably won't need to change existing code.
+
+Two more functions are new: "date_time_difference" and "calc_new_date_time".
+They allow to calculate differences in dates and new dates which include not
+only year, month and day, but also hour, minute, and second. They are exten-
+sions of the functions "dates_difference" and "calc_new_date" (which they
+also use).
+
+A utility has been added to the package ("parse_date.pl") which allows
+you to parse dates as returned by the UNIX "date" command. You can also
+parse the date of submitment of mails this way. This allows you to deter-
+mine the time the mail took to arrive, or you can automatically increase
+the priority of problem reports as time passes by, for instance. (This
+latter tool can be obtained by sending me a mail <sb@sdm.de>.)
+
+The german man-page is gone, it is too much effort to maintain two
+versions of the man-page. Sorry.
 
 
 How to install it:
@@ -72,9 +120,9 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-1.5").
+    package ("DateCalc-2.0").
 
- 2) Type "perl5 Makefile.PL" (or whatever the name and path of your Perl 5
+ 2) Type "perl Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
 
     This will create a "Makefile" with the appropriate parameters for your
@@ -98,6 +146,20 @@ tree!!
     me by mail at 'sb@sdm.de', sending me your compiler output (both STDOUT
     and STDERR). Thank you!
 
+    ======================================================================
+    Be aware that you need a C compiler which supports ANSI C in order to
+    successfully compile this package!
+    ======================================================================
+
+    Also note that problems may arise with the c89 compiler of HP, although
+    it allegedly supports ANSI C!
+
+    I recommend the GNU gcc compiler, which is available for free on the
+    Internet.
+
+    (HP users are strongly recommended to install the GNU assembler GAS
+    first before installing GNU gcc)
+
     Should you get the error messages
 
     DateCalc.c: 15: Unable to find include file 'EXTERN.h'.
@@ -106,11 +168,11 @@ tree!!
 
     then edit the file Makefile.PL and change the line
 
-    'INC'	=> '',     # e.g., '-I/opt/pkg/perl5.001m/dist' 
+    'INC'	=> '',     # e.g., '-I/opt/pkg/perl5.002/dist' 
 
     in such a way that it points to your Perl 5 distribution tree, e.g.,
 
-    'INC'       => '-I/usr/ctr/dlt/private/perl/perl5.001m',
+    'INC'       => '-I/usr/ctr/dlt/private/perl/perl5.002',
 
     or the like, and start over with the generation of the Makefile at 2).
 
@@ -118,9 +180,10 @@ tree!!
 
     The output should look somewhat like this:
 
-    /opt/bin/perl5 -I./blib -I./blib -I/opt/lib/perl5.001m/hpux
-    -I/opt/lib/perl5.001m -e 'use Test::Harness qw(&runtests $verbose);
-    $verbose=0; runtests @ARGV;' t/*.t
+    PERL_DL_NONLAZY=1 /opt/bin/perl -I./blib/arch -I./blib/lib
+    -I/opt/lib/perl5.002/ sun4-sunos/5.002 -I/opt/lib/perl5.002
+    -e 'use Test::Harness qw(&runtests $verbose); $verbose=0;
+    runtests @ARGV;' t/*.t
     t/f000..............ok
     t/f001..............ok
     t/f002..............ok
@@ -141,30 +204,27 @@ tree!!
     t/f017..............ok
     t/f018..............ok
     t/f019..............ok
+    t/f020..............ok
+    t/f021..............ok
+    t/f022..............ok
+    t/f023..............ok
+    t/f024..............ok
     All tests successful.
-    Files=20,  Tests=165,  4 secs ( 2.37 cusr  1.06 csys =  3.43 cpu)
+    Files=25,  Tests=295,  7 secs ( 4.15 cusr  1.75 csys =  5.90 cpu)
 
- 5) Currently there are two versions of the man page "Date::DateCalc.3":
-    "Date::DateCalc.3.deutsch" and "Date::DateCalc.3.english". Rename the
-    one which is appropriate for you to "Date::DateCalc.3".
+ 5) After this, you will have to manually copy the man page,
+    "Date::DateCalc.3", to your man directory, probably one of
+    "/usr/lang/man/cat3", "/usr/local/man/cat3", "/usr/man/cat3",
+    or the like (consult your MANPATH environment variable).
 
-    After this, you will have to manually copy this man page to your man
-    directory, probably one of "/usr/lang/man/cat3", "/usr/local/man/cat3",
-    "/usr/man/cat3", or the like (consult your MANPATH environment variable).
+    It might be useful, although a certain violation of approved Perl
+    concepts, to add links "ln -s Date::DateCalc.3 DateCalc.3" and
+    "ln -s Date::DateCalc.3 datecalc.3" in order to facilitate the
+    access to the man page.
 
-    (The current version of MakeMaker doesn't yet support the copying of the
-    man pages to their destination directory.)
-
-    If, however, you have installed a newer version of Makemaker which
-    supports installing of the man pages, you can skip this step as it's
-    automatically taken care of by the "make install" in the next step.
-
-    You may also first try "make install", and if it doesn't install the
-    man page, copy it manually.
-
- 6) Finally, type "make install".
+ 6) At last, type "make install".
         
- 7) Now you may try to run the "demo". Start it with "perl5 demo" (or what-
+ 7) Now you can try to run the "demo". Start it with "perl demo" (or what-
     ever the name and path of your Perl 5 binary is).
 
     It will ask you for your birthday and the current date and calculate your
@@ -177,6 +237,35 @@ tree!!
     dates in U.S. american format in the order month - day - year. Moreover,
     the decoding is done entirely in Perl, whereas "demo" uses the package's
     C function "decode_date".
+
+    Finally, the program "demo2" lets you find out about, for instance,
+    the second thursday of a given month and year.
+
+    The program takes four numeric arguments: n for the n-th day (1..5),
+    the day of week (1=Monday..7=Sunday), the month (1..12) and the year
+    (1..*):
+
+    > perl demo2 2 4 4 1996
+    The 2nd Thursday in April 1996 is Thursday, 11 April 1996
+
+    > perl demo2 4 1 4 1996
+    The 4th Monday in April 1996 is Monday, 22 April 1996
+
+    > perl demo2 5 1 4 1996
+    The 5th Monday in April 1996 is Monday, 29 April 1996
+
+    > perl demo2 5 3 4 1996
+    The 5th Wednesday in April 1996 is <no date>
+
+    > cal 4 1996
+       April 1996
+     S  M Tu  W Th  F  S
+        1  2  3  4  5  6
+     7  8  9 10 11 12 13
+    14 15 16 17 18 19 20
+    21 22 23 24 25 26 27
+    28 29 30
+
 
  8) Enjoy!
 
@@ -225,9 +314,34 @@ was added.
 Version 1.4 fixed a bug in DateCalc.xs where the function newSVnv(double)
 was used instead of newSViv(IV) although an integer value is passed to it.
 
-Version 1.5 includes a notice that you need a compiler capable of
+Version 1.5 introduced a notice that you need a compiler capable of
 processing ANSI C in order to successfully compile this module, and
-contains a second demo for decoding dates in U.S. american format.
+contained a second demo for decoding dates in U.S. american format.
+
+Version 1.6 was tested with Perl 5.002 for compatibility (positive)
+and a third demo was added which shows how to calculate, for instance,
+the 2nd Thursday of a given month and year. This version has never been
+published on the Internet, however.
+
+Version 2.0 offers new features, such as date/time calculations and a
+few other new functions. The german man page was dropped because the
+expense of maintaining two man pages is not bearable in the long run.
+The functions "day_short_tab" and "month_short_tab" are gone, these
+tables are not needed any longer internally. The functions "encode",
+"decode", "valid_date" and "date_string" have been renamed to
+"compress", "uncompress", "check_compressed" and "compressed_to_short",
+respectively, to reflect the fact that they belong together and to
+make the user interface more consistent. Moreover, the values returned
+by the function "day_of_week" have been shifted by one, they now go
+from 1 to 7 (previously from 0 to 6), to make things more consistent
+and to make the function "decode_day" work exactly as "decode_month"
+(which was already present in former versions but was not exported).
+The function and table "day_name_tab" has been changed accordingly.
+The two functions "date_time_difference" and "calc_new_date_time"
+are new, they allow to calculate differences in dates and new dates
+which include not only year, month and day, but also hour, minute,
+and second. They are extensions of the functions "dates_difference"
+and "calc_new_date" (which they also use).
 
 
 Thanks:
@@ -250,6 +364,18 @@ Also many thanks to David Thompson <dlt@dewey.csun.edu> for reporting a
 problem he encountered concerning the inclusion of the Perl distribution
 ("Unable to find include file ...") and for suggesting a solution for this
 problem. (That's the most pleasant kind of problem report, of course! ;-) )
+
+Many thanks to Tom Limoncelli <tal@plts.org> for raising the question on
+how to calculate the 2nd Thursday of a given month and year!
+
+Many thanks to Bart Robinson <lomew@cs.utah.edu> for suggesting the "all"
+export option and the "decode_day" and "decode_month" functions.
+
+Also many thanks to Ron Savage <Ron.Savage@datacraft.com.au> for suggesting
+the incorporation of time calculations into this module. (Sorry that I
+didn't include the handling of time zones, which can be taken care of
+more easily by adding/subtracting the appropriate time value in an extra,
+preliminary step!)
 
 
 Final note:

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 1995 Steffen Beyer. All rights reserved.
+  Copyright (c) 1996 Steffen Beyer. All rights reserved.
   This program is free software; you can redistribute it and/or
   modify it under the same terms as Perl itself.
 */
@@ -8,11 +8,15 @@
 #include "perl.h"
 #include "XSUB.h"
 
+#include <string.h>
 #include "lib_defs.h"
 #include "lib_date.h"
 
 
 MODULE = Date::DateCalc		PACKAGE = Date::DateCalc
+
+
+PROTOTYPES: ENABLE
 
 
 boolean
@@ -21,14 +25,14 @@ leap(year)
 
 
 N_int
-encode(yy,mm,dd)
+compress(yy,mm,dd)
     N_int	yy
     N_int	mm
     N_int	dd
 
 
 void
-decode(date)
+uncompress(date)
     N_int	date
     PPCODE:
     {
@@ -36,7 +40,7 @@ decode(date)
         N_int	yy;
         N_int	mm;
         N_int	dd;
-        decode(date,&cc,&yy,&mm,&dd);
+        uncompress(date,&cc,&yy,&mm,&dd);
         EXTEND(sp,4);
         PUSHs(sv_2mortal(newSViv((IV)cc)));
         PUSHs(sv_2mortal(newSViv((IV)yy)));
@@ -46,17 +50,17 @@ decode(date)
 
 
 boolean
-valid_date(date)
+check_compressed(date)
     N_int	date
 
 
 void
-date_string(date)
+compressed_to_short(date)
     N_int	date
     PPCODE:
     {
         byteptr	datestr;
-        datestr = date_string(date);
+        datestr = compressed_to_short(date);
         if (datestr != NULL)
         {
             EXTEND(sp,1);
@@ -73,21 +77,11 @@ check_date(year,mm,dd)
     N_int	dd
 
 
-long
+Z_long
 calc_days(year,mm,dd)
     N_int	year
     N_int	mm
     N_int	dd
-
-
-long
-dates_difference(year1,mm1,dd1,year2,mm2,dd2)
-    N_int	year1
-    N_int	mm1
-    N_int	dd1
-    N_int	year2
-    N_int	mm2
-    N_int	dd2
 
 
 N_int
@@ -97,12 +91,22 @@ day_of_week(year,mm,dd)
     N_int	dd
 
 
+Z_long
+dates_difference(year1,mm1,dd1,year2,mm2,dd2)
+    N_int	year1
+    N_int	mm1
+    N_int	dd1
+    N_int	year2
+    N_int	mm2
+    N_int	dd2
+
+
 void
 calc_new_date(year,mm,dd,offset)
     N_int	year
     N_int	mm
     N_int	dd
-    long	offset
+    Z_long	offset
     PPCODE:
     {
         N_int	y;
@@ -116,6 +120,72 @@ calc_new_date(year,mm,dd,offset)
         PUSHs(sv_2mortal(newSViv((IV)y)));
         PUSHs(sv_2mortal(newSViv((IV)m)));
         PUSHs(sv_2mortal(newSViv((IV)d)));
+    }
+
+
+void
+date_time_difference(year1,month1,day1,hh1,mm1,ss1,year2,month2,day2,hh2,mm2,ss2)
+    N_int	year1;
+    N_int	month1;
+    N_int	day1;
+    N_int	hh1;
+    N_int	mm1;
+    N_int	ss1;
+    N_int	year2;
+    N_int	month2;
+    N_int	day2;
+    N_int	hh2;
+    N_int	mm2;
+    N_int	ss2;
+    PPCODE:
+    {
+        Z_long	days;
+        Z_int	hh;
+        Z_int	mm;
+        Z_int	ss;
+        date_time_difference(&days,&hh,&mm,&ss,year1,month1,day1,hh1,mm1,ss1,year2,month2,day2,hh2,mm2,ss2);
+        EXTEND(sp,4);
+        PUSHs(sv_2mortal(newSViv((IV)days)));
+        PUSHs(sv_2mortal(newSViv((IV)hh)));
+        PUSHs(sv_2mortal(newSViv((IV)mm)));
+        PUSHs(sv_2mortal(newSViv((IV)ss)));
+    }
+
+
+void
+calc_new_date_time(year,month,day,hour,min,sec,days_offset,hh_offset,mm_offset,ss_offset)
+    N_int	year;
+    N_int	month;
+    N_int	day;
+    N_int	hour;
+    N_int	min;
+    N_int	sec;
+    Z_long	days_offset;
+    Z_long	hh_offset;
+    Z_long	mm_offset;
+    Z_long	ss_offset;
+    PPCODE:
+    {
+        N_int	yy;
+        N_int	mm;
+        N_int	dd;
+        N_int	h;
+        N_int	m;
+        N_int	s;
+        yy = year;
+        mm = month;
+        dd = day;
+        h = hour;
+        m = min;
+        s = sec;
+        calc_new_date_time(&yy,&mm,&dd,&h,&m,&s,days_offset,hh_offset,mm_offset,ss_offset);
+        EXTEND(sp,6);
+        PUSHs(sv_2mortal(newSViv((IV)yy)));
+        PUSHs(sv_2mortal(newSViv((IV)mm)));
+        PUSHs(sv_2mortal(newSViv((IV)dd)));
+        PUSHs(sv_2mortal(newSViv((IV)h)));
+        PUSHs(sv_2mortal(newSViv((IV)m)));
+        PUSHs(sv_2mortal(newSViv((IV)s)));
     }
 
 
@@ -202,6 +272,24 @@ weeks_in_year(year)
     N_int	year
  
 
+N_int
+decode_day(buffer)
+    byteptr	buffer
+    CODE:
+        RETVAL = decode_day(buffer,strlen((char *)buffer));
+    OUTPUT:
+        RETVAL
+
+
+N_int
+decode_month(buffer)
+    byteptr	buffer
+    CODE:
+        RETVAL = decode_month(buffer,strlen((char *)buffer));
+    OUTPUT:
+        RETVAL
+
+
 void
 decode_date(buffer)
     byteptr	buffer
@@ -222,35 +310,13 @@ decode_date(buffer)
 
 
 void
-day_short_tab(dd)
-    N_int	dd
-    PPCODE:
-    {
-        dd %= 7;
-        EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv((char *)day_short[dd],0)));
-    }
-
-
-void
 day_name_tab(dd)
     N_int	dd
     PPCODE:
     {
-        dd %= 7;
+        dd %= 8;
         EXTEND(sp,1);
         PUSHs(sv_2mortal(newSVpv((char *)day_name[dd],0)));
-    }
-
-
-void
-month_short_tab(mm)
-    N_int	mm
-    PPCODE:
-    {
-        mm %= 13;
-        EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv((char *)month_short[mm],0)));
     }
 
 
@@ -282,7 +348,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("1.5",0)));
+        PUSHs(sv_2mortal(newSVpv("2.0",0)));
     }
 
 

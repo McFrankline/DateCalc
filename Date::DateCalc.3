@@ -1,6 +1,6 @@
 
 
-DATE::DATECALC(3)         USER COMMANDS         DATE::DATECALC(3)
+Date::DateCalc(3)    Perl 5 Extension Module    Date::DateCalc(3)
 
 
 NAME
@@ -10,15 +10,24 @@ NAME
 SYNOPSIS
      use Date::DateCalc;
 
+     (in which case you must fully qualify every function with the
+     name of this module, i.e. $flag = Date::DateCalc::leap($year))
+
      or
 
-     use Date::DateCalc qw( leap encode decode valid_date date_string
-     check_date calc_days dates_difference day_of_week calc_new_date
-     date_to_short date_to_string week_number first_in_week weeks_in_year
-     decode_date day_short_tab day_name_tab month_short_tab month_name_tab
-     days_in_month );
+     use Date::DateCalc qw( leap compress uncompress check_compressed
+     compressed_to_short check_date calc_days day_of_week dates_difference
+     calc_new_date date_time_difference calc_new_date_time date_to_short
+     date_to_string week_number first_in_week weeks_in_year day_name_tab
+     month_name_tab decode_day decode_month decode_date days_in_month );
 
-     (you may, of course, also import only portions thereof)
+     (or only portions thereof, whatever you need)
+
+     or
+
+     use DateCalc qw(:all);
+
+     (which imports everything)
 
 DESCRIPTION
      ===============
@@ -35,6 +44,10 @@ DESCRIPTION
      is the number of a day in a month (from 1 to 28,29,30 or 31, de-
      pending on the month and the year).
  
+     Hint: The functions that support abbreviated year numbers are
+     the functions whose names contain the word "compress" and the
+     function "decode_date".
+
      ========================
        $flag = leap($year);
      ========================
@@ -47,9 +60,9 @@ DESCRIPTION
      For years less than 1, the result is probably meaningless (it IS
      almost meaningless, anyway, for years before 1582).
 
-     ================================
-       $date = encode($yy,$mm,$dd);
-     ================================
+     ==================================
+       $date = compress($yy,$mm,$dd);
+     ==================================
 
      This function encodes a date in 16 bits. The encoding scheme is
      as follows:
@@ -83,11 +96,11 @@ DESCRIPTION
 
      If no valid date is specified, zero is returned.
 
-     ======================================
-       ($cc,$yy,$mm,$dd) = decode($date);
-     ======================================
+     ==========================================
+       ($cc,$yy,$mm,$dd) = uncompress($date);
+     ==========================================
 
-     This function decodes dates that were encoded by "encode".
+     This function decodes dates that were encoded by "compress".
      It returns the century, year, month and day of the date encoded
      in "$date" in the variables "$cc", "$yy", "$mm" and "$dd", re-
      spectively.
@@ -99,9 +112,9 @@ DESCRIPTION
 
      Apart from this, no other checks are performed by this function.
 
-     ==============================
-       $flag = valid_date($date);
-     ==============================
+     ====================================
+       $flag = check_compressed($date);
+     ====================================
 
      This function returns a boolean value which is "true" (1) if
      "$date" contains a valid encoded date, and "false" (0) otherwise.
@@ -109,9 +122,9 @@ DESCRIPTION
      When determining validity, leap years are taken into account,
      i.e., the 29th of february is rejected in non-leap years.
 
-     ==================================
-       $datestr = date_string($date);
-     ==================================
+     ==========================================
+       $datestr = compressed_to_short($date);
+     ==========================================
 
      This function converts the encoded date in "$date" to a string
      of the format "dd-mmm-yy", which is returned.
@@ -154,22 +167,6 @@ DESCRIPTION
 
      Zero is returned if no valid date is specified.
 
-     ================================================================
-       $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
-     ================================================================
-
-     This function calculates the difference in days between the two
-     given dates.
-
-     The function calculates the difference "date 2" - "date 1".
-
-     If date 1 is later than date 2, the result will be negative,
-     which allows you to use this function to compare dates.
-
-     If one of the two dates is invalid, the result will degrade to
-     the value of the function "calc_days" for the other date. If
-     both dates are invalid, the result is zero.
-
      ==========================================
        $weekday = day_of_week($year,$mm,$dd);
      ==========================================
@@ -179,13 +176,33 @@ DESCRIPTION
 
      The return values have the following meaning:
 
-                     0       =       Monday
-                     1       =       Tuesday
-                     2       =       Wednesday
-                     3       =       Thursday
-                     4       =       Friday
-                     5       =       Saturday
-                     6       =       Sunday
+                     0       =       Error
+                     1       =       Monday
+                     2       =       Tuesday
+                     3       =       Wednesday
+                     4       =       Thursday
+                     5       =       Friday
+                     6       =       Saturday
+                     7       =       Sunday
+
+     The value zero is returned if the date is not valid.
+
+     ================================================================
+       $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
+     ================================================================
+
+     This function calculates the difference in days between the two
+     given dates.
+
+     The function calculates the difference "date 2" - "date 1", i.e.,
+     you normally specify the two dates in chronological order.
+
+     If date 1 is later than date 2, the result will be negative,
+     which allows you to use this function to compare dates.
+
+     If one of the two dates is invalid, the result will degrade to
+     the value of the function "calc_days" for the other date. If
+     both dates are invalid, the result is zero.
 
      ===========================================================
        ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
@@ -199,6 +216,57 @@ DESCRIPTION
      If the date cannot be calculated (for instance, if the given
      date is invalid or the new date would be before the year one),
      only zeros are returned.
+
+     ================================================================
+       ($days,$hh,$mm,$ss) = date_time_difference
+       (
+           $year1,$month1,$day1,$hh1,$mm1,$ss1,
+           $year2,$month2,$day2,$hh2,$mm2,$ss2
+       );
+     ================================================================
+
+     This function calculates the difference in days, hours, minutes
+     and seconds between the two given dates.
+
+     The function calculates the difference "date 2" - "date 1", i.e.,
+     you normally specify the two dates in chronological order.
+
+     If date 1 is later than date 2, the result will be negative
+     in every of the four return values, which allows you to use
+     this function to compare dates and to feed its output into
+     the function explained next in this text, "calc_new_date_time".
+
+     If one of the two date/time pairs is invalid, the result will
+     degrade to the value of the other date/time argument, converted
+     to days, hours, minutes and seconds. If both date/time pairs are
+     invalid, the result is zero in every return value.
+
+     A date/time pair is invalid either when the date is invalid or
+     when the values for hour, minute and second are outside the range
+     of 0..23, 0..59 and 0..59, respectively.
+
+     ========================================================
+       ($year,$month,$day,$hh,$mm,$ss) = calc_new_date_time
+       (
+           $year,$month,$day,$hh,$mm,$ss,
+           $days_offset,$hh_offset,$mm_offset,$ss_offset
+       );
+     ========================================================
+
+     Starting from the given date and time, a new date and time can
+     be calculated with this function.
+
+     The new date will be "$days_offset" days and "$hh_offset" hours,
+     "$mm_offset" minutes and "$ss_offset" seconds away from the ori-
+     ginal date. The values of these four offsets may be positive or
+     negative, independently from each other. This means that you can
+     add, for instance, 9 hours and subtract 5 minutes at the same time.
+
+     If the new date and time cannot be calculated (for instance, if
+     the given date is invalid or the new date would be before the year
+     one, or the values for hour, minute and second are outside the
+     range of 0..23, 0..59 and 0..59, respectively), only zeros are
+     returned in all return values.
 
      ============================================
        $datestr = date_to_short($year,$mm,$dd);
@@ -260,7 +328,7 @@ DESCRIPTION
 
        ($year,$mm,$dd) =
 
-           calc_new_date($year,$mm,$dd,-day_of_week($year,$mm,$dd));
+           calc_new_date($year,$mm,$dd,-day_of_week($year,$mm,$dd)+1);
 
      can be used to achieve the same effect.
 
@@ -274,6 +342,137 @@ DESCRIPTION
      No check is made if the year "$year" is in the valid range.
 
      For years less than 1, the result is probably meaningless.
+
+     =======================================
+       $day_name = day_name_tab($weekday);
+     =======================================
+
+     This function accesses the internal table of the days of week.
+
+     It returns the corresponding string for each numeric value of a
+     day of week (as returned by the function "day_of_week").
+
+     The value of "$weekday" is taken modulo 8 (!) internally to prevent
+     out-of-range access to the internal array.
+
+     The strings which are returned are the following:
+
+                     0       =>      Error
+                     1       =>      Monday
+                     2       =>      Tuesday
+                     3       =>      Wednesday
+                     4       =>      Thursday
+                     5       =>      Friday
+                     6       =>      Saturday
+                     7       =>      Sunday
+
+     =========================================
+       $month_name = month_name_tab($month);
+     =========================================
+
+     This function accesses the internal table of the month's names.
+
+     It returns the corresponding string for each numeric value of a
+     month.
+
+     The value of "$month" is taken modulo 13 (!) internally to prevent
+     out-of-range access to the internal array.
+
+     The strings which are returned are the following:
+
+                     0       =>      Error
+                     1       =>      January
+                     2       =>      February
+                     3       =>      March
+                     4       =>      April
+                     5       =>      May
+                     6       =>      June
+                     7       =>      July
+                     8       =>      August
+                     9       =>      September
+                    10       =>      October
+                    11       =>      November
+                    12       =>      December
+
+     ===================================
+       $weekday = decode_day($buffer);
+     ===================================
+
+     This function provides the inverse of the function "day_name_tab".
+
+     Whereas "day_name_tab" takes a number as its argument and returns
+     a string, "decode_day" takes a string (of any length) and tries
+     to match it with the table of the names of days (Monday, Tuesday,
+     and so on) and returns the corresponding number (1..7).
+
+     Only the first 3 characters are checked (in case-insensitive
+     manner) for a unique match. If it uniquely identifies the day,
+     one or two characters are sufficient:
+
+       Name of the day:     Uniquely identified by:     Value returned:
+
+              Monday        M, Mo, Mon, ... Monday            1
+              Tuesday          Tu, Tue, ... Tuesday           2
+              Wednesday     W, We, Wed, ... Wednesday         3
+              Thursday         Th, Thu, ... Thursday          4
+              Friday        F, Fr, Fri, ... Friday            5
+              Saturday         Sa, Sat, ... Saturday          6
+              Sunday           Su, Sun, ... Sunday            7
+
+     If there is no match, zero is returned.
+
+     This function is roughly equivalent to an associative array:
+
+     %day_tab = ( 'Mon' => 1, 'Tue' => 2, 'Wed' => 3, 'Thu' => 4,
+                  'Fri' => 5, 'Sat' => 6, 'Sun' => 7);
+     
+     $weekday = $day_tab{$buffer};
+
+     except for the capability of recognizing abbreviations and
+     to be case-independent.
+
+     ===================================
+       $month = decode_month($buffer);
+     ===================================
+
+     This function provides the inverse of the function "month_name_tab".
+
+     Whereas "month_name_tab" takes a number as its argument and returns
+     a string, "decode_month" takes a string (of any length) and tries
+     to match it with the table of the names of months (January, February,
+     and so on) and returns the corresponding number (1..12).
+
+     Only the first 3 characters are checked (in case-insensitive
+     manner) for a unique match. If it uniquely identifies the month,
+     one or two characters are sufficient:
+
+       Name of the month:     Uniquely identified by:     Value returned:
+
+                January          Ja, Jan, ... January           1
+                February      F, Fe, Feb, ... February          2
+                March                Mar, ... March             3
+                April            Ap, Apr, ... April             4
+                May                  May, ... May               5
+                June                 Jun, ... June              6
+                July                 Jul, ... July              7
+                August           Au, Aug, ... August            8
+                September     S, Se, Sep, ... September         9
+                October       O, Oc, Oct, ... October          10
+                November      N, No, Nov, ... November         11
+                December      D, De, Dec, ... December         12
+
+     If there is no match, zero is returned.
+
+     This function is roughly equivalent to an associative array:
+
+     %month_tab = ( 'Jan' => 1, 'Feb' => 2, 'Mar' => 3, 'Apr' => 4,
+                    'May' => 5, 'Jun' => 6, 'Jul' => 7, 'Aug' => 8,
+                    'Sep' => 9, 'Oct' => 10, 'Nov' => 11, 'Dec' => 12);
+     
+     $month = $month_tab{$buffer};
+
+     except for the capability of recognizing abbreviations and
+     to be case-independent.
 
      ===========================================
        ($year,$mm,$dd) = decode_date($buffer);
@@ -334,108 +533,6 @@ DESCRIPTION
      If no valid date can be deduced from its input, the function
      returns zeros in all its return values.
 
-     ===================================
-       $day = day_short_tab($weekday);
-     ===================================
-
-     This function accesses the internal table of abbreviations of
-     the days of week.
-
-     It returns the corresponding string for each numeric value of a
-     day of week (as returned by the function "day_of_week").
-
-     The value of "$weekday" is taken modulo 7 internally to prevent
-     out-of-range access to the internal array.
-
-     The strings which are returned are the following:
-
-                     0       =       Mon
-                     1       =       Tue
-                     2       =       Wed
-                     3       =       Thu
-                     4       =       Fri
-                     5       =       Sat
-                     6       =       Sun
-
-     ====================================
-       $day = day_name_tab($weekday);
-     ====================================
-
-     This function accesses the internal table of the days of week.
-
-     It returns the corresponding string for each numeric value of a
-     day of week (as returned by the function "day_of_week").
-
-     The value of "$weekday" is taken modulo 7 internally to prevent
-     out-of-range access to the internal array.
-
-     The strings which are returned are the following:
-
-                     0       =       Monday
-                     1       =       Tuesday
-                     2       =       Wednesday
-                     3       =       Thursday
-                     4       =       Friday
-                     5       =       Saturday
-                     6       =       Sunday
-
-     ==================================
-       $month = month_short_tab($mm);
-     ==================================
-
-     This function accesses the internal table of abbreviations of
-     the month's names.
-
-     It returns the corresponding string for each numeric value of a
-     month.
-
-     The value of "$mm" is taken modulo 13 (!) internally to prevent
-     out-of-range access to the internal array.
-
-     The strings which are returned are the following:
-
-                     0       =       Err
-                     1       =       Jan
-                     2       =       Feb
-                     3       =       Mar
-                     4       =       Apr
-                     5       =       May
-                     6       =       Jun
-                     7       =       Jul
-                     8       =       Aug
-                     9       =       Sep
-                    10       =       Oct
-                    11       =       Nov
-                    12       =       Dec
-
-     =================================
-       $month = month_name_tab($mm);
-     =================================
-
-     This function accesses the internal table of the month's names.
-
-     It returns the corresponding string for each numeric value of a
-     month.
-
-     The value of "$mm" is taken modulo 13 (!) internally to prevent
-     out-of-range access to the internal array.
-
-     The strings which are returned are the following:
-
-                     0       =       Error
-                     1       =       January
-                     2       =       February
-                     3       =       March
-                     4       =       April
-                     5       =       May
-                     6       =       June
-                     7       =       July
-                     8       =       August
-                     9       =       September
-                    10       =       October
-                    11       =       November
-                    12       =       December
-
      =====================================
        $days = days_in_month($year,$mm);
      =====================================
@@ -454,7 +551,7 @@ DESCRIPTION
      account):
 
        $dd = days_in_month($year,$mm);
-       $dw = day_of_week($year,$mm,$dd);
+       $dw = day_of_week($year,$mm,$dd) - 1;
        if ($dw > 4)
        {
            ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,4-$dw);
@@ -472,7 +569,7 @@ DESCRIPTION
            {
                ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,-1);
            }
-           $dw = day_of_week($year,$mm,$dd);
+           $dw = day_of_week($year,$mm,$dd) - 1;
            if ($dw > 4)
            {
                ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,4-$dw);
@@ -510,7 +607,7 @@ DESCRIPTION
      number of the "DateCalc" extension package.
 
      Since this function is not exported, you always have to
-     qualify it explicitly (i.e., "Date::DateCalc::...").
+     qualify it explicitly (i.e., "Date::DateCalc::Version()").
 
      This is to avoid possible conflicts with version functions
      from other packages.
@@ -521,11 +618,7 @@ EXAMPLE
      use strict;
      no strict "vars";
 
-     use Date::DateCalc qw( leap encode decode valid_date date_string
-     check_date calc_days dates_difference day_of_week calc_new_date
-     date_to_short date_to_string week_number first_in_week weeks_in_year
-     decode_date day_short_tab day_name_tab month_short_tab month_name_tab
-     days_in_month );
+     use Date::DateCalc qw(:all);
 
      print "\n";
 
@@ -581,13 +674,13 @@ SEE ALSO
      perl(1), perlsub(1), perlmod(1), perlapi(1), perlguts(1).
 
 VERSION
-     This man page documents Date::DateCalc, version 1.5.
+     This man page documents Date::DateCalc, version 2.0.
 
 AUTHOR
      Steffen Beyer <sb@sdm.de> (sd&m GmbH&Co.KG, Munich, Germany)
 
 COPYRIGHT
-     Copyright (c) 1995 by Steffen Beyer. All rights reserved.
+     Copyright (c) 1996 by Steffen Beyer. All rights reserved.
 
 LICENSE AGREEMENT
      This package is free software; you can redistribute it and/or

@@ -3,23 +3,23 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( valid_date );
+use Date::DateCalc qw( check_compressed );
 
 # ======================================================================
-#   $flag = valid_date($date);
+#   $flag = check_compressed($date);
 # ======================================================================
 
 print "1..5\n";
 
 $n = 1;
-if (valid_date(48163) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_compressed(48163) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (valid_date(    0) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_compressed(    0) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (valid_date(13170) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_compressed(13170) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (valid_date(12892) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_compressed(12892) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (valid_date(12893) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_compressed(12893) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

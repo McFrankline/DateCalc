@@ -3,94 +3,115 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( month_name_tab );
+use Date::DateCalc qw( decode_day );
 
 # ======================================================================
-#   $month = month_name_tab($mm);
+#   $weekday = decode_day($buffer);
 # ======================================================================
 
-print "1..27\n";
+print "1..34\n";
 
 $n = 1;
-if (month_name_tab(0) eq "Error")
+if (decode_day("m") == 1)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(1) eq "January")
+if (decode_day("mo") == 1)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(2) eq "February")
+if (decode_day("mon") == 1)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(3) eq "March")
+if (decode_day("Monday") == 1)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(4) eq "April")
+if (decode_day("t") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(5) eq "May")
+if (decode_day("tu") == 2)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(6) eq "June")
+if (decode_day("tue") == 2)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(7) eq "July")
+if (decode_day("Tuesday") == 2)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(8) eq "August")
+if (decode_day("w") == 3)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(9) eq "September")
+if (decode_day("we") == 3)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(10) eq "October")
+if (decode_day("wed") == 3)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(11) eq "November")
+if (decode_day("Wednesday") == 3)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(12) eq "December")
+if (decode_day("t") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(13) eq "Error")
+if (decode_day("th") == 4)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(14) eq "January")
+if (decode_day("thu") == 4)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(15) eq "February")
+if (decode_day("Thursday") == 4)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(16) eq "March")
+if (decode_day("f") == 5)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(17) eq "April")
+if (decode_day("fr") == 5)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(18) eq "May")
+if (decode_day("fri") == 5)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(19) eq "June")
+if (decode_day("Friday") == 5)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(20) eq "July")
+if (decode_day("s") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(21) eq "August")
+if (decode_day("sa") == 6)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(22) eq "September")
+if (decode_day("sat") == 6)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(23) eq "October")
+if (decode_day("Saturday") == 6)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(24) eq "November")
+if (decode_day("s") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(25) eq "December")
+if (decode_day("su") == 7)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(26) eq "Error")
+if (decode_day("sun") == 7)
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (decode_day("Sunday") == 7)
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (decode_day("workday") == 0)
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (decode_day("funday") == 0)
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (decode_day("bad day") == 0)
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (decode_day("sunny day") == 7)
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (decode_day("payday") == 0)                     # too bad! ;-)
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (decode_day("holyday") == 0)                    # sigh. ;-)
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

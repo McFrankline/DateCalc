@@ -3,11 +3,11 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'	=> 'Date::DateCalc',
-    'VERSION'	=> '1.3',
+    'VERSION'	=> '1.4',
     'DISTNAME'	=> 'DateCalc',
     'OBJECT'	=> '$(O_FILES)',
     'LIBS'	=> [''],   # e.g., '-lm' 
     'DEFINE'	=> '',     # e.g., '-DHAVE_SOMETHING' 
-    'INC'	=> '',     # e.g., '-I/usr/include/other' 
+    'INC'	=> '',     # e.g., '-I/opt/pkg/perl5.001m/dist' 
     'dist'      => { COMPRESS=>"gzip", SUFFIX=>"gz" }
 );

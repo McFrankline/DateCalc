@@ -1,5 +1,5 @@
 =======================================
-  Module "Date::DateCalc" Version 1.3
+  Module "Date::DateCalc" Version 1.4
 =======================================
 
 --------------------------------------------------------------------------------
@@ -53,6 +53,7 @@ functions it exports:
   $day = day_name_tab($weekday);
   $month = month_short_tab($mm);
   $month = month_name_tab($mm);
+  $days = days_in_month($year,$mm);
   $version = Date::DateCalc::Version();
 
 For more details, see the Date::DateCalc(3) man page!
@@ -65,7 +66,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-1.3").
+    package ("DateCalc-1.4").
 
  2) Type "perl5 Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
@@ -90,6 +91,22 @@ tree!!
     tion of certain types already defined by your system), please contact
     me by mail at 'sb@sdm.de', sending me your compiler output (both STDOUT
     and STDERR). Thank you!
+
+    Should you get the error messages
+
+    DateCalc.c: 15: Unable to find include file 'EXTERN.h'.
+    DateCalc.c: 16: Unable to find include file 'perl.h'.
+    DateCalc.c: 17: Unable to find include file 'XSUB.h'.
+
+    then edit the file Makefile.PL and change the line
+
+    'INC'	=> '',     # e.g., '-I/opt/pkg/perl5.001m/dist' 
+
+    in such a way that it points to your Perl 5 distribution tree, e.g.,
+
+    'INC'       => '-I/usr/ctr/dlt/private/perl/perl5.001m',
+
+    or the like, and start over with the generation of the Makefile at 2).
 
  4) Now issue "make test".
 
@@ -190,9 +207,12 @@ succeeded in fixing the system "typedef"s problem, I am re-releasing it
 (with only marginal corrections (like the one above, for example) and some
 small refinements of the documentation) as version 1.2b ("b" for "beta").
 
-Version 1.3 now compiles the C library "lib_date.c" separately; it is no
-longer '#include'd in the XS file. Moreover, the function "days_in_month"
-has been added.
+From version 1.3 on, the C library "lib_date.c" is compiled separately; it is
+no longer '#include'd in the XS file. Moreover, the function "days_in_month"
+was added.
+
+Version 1.4 fixes a bug in DateCalc.xs where the function newSVnv(double)
+was used instead of newSViv(IV) although an integer value is passed to it.
 
 
 Thanks:
@@ -206,6 +226,15 @@ Also many thanks to David Jenkins for reviewing this README file and the
 english man page.
 
 Thanks to Jarkko Hietaniemi for suggesting the "days_in_month" function.
+
+Many thanks to Christian <chrisi@vm.akh-wien.ac.at> for reporting the bug
+fixed in version 1.4, which showed up on an HP E55 running HP-UX 10.01 and
+Perl 5.001m with the c89 Ansi 89 compiler from HP.
+
+Also many thanks to David Thompson <dlt@dewey.csun.edu> for reporting a
+problem he encountered concerning the inclusion of the Perl distribution
+("Unable to find include file ...") and for suggesting a solution for this
+problem. (That's the most pleasant kind of problem report, of course! ;-) )
 
 
 Final note:

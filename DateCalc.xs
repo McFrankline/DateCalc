@@ -38,10 +38,10 @@ decode(date)
         N_int	dd;
         decode(date,&cc,&yy,&mm,&dd);
         EXTEND(sp,4);
-        PUSHs(sv_2mortal(newSVnv(cc)));
-        PUSHs(sv_2mortal(newSVnv(yy)));
-        PUSHs(sv_2mortal(newSVnv(mm)));
-        PUSHs(sv_2mortal(newSVnv(dd)));
+        PUSHs(sv_2mortal(newSViv((IV)cc)));
+        PUSHs(sv_2mortal(newSViv((IV)yy)));
+        PUSHs(sv_2mortal(newSViv((IV)mm)));
+        PUSHs(sv_2mortal(newSViv((IV)dd)));
     }
 
 
@@ -113,9 +113,9 @@ calc_new_date(year,mm,dd,offset)
         d = dd;
         calc_new_date(&y,&m,&d,offset);
         EXTEND(sp,3);
-        PUSHs(sv_2mortal(newSVnv(y)));
-        PUSHs(sv_2mortal(newSVnv(m)));
-        PUSHs(sv_2mortal(newSVnv(d)));
+        PUSHs(sv_2mortal(newSViv((IV)y)));
+        PUSHs(sv_2mortal(newSViv((IV)m)));
+        PUSHs(sv_2mortal(newSViv((IV)d)));
     }
 
 
@@ -173,8 +173,8 @@ week_number(year,mm,dd)
             yy++;
         }
         EXTEND(sp,2);
-        PUSHs(sv_2mortal(newSVnv(ww)));
-        PUSHs(sv_2mortal(newSVnv(yy)));
+        PUSHs(sv_2mortal(newSViv((IV)ww)));
+        PUSHs(sv_2mortal(newSViv((IV)yy)));
     }
 
 
@@ -191,9 +191,9 @@ first_in_week(week,year)
         mm = dd = 0;
         first_in_week(week,&yy,&mm,&dd);
         EXTEND(sp,3);
-        PUSHs(sv_2mortal(newSVnv(yy)));
-        PUSHs(sv_2mortal(newSVnv(mm)));
-        PUSHs(sv_2mortal(newSVnv(dd)));
+        PUSHs(sv_2mortal(newSViv((IV)yy)));
+        PUSHs(sv_2mortal(newSViv((IV)mm)));
+        PUSHs(sv_2mortal(newSViv((IV)dd)));
     }
 
 
@@ -215,9 +215,9 @@ decode_date(buffer)
             year = mm = dd = 0;
         }
         EXTEND(sp,3);
-        PUSHs(sv_2mortal(newSVnv(year)));
-        PUSHs(sv_2mortal(newSVnv(mm)));
-        PUSHs(sv_2mortal(newSVnv(dd)));
+        PUSHs(sv_2mortal(newSViv((IV)year)));
+        PUSHs(sv_2mortal(newSViv((IV)mm)));
+        PUSHs(sv_2mortal(newSViv((IV)dd)));
     }
 
 
@@ -273,7 +273,7 @@ days_in_month(year,mm)
     {
         mm %= 13;
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVnv((int) month_length[leap(year)][mm])));
+        PUSHs(sv_2mortal(newSViv((IV)month_length[leap(year)][mm])));
     }
 
 
@@ -282,7 +282,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("1.3",0)));
+        PUSHs(sv_2mortal(newSVpv("1.4",0)));
     }
 
 

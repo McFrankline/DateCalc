@@ -12,6 +12,6 @@ use Date::DateCalc;
 print "1..1\n";
 
 $n = 1;
-if (Date::DateCalc::Version() eq "1.3") {print "ok $n\n";} else {print "not ok $n\n";}
+if (Date::DateCalc::Version() eq "1.4") {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

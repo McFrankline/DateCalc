@@ -1,0 +1,39 @@
+####################################
+#
+# typemap for Perl 5 interface to Date::DateCalc package
+#
+# written by Steffen Beyer (sb@sdm.de)
+# last modified 21st November 1995
+# version 1.2a
+#
+#################################### Date::DateCalc SECTION
+#
+# 
+
+byte	T_U_CHAR
+word	T_IV
+longword	T_IV
+shortword	T_IV
+
+isochar	T_U_CHAR
+
+N_char	T_U_CHAR
+N_int	T_IV
+N_long	T_IV
+N_short	T_IV
+
+Z_char	T_CHAR
+Z_int	T_IV
+Z_long	T_IV
+Z_short	T_IV
+
+voidptr	T_PTR
+byteptr	T_PV
+wordptr	T_OPAQUEPTR
+longwordptr	T_OPAQUEPTR
+shortwordptr	T_OPAQUEPTR
+
+isocharptr	T_PV
+
+boolean	T_IV
+

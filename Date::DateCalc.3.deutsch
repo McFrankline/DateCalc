@@ -1,0 +1,469 @@
+////////////////////////////////////////
+//                                    //
+//        Benutzungsanleitung         //
+//                                    //
+//                zum                 //
+//                                    //
+//         Erweiterungspaket          //
+//                                    //
+//          fuer Perl 5.001m          //
+//                                    //
+////////////////////////////////////////
+//                                    //
+//          "Date::DateCalc"          //
+//                                    //
+////////////////////////////////////////
+//                                    //
+// Datumsberechnungen nach den Normen //
+//    ISO/R 2015-1971 und DIN 1355    //
+//                                    //
+////////////////////////////////////////
+
+===============
+  Konvention:
+===============
+
+"$year" bedeutet im folgenden eine vollstaendige Jahreszahl (z.B. 1995),
+waehrend fuer "$yy" in der Regel sowohl eine vollstaendige als auch eine
+abgekuerzte Jahreszahl (z.B. 95) eingesetzt werden kann. Jahreszahlen
+muessen groesser als Null sein.
+
+"$mm" steht fuer die Nummer des Monats (also 1 bis 12), und "$dd" steht
+fuer die Nummer des Tages im Monat (also 1 bis maximal 31).
+ 
+========================
+  $flag = leap($year);
+========================
+
+Diese Funktion liefert einen booleschen Wert, der angibt, ob das Jahr "$year"
+ein Schaltjahr ist.
+
+================================
+  $date = encode($yy,$mm,$dd);
+================================
+
+Mit Hilfe dieser Funktion kann ein Datum in einem 16-Bit-Wort verschluesselt
+werden. Die Verschluesselung erfolgt dabei wie folgt:
+
+              Bit-Nummer:    FEDCBA9 8765 43210
+              Inhalt:        yyyyyyy mmmm ddddd
+
+Alle Bits gleich Null steht dabei fuer "<no date>".
+
+Durch diese Art der Kodierung koennen verschluesselte Daten OHNE ENT-
+SCHLUESSELUNG auf Gleichheit UND REIHENFOLGE (GROESSER/KLEINER) geprueft
+werden!!
+
+Diese Funktion kann allerdings nur Daten innerhalb des Bereichs von einem
+Jahrhundert verschluesseln.
+
+Dazu wird im C-Kode des Moduls ein Referenz-Jahrhundert und -Jahr einge-
+stellt (hier 1900 und 70, wie auf UNIX-Systemen ueblich).
+
+Damit reicht der abgedeckte Bereich von 1970 bis 2069.
+
+Wenn fuer das Jahr "$yy" beispielsweise 95 eingegeben wird, wird automatisch
+1995 angenommen. Wird dagegen eine Zahl kleiner als 70 eingegeben, z.B. 64,
+so wird angenommen, dass 2064 gemeint ist.
+
+Es koennen auch vollstaendige Jahreszahlen eingegeben werden, vorausgesetzt
+sie liegen im abgedeckten Bereich (also 1970 bis 2069).
+
+Falls kein gueltiges Datum angegeben wurde, wird der Wert Null zurueckge-
+liefert.
+
+======================================
+  ($cc,$yy,$mm,$dd) = decode($date);
+======================================
+
+Diese Funktion ist das Gegenstueck zur Funktion "encode". Sie liefert
+in den Variablen "$cc", "$yy", "$mm" und "$dd" das Jahrhundert, das Jahr,
+den Monat und den Tag des Datums in "$date" zurueck.
+
+Der Term "$cc + $yy" ergibt dabei die eigentliche Jahreszahl (z.B. 1900 + 95
+= 1995).
+
+Falls "$date" den Wert Null hat, wird in allen Rueckgabevariablen eine Null
+zurueckgeliefert.
+
+Ansonsten wird jedoch keine Ueberpruefung des Datums vorgenommen.
+
+==============================
+  $flag = valid_date($date);
+==============================
+
+Diese Funktion liefert einen booleschen Wert, der angibt, ob in "$date" ein
+gueltiges Datum verschluesselt ist. (Schaltjahre werden beruecksichtigt!!)
+
+==================================
+  $datestr = date_string($date);
+==================================
+
+Mit Hilfe dieser Funktion wird das verschluesselte Datum in "$date" in einen
+String der Form "dd-mmm-yy" umgewandelt und in "$datestr" abgelegt.
+
+(Dabei ist "mmm" die (englische) Abkuerzung des Monatsnamens.)
+
+Falls "$date" kein gueltiges Datum enthaelt, wird "<no date>" in "$datestr"
+zurueckgeliefert.
+
+Der in "$datestr" abgelegte String ist bei dieser Funktion also immer genau
+9 Zeichen lang.
+
+======================================
+  $flag = check_date($year,$mm,$dd);
+======================================
+
+Diese Routine liefert einen booleschen Wert, der angibt, ob die Zahlen in
+"$year", "$mm" und "$dd" ein gueltiges Datum darstellen.
+
+Schaltjahre werden dabei beruecksichtigt!!
+
+=====================================
+  $days = calc_days($year,$mm,$dd);
+=====================================
+
+Diese Funktion liefert die (rein rechnerische!) Anzahl von Tagen zwischen
+dem gegebenen Datum und dem 1.1.1 (dem ersten Januar im Jahre 1) zurueck
+(beruecksichtigt aber nicht die Kalenderverschiebung im 16. Jahrhundert).
+
+Sie wird zur Berechnung der Differenz in Tagen zwischen zwei Daten benoetigt.
+
+================================================================
+  $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
+================================================================
+
+Diese Funktion berechnet die Differenz in Tagen zwischen den zwei angegebenen
+Daten. Dabei wird der Wert "Datum 2" - "Datum 1" berechnet.
+
+Falls "Datum 1" groesser (= spaeter) ist als "Datum 2", kommt ein negativer
+Wert heraus, dessen Betrag (Absolutwert) die gesuchte Differenz ist.
+
+==========================================
+  $weekday = day_of_week($year,$mm,$dd);
+==========================================
+
+Diese Funktion berechnet den Wochentag fuer ein gegebenes Datum.
+
+Dabei gilt:
+
+                0       =       Montag
+                1       =       Dienstag
+                2       =       Mittwoch
+                3       =       Donnerstag
+                4       =       Freitag
+                5       =       Samstag
+                6       =       Sonntag
+
+===========================================================
+  ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
+===========================================================
+
+Ausgehend von einem gegebenen Datum kann mit Hilfe dieser Funktion ein
+neues Datum berechnet werden, das eine bestimmte Anzahl von Tagen ("$offset")
+spaeter (positiver Wert) oder zurueck (negativer Wert) liegt.
+
+Kann das Datum nicht berechnet werden (z.B. weil das Datum vor dem Jahre 1
+liegen wuerde), wird in allen Rueckgabevariablen der Wert Null zurueckge-
+liefert.
+
+============================================
+  $datestr = date_to_short($year,$mm,$dd);
+============================================
+
+Diese Funktion wandelt das gegebene Datum in einen String der Form
+"www dd-mmm-yyyy" um, wobei "www" eine (englische) Abkuerzung fuer
+den Wochentag und "mmm" eine (englische) Abkuerzung fuer den Monat
+ist.
+
+=============================================
+  $datestr = date_to_string($year,$mm,$dd);
+=============================================
+
+Diese Funktion wandelt das gegebene Datum in einen String der Form
+"wwwwwwwww, dd mmmmmmmmm yyyy" um, wobei "wwwwwwwww" der ausgeschriebene
+(englische) Wochentag und "mmmmmmmmm" der ausgeschriebene (englische) Monat
+ist.
+
+===============================================
+  ($week,$year) = week_number($year,$mm,$dd);
+===============================================
+
+Diese Funktion berechnet die Nummer der Woche, in der das gegebene Datum
+liegt.
+
+Das kann ggfs. die letzte Woche des Vorjahres oder die erste Woche des
+naechstfolgenden Jahres sein.
+
+=================================================
+  ($year,$mm,$dd) = first_in_week($week,$year);
+=================================================
+
+Diese Funktion berechnet das Datum des ersten Tages (des Montags) (!)
+der angegebenen Woche im angegebenen Jahr.
+
+Falls der erste Tag der Woche im Vor- oder naechstfolgenden Jahr liegt,
+wird der Ausgabewert des Jahres ("$year") entsprechend angepasst (auch
+dann, wenn z.B. die Nummer der Woche groesser ist als die Anzahl der
+Wochen im angegebenen Jahr).
+
+Kann das Datum nicht berechnet werden (z.B. weil das Datum vor dem Jahre 1
+liegen wuerde), wird in allen Rueckgabevariablen der Wert Null zurueckge-
+liefert.
+
+Mit Hilfe des Ausdrucks
+
+  ($year,$mm,$dd) = first_in_week(week_number($year,$mm,$dd));
+
+laesst sich uebrigens zu jedem Datum das Datum des Montags der zugehoerigen
+Woche berechnen.
+
+Alternativ dazu kann man auch den Ausdruck
+
+  ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,-day_of_week($year,$mm,$dd));
+
+verwenden.
+
+==================================
+  $weeks = weeks_in_year($year);
+==================================
+
+Diese Funktion bestimmt die Anzahl der Wochen im angegebenen Jahr
+(52 oder 53 Wochen).
+
+===========================================
+  ($year,$mm,$dd) = decode_date($buffer);
+===========================================
+
+Mit Hilfe dieser Funktion koennen Daten in (nahezu) beliebigem Format
+eingelesen werden, die als String in "$buffer" vorliegen muessen.
+
+Es wird allerdings eine Eingabe in der Reihenfolge Tag - Monat - Jahr
+erwartet.
+
+Der Tag und das Jahr muessen als Zahlen, der Monat kann als Zahl oder
+als (maximal dreistellige) (englische!) Abkuerzung des Monatsnamens
+vorliegen (die Gross- und Kleinschreibung spielt hier keine Rolle).
+
+Wenn es eindeutig ist, reichen dabei auch der erste oder die ersten
+beiden Buchstaben des Monatsnamens aus.
+
+Das Jahr darf ebenfalls abgekuerzt werden, z.B. "95" statt "1995".
+
+Vor, zwischen und nach diesen drei Angaben koennen beliebig viele
+Trennzeichen stehen, wobei als Trennzeichen alle Nicht-Buchstaben
+und Nicht-Ziffern aufgefasst werden.
+
+Falls zwischen den drei Angaben keine Trennzeichen stehen, und der Monat
+als Zahl angegeben wurde, der relevante Teil der Eingabe also aus einer
+ununterbrochenen Kette von Ziffern besteht, wird - in Abhaengigkeit von
+der Laenge der eingegebenen Ziffernfolge - versucht, diese sinnvoll zu
+zerlegen:
+
+                Laenge:         Zerlegung:
+                   3              dmy
+                   4              dmyy
+                   5              dmmyy
+                   6              ddmmyy
+                   7              dmmyyyy
+                   8              ddmmyyyy
+
+Beispiel:
+
+Alle folgenden Eingaben werden als "3. Januar 1964" erkannt:
+
+                             3.1.64
+                             3 1 64
+                            03.01.64
+                            03/01/64
+                           3. Jan 1964
+                           3. Jan '64
+                            03-Jan-64
+                            3.Jan1964
+                             3Jan64
+                             3ja64
+                              3164
+
+Falls aus der Eingabe kein gueltiges Datum ermittelt werden kann, wird in
+allen Rueckgabevariablen der Wert Null zurueckgeliefert.
+
+===================================
+  $day = day_short_tab($weekday);
+===================================
+
+Diese Funktion greift auf die interne Tabelle der (englischen) Wochentags-
+abkuerzungen zu und liefert zum numerischen Wert "$weekday" des Wochentages
+(wie er z.B. von der Funktion "day_of_week($year,$mm,$dd)" geliefert wird)
+die entsprechende Abkuerzung.
+
+Der Wert "$weekday" wird intern (zum Schutz vor Zugriffen ausserhalb der
+Tabelle) Modulo 7 genommen.
+
+Dabei gilt:
+
+                0       =       Mon
+                1       =       Tue
+                2       =       Wed
+                3       =       Thu
+                4       =       Fri
+                5       =       Sat
+                6       =       Sun
+
+====================================
+  $day = day_name_tab($weekday);
+====================================
+
+Diese Funktion greift auf die interne Tabelle der (englischen) Wochentags-
+namen zu und liefert zum numerischen Wert "$weekday" des Wochentages (wie
+er z.B. von der Funktion "day_of_week($year,$mm,$dd)" geliefert wird) den
+entsprechenden Wochentag.
+
+Der Wert "$weekday" wird intern (zum Schutz vor Zugriffen ausserhalb der
+Tabelle) Modulo 7 genommen.
+
+Dabei gilt:
+
+                0       =       Monday
+                1       =       Tuesday
+                2       =       Wednesday
+                3       =       Thursday
+                4       =       Friday
+                5       =       Saturday
+                6       =       Sunday
+
+==================================
+  $month = month_short_tab($mm);
+==================================
+
+Diese Funktion greift auf die interne Tabelle der (englischen) Monatsab-
+kuerzungen zu und liefert zum numerischen Wert "$mm" des Monats die ent-
+sprechende Abkuerzung.
+
+Der Wert "$mm" wird intern (zum Schutz vor Zugriffen ausserhalb der Tabelle)
+Modulo 13 (!) genommen.
+
+Dabei gilt:
+
+                0       =       Err
+                1       =       Jan
+                2       =       Feb
+                3       =       Mar
+                4       =       Apr
+                5       =       May
+                6       =       Jun
+                7       =       Jul
+                8       =       Aug
+                9       =       Sep
+               10       =       Oct
+               11       =       Nov
+               12       =       Dec
+
+=================================
+  $month = month_name_tab($mm);
+=================================
+
+Diese Funktion greift auf die interne Tabelle der (englischen) Monats-
+namen zu und liefert zum numerischen Wert "$mm" des Monats den ent-
+sprechenden Namen.
+
+Der Wert "$mm" wird intern (zum Schutz vor Zugriffen ausserhalb der Tabelle)
+Modulo 13 (!) genommen.
+
+Dabei gilt:
+
+                0       =       Error
+                1       =       January
+                2       =       February
+                3       =       March
+                4       =       April
+                5       =       May
+                6       =       June
+                7       =       July
+                8       =       August
+                9       =       September
+               10       =       October
+               11       =       November
+               12       =       December
+
+=========================================
+  $version = Date::DateCalc::Version();
+=========================================
+
+Diese Funktion liefert einen String mit der aktuellen Versionsnummer des
+"DateCalc"-Erweiterungspakets.
+
+Da diese Funktion nicht exportiert wird, muss sie immer vollstaendig
+referenziert werden (Date::DateCalc::...).
+
+////////////////////////////////////////
+//                                    //
+//             Beispiel:              //
+//                                    //
+////////////////////////////////////////
+
+#!perl -w
+
+use strict;
+no strict "vars";
+
+use Date::DateCalc qw( leap encode decode valid_date date_string check_date calc_days dates_difference day_of_week calc_new_date date_to_short date_to_string week_number first_in_week weeks_in_year decode_date day_short_tab day_name_tab month_short_tab month_name_tab );
+
+print "\n";
+
+$ok = 0;
+while (! $ok)
+{
+    print "Please enter the date of your birthday (day-month-year): ";
+    $date = <STDIN>;
+    print "\n";
+    ($yy1,$mm1,$dd1) = decode_date($date);
+    if ($yy1)
+    {
+        $datestr = date_to_short($yy1,$mm1,$dd1);
+        print "Your date is: $datestr\n";
+        print "\n";
+        print "Is that correct? (Yes/No) ";
+        $response = <STDIN>;
+        print "\n";
+        $ok = ($response =~ /^Y/i);
+    }
+}
+print "Your birthday is: $datestr\n";
+print "\n";
+
+$ok = 0;
+while (! $ok)
+{
+    print "Please enter today's date (day-month-year): ";
+    $date = <STDIN>;
+    print "\n";
+    ($yy2,$mm2,$dd2) = decode_date($date);
+    if ($yy2)
+    {
+        $datestr = date_to_short($yy2,$mm2,$dd2);
+        print "Your date is: $datestr\n";
+        print "\n";
+        print "Is that correct? (Yes/No) ";
+        $response = <STDIN>;
+        print "\n";
+        $ok = ($response =~ /^Y/i);
+    }
+}
+print "Today's date is: $datestr\n";
+print "\n";
+
+$days = dates_difference($yy1,$mm1,$dd1,$yy2,$mm2,$dd2);
+print "You are $days days old.\n";
+print "\n";
+
+__END__
+
+////////////////////////////////////////
+// PROGRAMMER   Steffen Beyer         //
+////////////////////////////////////////
+// CREATED      09.11.95              //
+////////////////////////////////////////
+// MODIFIED     18.11.95              //
+////////////////////////////////////////
+// COPYRIGHT    Steffen Beyer         //
+////////////////////////////////////////

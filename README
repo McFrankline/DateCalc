@@ -1,0 +1,203 @@
+========================================
+  Module "Date::DateCalc" Version 1.2a
+========================================
+
+--------------------------------------------------------------------------------
+ Extension package for Perl 5.001m (should work with Perl 5.000 and up as well)
+--------------------------------------------------------------------------------
+
+
+Legal stuff:
+------------
+
+Copyright (c) 1995 by Steffen Beyer. All rights reserved.
+This package is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+
+What does it do:
+----------------
+
+The package provides a Perl interface to a C library which offers all
+sorts of date calculations, complying with the ISO/R 2015-1971 and DIN
+1355 standards which specify things as what leap years are, when they
+occur, how the week numbers are defined, what's the first day of the week,
+how many weeks (52 or 53) a given year has, and so on (Gregorian calendar,
+as opposed to the Julian calendar, which was used until 1582).
+
+Many users have craved for a simple module that uses the XS interface to
+incorporate a C library, in order to be able to learn from it, since the
+PERLAPI and PERLGUTS sections of the Perl 5 manual are not complete and
+easy to put into practice. So here it is!
+
+To give you an idea of what the package can do, here a list of all the
+functions it exports:
+
+  $flag = leap($year);
+  $date = encode($yy,$mm,$dd);
+  ($cc,$yy,$mm,$dd) = decode($date);
+  $flag = valid_date($date);
+  $datestr = date_string($date);
+  $flag = check_date($year,$mm,$dd);
+  $days = calc_days($year,$mm,$dd);
+  $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
+  $weekday = day_of_week($year,$mm,$dd);
+  ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
+  $datestr = date_to_short($year,$mm,$dd);
+  $datestr = date_to_string($year,$mm,$dd);
+  ($week,$year) = week_number($year,$mm,$dd);
+  ($year,$mm,$dd) = first_in_week($week,$year);
+  $weeks = weeks_in_year($year);
+  ($year,$mm,$dd) = decode_date($buffer);
+  $day = day_short_tab($weekday);
+  $day = day_name_tab($weekday);
+  $month = month_short_tab($mm);
+  $month = month_name_tab($mm);
+  $version = Date::DateCalc::Version();
+
+For more details, see the Date::DateCalc(3) man page!
+
+
+How to install it:
+------------------
+
+Please unpack and build this package OUTSIDE the Perl source and distribution
+tree!!
+
+ 1) Change directory to the directory that has been created by unpacking this
+    package ("DateCalc-1.2a").
+
+ 2) Type "perl5 Makefile.PL" (or whatever the name and path of your Perl 5
+    binary is).
+
+    This will create a "Makefile" with the appropriate parameters for your
+    system (for instance, where the install directories are, and so on).
+
+ 3) Type "make".
+
+    This will create a dynamically linkable library file that will be linked
+    to Perl later, at runtime, provided your system supports dynamic linking.
+
+    Please refer to the MakeMaker documentation for instructions on how
+    to build a new Perl with statically linked libraries (invoke "perldoc
+    ExtUtils::MakeMaker" for this), in case your system DOESN'T support
+    dynamic linking!
+
+    (Note, however, that I didn't test this since my system does support
+    dynamic linking.)
+
+    Should you encounter any compiler warnings or errors (like the redefini-
+    tion of certain types already defined by your system), please contact
+    me by mail at 'sb@sdm.de', sending me your compiler output (both STDOUT
+    and STDERR). Thank you!
+
+ 4) Now issue "make test".
+
+    The output should look somewhat like this:
+
+    PERL_DL_NONLAZY=1 /opt/bin/perl5 -I./blib/sun4-sunos -I./blib
+    -I/opt/lib/perl5.001m/sun4-sunos -I/opt/lib/perl5.001m -e 'use
+    Test::Harness qw(&runtests $verbose); $verbose=0; runtests @ARGV;'
+    t/*.t
+    t/f001..............ok
+    t/f002..............ok
+    t/f003..............ok
+    t/f004..............ok
+    t/f005..............ok
+    t/f006..............ok
+    t/f007..............ok
+    t/f008..............ok
+    t/f009..............ok
+    t/f010..............ok
+    t/f011..............ok
+    t/f012..............ok
+    t/f013..............ok
+    t/f014..............ok
+    t/f015..............ok
+    t/f016..............ok
+    t/f017..............ok
+    t/f018..............ok
+    t/f019..............ok
+    All tests successful.
+    Files=19,  Tests=139,  7 secs ( 3.13 cusr  2.00 csys =  5.13 cpu)
+
+ 5) Currently there are two versions of the man page "Date::DateCalc.3":
+    "Date::DateCalc.3.deutsch" and "Date::DateCalc.3.english". Rename the
+    one which is appropriate for you to "Date::DateCalc.3".
+
+    After this, you will have to manually copy this man page to your man
+    directory, probably one of "/usr/lang/man/cat3", "/usr/local/man/cat3",
+    "/usr/man/cat3", or the like (consult your MANPATH environment variable).
+
+    (The current version of MakeMaker doesn't support the copying of the man
+    pages to their destination directory yet!)
+
+    If, however, you have installed a newer version of Makemaker which
+    supports installing of the man pages, you can skip this step as it's
+    automatically being taken care of by the "make install" in the next
+    step.
+
+    You may also first try "make install", and if it doesn't install the
+    man page, copy it manually.
+
+ 6) Finally, type "make install".
+        
+ 7) Now you may try to run the "demo". Start it with "perl5 demo" (or what-
+    ever the name and path of your Perl 5 binary is).
+
+    It will ask you for your birthday and the current date and calculate your
+    age in days. You may enter the dates in almost any format, provided that
+    you enter them in the order day - month - year. You may also use an (up
+    to 3 letters) abbreviation for the month. You might try "03-Jan-1964",
+    for example. Experiment!
+
+ 8) Enjoy!
+
+
+Version history:
+----------------
+
+Version 1.0 was the initial release (released as an article in the news-
+groups comp.lang.perl.misc and de.comp.lang.perl (cross-posting)).
+
+Version 1.01 tried to fix some "violations" of programming standards for
+Perl extension modules I wasn't aware of. (I'm rather new at all this!)
+
+Version 1.1 supplied a much more elaborate set of test scripts which will
+be run and evaluated automatically by Test::Harness when "make test" is
+issued, testing every single function in this package very thoroughly.
+
+This version also tried to fix the problem with the redefinition of the
+types "uint", "ulong" etc. that arose on some systems which define these
+types themselves, by renaming them to "unint", "unlong" and so forth.
+
+Version 1.2a is another attempt to solve the problem of the predefined
+types by renaming them to some more unusual (and hence less probably
+already defined) names. (See the file 'lib_defs.h' for details)
+
+Other developers beware: The type names "uint", "u_int" and "unint" (and
+the like) are all taken! Do not use these names for your own types!
+
+
+Thanks:
+-------
+
+Many thanks to Andreas Koenig for his efforts as upload-manager for the CPAN,
+his patience, and lots of very good advice and suggestions!  Thank you for
+doing such a tremendous (and very time-consuming) job!!
+
+
+Final note:
+-----------
+
+Please report any comments, problems, suggestions, findings, complaints,
+questions, enlightenments ;-) and so on (not necessarily in this order) to:
+
+sb@sdm.de (Steffen Beyer)
+
+With kind regards,
+--
+Steffen Beyer
+mailto:sb@sdm.de        |s  |d &|m  |  software design & management GmbH&Co.KG
+phone: +49 89 63812-244 |   |   |   |  Thomas-Dehler-Str. 27
+fax:   +49 89 63812-150 |   |   |   |  81737 Munich, Germany.

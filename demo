@@ -1,0 +1,56 @@
+#!perl -w
+
+use strict;
+no strict "vars";
+
+use Date::DateCalc qw( leap encode decode valid_date date_string check_date calc_days dates_difference day_of_week calc_new_date date_to_short date_to_string week_number first_in_week weeks_in_year decode_date day_short_tab day_name_tab month_short_tab month_name_tab );
+
+print "\n";
+
+$ok = 0;
+while (! $ok)
+{
+    print "Please enter the date of your birthday (day-month-year): ";
+    $date = <STDIN>;
+    print "\n";
+    ($yy1,$mm1,$dd1) = decode_date($date);
+    if ($yy1)
+    {
+        $datestr = date_to_short($yy1,$mm1,$dd1);
+        print "Your date is: $datestr\n";
+        print "\n";
+        print "Is that correct? (Yes/No) ";
+        $response = <STDIN>;
+        print "\n";
+        $ok = ($response =~ /^Y/i);
+    }
+}
+print "Your birthday is: $datestr\n";
+print "\n";
+
+$ok = 0;
+while (! $ok)
+{
+    print "Please enter today's date (day-month-year): ";
+    $date = <STDIN>;
+    print "\n";
+    ($yy2,$mm2,$dd2) = decode_date($date);
+    if ($yy2)
+    {
+        $datestr = date_to_short($yy2,$mm2,$dd2);
+        print "Your date is: $datestr\n";
+        print "\n";
+        print "Is that correct? (Yes/No) ";
+        $response = <STDIN>;
+        print "\n";
+        $ok = ($response =~ /^Y/i);
+    }
+}
+print "Today's date is: $datestr\n";
+print "\n";
+
+$days = dates_difference($yy1,$mm1,$dd1,$yy2,$mm2,$dd2);
+print "You are $days days old.\n";
+print "\n";
+
+__END__

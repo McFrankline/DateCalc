@@ -1,0 +1,523 @@
+
+
+DATE::DATECALC(1)        USER COMMANDS          DATE::DATECALC(1)
+
+
+NAME
+     Date::DateCalc - Date calculations in compliance with
+                      ISO/R 2015-1971 and DIN 1355 standards
+
+SYNOPSIS
+     use Date::DateCalc;
+
+     or
+
+     use Date::DateCalc qw( leap encode decode valid_date date_string
+     check_date calc_days dates_difference day_of_week calc_new_date
+     date_to_short date_to_string week_number first_in_week weeks_in_year
+     decode_date day_short_tab day_name_tab month_short_tab month_name_tab );
+
+     (you may, of course, also import only portions thereof!)
+
+DESCRIPTION
+     ===============
+       Convention:
+     ===============
+
+     In the following, "$year" stands for a "complete" year number
+     (like "1995", for instance), whereas "$yy" may be an abbreviated
+     year number (like "95") OR a complete year number.
+
+     Year numbers must be positive integers (greater than zero).
+
+     "$mm" stands for the number of a month (from 1 to 12), and "$dd"
+     is the number of a day in a month (from 1 to 28,29,30 or 31, de-
+     pending on the month and the year).
+ 
+     ========================
+       $flag = leap($year);
+     ========================
+
+     This function returns a boolean value which is "true" (1) if the
+     year "$year" is a leap year, and "false" (0) otherwise.
+
+     No check is made if the year "$year" is in the valid range.
+
+     For years less than 1, the result is probably meaningless (it IS
+     almost meaningless, anyway, for years before 1582).
+
+     ================================
+       $date = encode($yy,$mm,$dd);
+     ================================
+
+     This function encodes a date in 16 bits. The encoding scheme is
+     as follows:
+
+                   Bit-No.:       FEDCBA9 8765 43210
+                   Contents:      yyyyyyy mmmm ddddd
+
+     All bits equal to zero is equivalent to "<no date>".
+
+     Through this encoding scheme, it is possible to COMPARE ENCODED
+     DATES for equality and ORDER (less than/greater than) WITHOUT
+     any previous DECODING!!
+
+     However, this function can only handle dates within one century.
+
+     This century can be biased at will by choosing a base century
+     and year. In this module, the base century is set to 1900 and
+     the base year to 70. (As on all UNIX systems as well).
+
+     This way this function can handle dates from 1970 up to 2069.
+
+     If the year "$yy" is equal to, say, 95, it is automatically
+     assumed that 1995 is meant. However, if you specify a year
+     number which is SMALLER than 70, like 64, for instance, it
+     is assumed that you meant 2064.
+
+     But you are not confined to abbreviated year numbers (smaller
+     than 100). You may of course use complete year numbers, provided
+     that they are in the supported range (that is, from 1970 to 2069).
+
+     If no valid date is specified, zero is returned.
+
+     ======================================
+       ($cc,$yy,$mm,$dd) = decode($date);
+     ======================================
+
+     This function decodes dates that were encoded by "encode".
+     It returns the century, year, month and day of the date encoded
+     in "$date" in the variables "$cc", "$yy", "$mm" and "$dd", re-
+     spectively.
+
+     The expression "$cc + $yy" yields the complete year number (for
+     example, 1900 + 95 = 1995).
+
+     If "$date" is zero, all return values are zero as well.
+
+     Besides this, no other checks are performed by this function.
+
+     ==============================
+       $flag = valid_date($date);
+     ==============================
+
+     This function returns a boolean value which is "true" (1) if
+     "$date" contains a valid encoded date, and "false" (0) otherwise.
+
+     When determining validity, leap years are taken into account,
+     i.e., the 29th of february is rejected in non-leap years.
+
+     ==================================
+       $datestr = date_string($date);
+     ==================================
+
+     This function converts the encoded date in "$date" to a string
+     of the format "dd-mmm-yy", which is returned.
+
+     ("mmm" is the 3-letter abbreviation of the month)
+
+     If the date in "$date" is invalid, the string "<no date>" is
+     returned.
+
+     Note that the string which is returned is always exactly 9
+     characters long, in any case.
+
+     ======================================
+       $flag = check_date($year,$mm,$dd);
+     ======================================
+
+     This function returns a boolean value which is "true" (1) if the
+     three numbers "$year", "$mm" and "$dd" represent a valid date,
+     and "false" (0) otherwise.
+
+     When determining validity, leap years are taken into account,
+     i.e., the 29th of february is rejected in non-leap years.
+
+     =====================================
+       $days = calc_days($year,$mm,$dd);
+     =====================================
+
+     This function returns the (only theoretical) number of days
+     between the first of january of the year one and the given date.
+
+     The function doesn't take into account the change from the
+     Julian to the Gregorian calendar (used today) in 1582.
+
+     It is needed to calculate the difference in days between two
+     dates.
+
+     Zero is returned if no valid date is specified.
+
+     ================================================================
+       $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
+     ================================================================
+
+     This function calculates the difference in days between the two
+     given dates.
+
+     The function calculates the difference "date 2" - "date 1".
+
+     If date 1 is later than date 2, the result will be negative.
+
+     (This means you may use this function to compare dates!)
+
+     If one of the two dates is invalid, the result will degrade to
+     the value of the function "calc_days" for the other date. If
+     both dates are invalid, the result is zero.
+
+     ==========================================
+       $weekday = day_of_week($year,$mm,$dd);
+     ==========================================
+
+     This function calculates the day of week for the given date.
+
+     The return values have the following meaning:
+
+                     0       =       Monday
+                     1       =       Tuesday
+                     2       =       Wednesday
+                     3       =       Thursday
+                     4       =       Friday
+                     5       =       Saturday
+                     6       =       Sunday
+
+     ===========================================================
+       ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
+     ===========================================================
+
+     Starting from the given date, a new date can be calculated with
+     this function which is "$offset" days away from the original
+     date. "$offset" may be positive (for a date later than the ori-
+     ginal date) or negative (for a date earlier than the given date).
+
+     If the date cannot be calculated (for instance, if the given
+     date is invalid or the new date would be before the year one),
+     only zeros are returned.
+
+     ============================================
+       $datestr = date_to_short($year,$mm,$dd);
+     ============================================
+
+     This function converts the given date to a string of the format
+     "www dd-mmm-yyyy", which is returned.
+
+     "www" is a (3-letter) abbreviation of the day of week, and "mmm"
+     is a (3-letter) abbreviation of the month.
+
+     If the given date is invalid, the string "<no date>" is returned.
+
+     =============================================
+       $datestr = date_to_string($year,$mm,$dd);
+     =============================================
+
+     This function converts the given date to a string of the format
+     "wwwwwwwww, dd mmmmmmmmm yyyy", which is returned.
+
+     "wwwwwwwww" is the day of week and "mmmmmmmmm" the name of the
+     month.
+
+     If the given date is invalid, the string "<no date>" is returned.
+
+     ===============================================
+       ($week,$year) = week_number($year,$mm,$dd);
+     ===============================================
+
+     This function calculates the number of the week in which the
+     given date lies.
+
+     This can occasionally be the last week of the previous year
+     or the first week of the next year.
+
+     =================================================
+       ($year,$mm,$dd) = first_in_week($week,$year);
+     =================================================
+
+     This function calculates the date of the first day (the monday!)
+     of the given week in the given year.
+
+     The return value "$year" is adjusted accordingly if the first
+     day of the given week lies in the previous or next year (also
+     if the given week number is greater than the number of weeks in
+     the given year!).
+
+     If the date cannot be calculated (for instance, if the calcula-
+     ted date would be before the year one), only zeros are returned.
+
+     With help of the expression
+
+       ($year,$mm,$dd) = first_in_week(week_number($year,$mm,$dd));
+
+     it is possible to easily calculate the date of the monday be-
+     longing to the week the given date lies in.
+
+     Alternatively, the expression
+
+       ($year,$mm,$dd) =
+
+           calc_new_date($year,$mm,$dd,-day_of_week($year,$mm,$dd));
+
+     can be used to achieve the same.
+
+     ==================================
+       $weeks = weeks_in_year($year);
+     ==================================
+
+     This function returns the number of weeks of the given year
+     (52 or 53 weeks).
+
+     No check is made if the year "$year" is in the valid range.
+
+     For years less than 1, the result is probably meaningless.
+
+     ===========================================
+       ($year,$mm,$dd) = decode_date($buffer);
+     ===========================================
+
+     With help of this function, it is possible to recognize
+     dates in almost any format, provided the date is given
+     as "day - month - year".
+
+     The day and the year must be given as numbers, the month may be
+     specified either by number or an abbreviation (up to 3 charac-
+     ters long) of the month's name (case is ignored).
+
+     If they uniquely identify the month, one or two letters are
+     sufficient (like "s" for september and "ja" for january).
+
+     The year may be abbreviated as well, for instance "95" instead
+     of "1995". (Year numbers below 100 are incremented by 1900.)
+
+     Any number of non-digits may precede the number of the day and
+     follow the number of the year.
+
+     Between the number of the day and the month, as well as between
+     the month and the number of the year, any number of non-alpha-
+     numeric characters (i.e., all characters not in [A-Za-z0-9])
+     may be interspersed.
+
+     If after removing the preceding and trailing non-digit characters
+     the string consists only of digits, it is automatically mapped to
+     the day, month and year depending on its length, as intuitively as
+     possible, as follows:
+
+                      Length:        Mapping:
+                        3              dmy
+                        4              dmyy
+                        5              dmmyy
+                        6              ddmmyy
+                        7              dmmyyyy
+                        8              ddmmyyyy
+
+     Example:
+
+     All the following strings will be recognized as
+     "january 3rd 1964":
+
+                             3.1.64
+                             3 1 64
+                            03.01.64
+                            03/01/64
+                           3. Jan 1964
+                           3. Jan '64
+                            03-Jan-64
+                            3.Jan1964
+                             3Jan64
+                             3ja64
+                              3164
+
+     If no valid date can be deduced from its input, the function
+     returns zeros in all its return values.
+
+     ===================================
+       $day = day_short_tab($weekday);
+     ===================================
+
+     This function accesses the internal table of abbreviations of
+     the days of week.
+
+     It returns the corresponding string for each numeric value of a
+     day of week (as returned by the function "day_of_week").
+
+     The value of "$weekday" is taken modulo 7 internally to prevent
+     out-of-range access to the internal array.
+
+     The strings which are returned are the following:
+
+                     0       =       Mon
+                     1       =       Tue
+                     2       =       Wed
+                     3       =       Thu
+                     4       =       Fri
+                     5       =       Sat
+                     6       =       Sun
+
+     ====================================
+       $day = day_name_tab($weekday);
+     ====================================
+
+     This function accesses the internal table of the days of week.
+
+     It returns the corresponding string for each numeric value of a
+     day of week (as returned by the function "day_of_week").
+
+     The value of "$weekday" is taken modulo 7 internally to prevent
+     out-of-range access to the internal array.
+
+     The strings which are returned are the following:
+
+                     0       =       Monday
+                     1       =       Tuesday
+                     2       =       Wednesday
+                     3       =       Thursday
+                     4       =       Friday
+                     5       =       Saturday
+                     6       =       Sunday
+
+     ==================================
+       $month = month_short_tab($mm);
+     ==================================
+
+     This function accesses the internal table of abbreviations of
+     the month's names.
+
+     It returns the corresponding string for each numeric value of a
+     month.
+
+     The value of "$mm" is taken modulo 13 (!) internally to prevent
+     out-of-range access to the internal array.
+
+     The strings which are returned are the following:
+
+                     0       =       Err
+                     1       =       Jan
+                     2       =       Feb
+                     3       =       Mar
+                     4       =       Apr
+                     5       =       May
+                     6       =       Jun
+                     7       =       Jul
+                     8       =       Aug
+                     9       =       Sep
+                    10       =       Oct
+                    11       =       Nov
+                    12       =       Dec
+
+     =================================
+       $month = month_name_tab($mm);
+     =================================
+
+     This function accesses the internal table of the month's names.
+
+     It returns the corresponding string for each numeric value of a
+     month.
+
+     The value of "$mm" is taken modulo 13 (!) internally to prevent
+     out-of-range access to the internal array.
+
+     The strings which are returned are the following:
+
+                     0       =       Error
+                     1       =       January
+                     2       =       February
+                     3       =       March
+                     4       =       April
+                     5       =       May
+                     6       =       June
+                     7       =       July
+                     8       =       August
+                     9       =       September
+                    10       =       October
+                    11       =       November
+                    12       =       December
+
+     =========================================
+       $version = Date::DateCalc::Version();
+     =========================================
+
+     This function returns a string with the (numeric) version
+     number of the "DateCalc" extension package.
+
+     Since this function is not exported, you always have to
+     reference it explicitly (i.e., "Date::DateCalc::...").
+
+     (Imagine you are "using" several packages that all export
+     this same function: If you called it without referencing it,
+     you wouldn't know for sure which of the packages answered!)
+
+EXAMPLE
+     #!perl -w
+
+     use strict;
+     no strict "vars";
+
+     use Date::DateCalc qw( leap encode decode valid_date date_string
+     check_date calc_days dates_difference day_of_week calc_new_date
+     date_to_short date_to_string week_number first_in_week weeks_in_year
+     decode_date day_short_tab day_name_tab month_short_tab month_name_tab );
+
+     print "\n";
+
+     $ok = 0;
+     while (! $ok)
+     {
+         print "Please enter the date of your birthday (day-month-year): ";
+         $date = <STDIN>;
+         print "\n";
+         ($yy1,$mm1,$dd1) = decode_date($date);
+         if ($yy1)
+         {
+             $datestr = date_to_short($yy1,$mm1,$dd1);
+             print "Your date is: $datestr\n";
+             print "\n";
+             print "Is that correct? (Yes/No) ";
+             $response = <STDIN>;
+             print "\n";
+             $ok = ($response =~ /^Y/i);
+         }
+     }
+     print "Your birthday is: $datestr\n";
+     print "\n";
+
+     $ok = 0;
+     while (! $ok)
+     {
+         print "Please enter today's date (day-month-year): ";
+         $date = <STDIN>;
+         print "\n";
+         ($yy2,$mm2,$dd2) = decode_date($date);
+         if ($yy2)
+         {
+             $datestr = date_to_short($yy2,$mm2,$dd2);
+             print "Your date is: $datestr\n";
+             print "\n";
+             print "Is that correct? (Yes/No) ";
+             $response = <STDIN>;
+             print "\n";
+             $ok = ($response =~ /^Y/i);
+         }
+     }
+     print "Today's date is: $datestr\n";
+     print "\n";
+
+     $days = dates_difference($yy1,$mm1,$dd1,$yy2,$mm2,$dd2);
+     print "You are $days days old.\n";
+     print "\n";
+
+     __END__
+
+SEE ALSO
+     perl(1), perlsub(1), perlmod(1), perlapi(1), perlguts(1).
+
+VERSION
+     This man page documents Date::DateCalc, version 1.2a.
+
+AUTHOR
+     Steffen Beyer <sb@sdm.de> (sd&m GmbH&Co.KG, Munich, Germany)
+
+COPYRIGHT
+     Copyright (c) 1995 by Steffen Beyer. All rights reserved.
+
+LICENSE AGREEMENT
+     This package is free software; you can redistribute it and/or
+     modify it under the same terms as Perl itself.
+

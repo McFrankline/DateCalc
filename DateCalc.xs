@@ -36,7 +36,7 @@ decode(date)
         N_int	mm;
         N_int	dd;
         decode(date,&cc,&yy,&mm,&dd);
-        EXTEND(SP,4);
+        EXTEND(sp,4);
         PUSHs(sv_2mortal(newSVnv(cc)));
         PUSHs(sv_2mortal(newSVnv(yy)));
         PUSHs(sv_2mortal(newSVnv(mm)));
@@ -58,7 +58,7 @@ date_string(date)
         datestr = date_string(date);
         if (datestr != NULL)
         {
-            EXTEND(SP,1);
+            EXTEND(sp,1);
             PUSHs(sv_2mortal(newSVpv((char *)datestr,0)));
             free(datestr);
         }
@@ -111,7 +111,7 @@ calc_new_date(year,mm,dd,offset)
         m = mm;
         d = dd;
         calc_new_date(&y,&m,&d,offset);
-        EXTEND(SP,3);
+        EXTEND(sp,3);
         PUSHs(sv_2mortal(newSVnv(y)));
         PUSHs(sv_2mortal(newSVnv(m)));
         PUSHs(sv_2mortal(newSVnv(d)));
@@ -129,7 +129,7 @@ date_to_short(year,mm,dd)
         datestr = date_to_short(year,mm,dd);
         if (datestr != NULL)
         {
-            EXTEND(SP,1);
+            EXTEND(sp,1);
             PUSHs(sv_2mortal(newSVpv((char *)datestr,0)));
             free(datestr);
         }
@@ -147,7 +147,7 @@ date_to_string(year,mm,dd)
         datestr = date_to_string(year,mm,dd);
         if (datestr != NULL)
         {
-            EXTEND(SP,1);
+            EXTEND(sp,1);
             PUSHs(sv_2mortal(newSVpv((char *)datestr,0)));
             free(datestr);
         }
@@ -171,7 +171,7 @@ week_number(year,mm,dd)
             ww = 1;
             yy++;
         }
-        EXTEND(SP,2);
+        EXTEND(sp,2);
         PUSHs(sv_2mortal(newSVnv(ww)));
         PUSHs(sv_2mortal(newSVnv(yy)));
     }
@@ -189,7 +189,7 @@ first_in_week(week,year)
         yy = year;
         mm = dd = 0;
         first_in_week(week,&yy,&mm,&dd);
-        EXTEND(SP,3);
+        EXTEND(sp,3);
         PUSHs(sv_2mortal(newSVnv(yy)));
         PUSHs(sv_2mortal(newSVnv(mm)));
         PUSHs(sv_2mortal(newSVnv(dd)));
@@ -213,7 +213,7 @@ decode_date(buffer)
         {
             year = mm = dd = 0;
         }
-        EXTEND(SP,3);
+        EXTEND(sp,3);
         PUSHs(sv_2mortal(newSVnv(year)));
         PUSHs(sv_2mortal(newSVnv(mm)));
         PUSHs(sv_2mortal(newSVnv(dd)));
@@ -226,7 +226,7 @@ day_short_tab(dd)
     PPCODE:
     {
         dd %= 7;
-        EXTEND(SP,1);
+        EXTEND(sp,1);
         PUSHs(sv_2mortal(newSVpv((char *)day_short[dd],0)));
     }
 
@@ -237,7 +237,7 @@ day_name_tab(dd)
     PPCODE:
     {
         dd %= 7;
-        EXTEND(SP,1);
+        EXTEND(sp,1);
         PUSHs(sv_2mortal(newSVpv((char *)day_name[dd],0)));
     }
 
@@ -248,7 +248,7 @@ month_short_tab(mm)
     PPCODE:
     {
         mm %= 13;
-        EXTEND(SP,1);
+        EXTEND(sp,1);
         PUSHs(sv_2mortal(newSVpv((char *)month_short[mm],0)));
     }
 
@@ -259,7 +259,7 @@ month_name_tab(mm)
     PPCODE:
     {
         mm %= 13;
-        EXTEND(SP,1);
+        EXTEND(sp,1);
         PUSHs(sv_2mortal(newSVpv((char *)month_name[mm],0)));
     }
 
@@ -268,8 +268,8 @@ void
 Version()
     PPCODE:
     {
-        EXTEND(SP,1);
-        PUSHs(sv_2mortal(newSVpv("1.2a",0)));
+        EXTEND(sp,1);
+        PUSHs(sv_2mortal(newSVpv("1.2b",0)));
     }
 
 

@@ -15,7 +15,7 @@ typedef  unsigned   int     word;
 typedef  unsigned   long    longword;
 typedef  unsigned   short   shortword;
 
-typedef  unsigned   char    isochar;  /* ISO-Latin-1 is an 8-bit code */
+typedef  unsigned   char    isochar;  /* ISO-Latin-1 is an 8-bit code... */
 
 typedef  unsigned   char    N_char;   /* natural numbers */
 typedef  unsigned   int     N_int;    /* N = { 0, 1, 2, 3, ... } */
@@ -33,7 +33,7 @@ typedef  word               *wordptr;
 typedef  longword           *longwordptr;
 typedef  shortword          *shortwordptr;
 
-typedef  unsigned   char    *isocharptr;
+typedef  isochar            *isocharptr;
 
 #ifdef EXTENDED_LIB_DEFINITIONS
 
@@ -131,7 +131,7 @@ typedef enum { false = FALSE , true = TRUE } boolean;
 /**************************************/
 /* CREATED      01.11.93              */
 /**************************************/
-/* MODIFIED     21.11.95              */
+/* MODIFIED     22.11.95              */
 /**************************************/
 /* COPYRIGHT    Steffen Beyer         */
 /**************************************/

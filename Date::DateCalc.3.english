@@ -1,6 +1,6 @@
 
 
-DATE::DATECALC(1)        USER COMMANDS          DATE::DATECALC(1)
+DATE::DATECALC(3)        USER COMMANDS          DATE::DATECALC(3)
 
 
 NAME
@@ -17,7 +17,7 @@ SYNOPSIS
      date_to_short date_to_string week_number first_in_week weeks_in_year
      decode_date day_short_tab day_name_tab month_short_tab month_name_tab );
 
-     (you may, of course, also import only portions thereof!)
+     (you may, of course, also import only portions thereof)
 
 DESCRIPTION
      ===============
@@ -66,18 +66,19 @@ DESCRIPTION
 
      This century can be biased at will by choosing a base century
      and year. In this module, the base century is set to 1900 and
-     the base year to 70. (As on all UNIX systems as well).
+     the base year to 70. (Standard on UNIX systems)
 
-     This way this function can handle dates from 1970 up to 2069.
+     This allows the function to handle dates from 1970 up to 2069.
 
      If the year "$yy" is equal to, say, 95, it is automatically
      assumed that 1995 is meant. However, if you specify a year
      number which is SMALLER than 70, like 64, for instance, it
      is assumed that you meant 2064.
 
-     But you are not confined to abbreviated year numbers (smaller
-     than 100). You may of course use complete year numbers, provided
-     that they are in the supported range (that is, from 1970 to 2069).
+     You are not confined to abbreviated year numbers (smaller than
+     100), however. The function also accepts complete year numbers,
+     provided that they are in the supported range (that is, from
+     1970 to 2069).
 
      If no valid date is specified, zero is returned.
 
@@ -95,7 +96,7 @@ DESCRIPTION
 
      If "$date" is zero, all return values are zero as well.
 
-     Besides this, no other checks are performed by this function.
+     Apart from this, no other checks are performed by this function.
 
      ==============================
        $flag = valid_date($date);
@@ -114,13 +115,13 @@ DESCRIPTION
      This function converts the encoded date in "$date" to a string
      of the format "dd-mmm-yy", which is returned.
 
-     ("mmm" is the 3-letter abbreviation of the month)
+     ("mmm" is the 3-letter abbreviation (in english) of the month)
 
      If the date in "$date" is invalid, the string "<no date>" is
      returned.
 
-     Note that the string which is returned is always exactly 9
-     characters long, in any case.
+     Note that the string which is returned by this function is
+     always exactly 9 characters long.
 
      ======================================
        $flag = check_date($year,$mm,$dd);
@@ -133,18 +134,22 @@ DESCRIPTION
      When determining validity, leap years are taken into account,
      i.e., the 29th of february is rejected in non-leap years.
 
+     Year numbers must be greater than zero (negative values will be
+     interpreted as large positive numbers due to their internal 2's
+     complement representation). A year number of zero is invalid.
+
      =====================================
        $days = calc_days($year,$mm,$dd);
      =====================================
 
-     This function returns the (only theoretical) number of days
-     between the first of january of the year one and the given date.
+     This function returns the (theoretical) number of days between
+     the first of january of the year one and the given date.
 
      The function doesn't take into account the change from the
-     Julian to the Gregorian calendar (used today) in 1582.
+     Julian to the Gregorian calendar used today in 1582.
 
      It is needed to calculate the difference in days between two
-     dates.
+     dates and the day of week.
 
      Zero is returned if no valid date is specified.
 
@@ -157,9 +162,8 @@ DESCRIPTION
 
      The function calculates the difference "date 2" - "date 1".
 
-     If date 1 is later than date 2, the result will be negative.
-
-     (This means you may use this function to compare dates!)
+     If date 1 is later than date 2, the result will be negative,
+     which allows you to use this function to compare dates.
 
      If one of the two dates is invalid, the result will degrade to
      the value of the function "calc_days" for the other date. If
@@ -169,7 +173,8 @@ DESCRIPTION
        $weekday = day_of_week($year,$mm,$dd);
      ==========================================
 
-     This function calculates the day of week for the given date.
+     This function calculates the day of week for the given date
+     (which must be a valid date).
 
      The return values have the following meaning:
 
@@ -202,7 +207,7 @@ DESCRIPTION
      "www dd-mmm-yyyy", which is returned.
 
      "www" is a (3-letter) abbreviation of the day of week, and "mmm"
-     is a (3-letter) abbreviation of the month.
+     is a (3-letter) abbreviation of the month (both in english).
 
      If the given date is invalid, the string "<no date>" is returned.
 
@@ -214,7 +219,7 @@ DESCRIPTION
      "wwwwwwwww, dd mmmmmmmmm yyyy", which is returned.
 
      "wwwwwwwww" is the day of week and "mmmmmmmmm" the name of the
-     month.
+     month (both in english).
 
      If the given date is invalid, the string "<no date>" is returned.
 
@@ -232,7 +237,7 @@ DESCRIPTION
        ($year,$mm,$dd) = first_in_week($week,$year);
      =================================================
 
-     This function calculates the date of the first day (the monday!)
+     This function calculates the date of the first day (the Monday)
      of the given week in the given year.
 
      The return value "$year" is adjusted accordingly if the first
@@ -247,8 +252,8 @@ DESCRIPTION
 
        ($year,$mm,$dd) = first_in_week(week_number($year,$mm,$dd));
 
-     it is possible to easily calculate the date of the monday be-
-     longing to the week the given date lies in.
+     it is possible to easily calculate the date of the Monday be-
+     longing to the week in which the given date lies.
 
      Alternatively, the expression
 
@@ -256,7 +261,7 @@ DESCRIPTION
 
            calc_new_date($year,$mm,$dd,-day_of_week($year,$mm,$dd));
 
-     can be used to achieve the same.
+     can be used to achieve the same effect.
 
      ==================================
        $weeks = weeks_in_year($year);
@@ -282,7 +287,7 @@ DESCRIPTION
      ters long) of the month's name (case is ignored).
 
      If they uniquely identify the month, one or two letters are
-     sufficient (like "s" for september and "ja" for january).
+     sufficient (e.g. "s" for september or "ja" for january).
 
      The year may be abbreviated as well, for instance "95" instead
      of "1995". (Year numbers below 100 are incremented by 1900.)
@@ -440,9 +445,8 @@ DESCRIPTION
      Since this function is not exported, you always have to
      reference it explicitly (i.e., "Date::DateCalc::...").
 
-     (Imagine you are "using" several packages that all export
-     this same function: If you called it without referencing it,
-     you wouldn't know for sure which of the packages answered!)
+     This is to avoid possible conflicts with version functions
+     from other packages.
 
 EXAMPLE
      #!perl -w
@@ -509,7 +513,7 @@ SEE ALSO
      perl(1), perlsub(1), perlmod(1), perlapi(1), perlguts(1).
 
 VERSION
-     This man page documents Date::DateCalc, version 1.2a.
+     This man page documents Date::DateCalc, version 1.2b.
 
 AUTHOR
      Steffen Beyer <sb@sdm.de> (sd&m GmbH&Co.KG, Munich, Germany)

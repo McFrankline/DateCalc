@@ -3,12 +3,12 @@
 # typemap for Perl 5 interface to Date::DateCalc package
 #
 # written by Steffen Beyer (sb@sdm.de)
-# last modified 21st November 1995
-# version 1.2a
+# last modified 25th November 1995
+# version 1.2b
 #
 #################################### Date::DateCalc SECTION
 #
-# 
+TYPEMAP
 
 byte	T_U_CHAR
 word	T_IV

@@ -1,5 +1,5 @@
                    ========================================
-                     Package "Date::DateCalc" Version 3.1
+                     Package "Date::DateCalc" Version 3.2
                    ========================================
                        for Perl version 5.000 and higher
 
@@ -12,10 +12,21 @@
 Contents of this file:
 ----------------------
 
+  -  What's new in version 3.2
   -  What's new in version 3.1
   -  Most important differences between versions 2.x and 3.0
   -  Most important differences between versions 1.x and 2.x
   -  Version history in details
+
+
+What's new in version 3.2:
+--------------------------
+
+A new function "week_of_year()" has been added to the C library "lib_date.c"
+which implements the little piece of code that was formerly contained in the
+XS function "week_number" (which now uses this new C function instead).
+
+The Perl interface of the function "week_number" thus does NOT change.
 
 
 What's new in version 3.1:
@@ -302,6 +313,15 @@ as the condition in an "if" statement, which wasn't possible before.
 Version 3.1 adds a "calendar" function (similar to the UNIX "cal" command)
 to the "DateCalcLib" module as well as a piece of C source code to demons-
 trate how to use the C library ("lib_date.c") in this package stand-alone.
+
+----------------------------------------------------------------------------
+
+In version 3.2, the piece of code in the file "DateCalc.xs" used to interpret
+the week number returned by the C function "week_number()" has been moved to
+the C library "lib_date.c", where it was used to create an additional function
+named "week_of_year()". The XS function "week_number" now uses this new
+function. The Perl function "week_number" thus stays exactly the same as
+it was.
 
 ----------------------------------------------------------------------------
 

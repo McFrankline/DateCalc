@@ -1,5 +1,5 @@
                    ========================================
-                     Package "Date::DateCalc" Version 3.1
+                     Package "Date::DateCalc" Version 3.2
                    ========================================
                        for Perl version 5.000 and higher
 
@@ -27,7 +27,7 @@ Where to find:
 --------------
 
 At any CPAN ftp site (CPAN = "Comprehensive Perl Archive Network"),
-the file "DateCalc-3.1.tar.gz" can be found in any of the following
+the file "DateCalc-3.2.tar.gz" can be found in any of the following
 directories:
 
     .../CPAN/authors/id/STBEY/
@@ -36,7 +36,7 @@ directories:
 
 To find a CPAN ftp site, you can either direct your web browser to
 
-    http://www.perl.com/CPAN/modules/by-module/Date/DateCalc-3.1.tar.gz
+    http://www.perl.com/CPAN/modules/by-module/Date/DateCalc-3.2.tar.gz
 
 (which will automatically redirect you to a CPAN ftp server near you) or
 look into "The Perl 5 Module List" by Tim Bunce and Andreas Koenig either

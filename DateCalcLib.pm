@@ -19,7 +19,7 @@ year_month_day_offset parse_date easter_sunday calendar );
 
 %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
-$VERSION = '3.1';
+$VERSION = '3.2';
 
 use Carp;
 
@@ -1016,7 +1016,7 @@ Date::DateCalc(3).
 
 =head1 VERSION
 
-This man page documents "Date::DateCalcLib" version 3.1.
+This man page documents "Date::DateCalcLib" version 3.2.
 
 =head1 AUTHOR
 

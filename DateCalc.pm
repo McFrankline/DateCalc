@@ -23,7 +23,7 @@ decode_day decode_month decode_date days_in_month );
 # "Version" is available but not exported!
 # Call with "Date::DateCalc::Version()"!
 
-$VERSION = '3.1';
+$VERSION = '3.2';
 
 bootstrap Date::DateCalc $VERSION;
 
@@ -782,7 +782,7 @@ perlmod(1), perlxs(1), perlxstut(1), perlguts(1).
 
 =head1 VERSION
 
-This man page documents "Date::DateCalc" version 3.1.
+This man page documents "Date::DateCalc" version 3.2.
 
 =head1 AUTHOR
 

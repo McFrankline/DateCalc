@@ -249,15 +249,8 @@ week_number(year,mm,dd)
     PPCODE:
     {
         N_int	week;
-        if (check_date(year,mm,dd))
+        if (week_of_year(&week,&year,mm,dd))
         {
-            week = week_number(year,mm,dd);
-            if (week == 0) week = weeks_in_year(--year);
-            else if (week > weeks_in_year(year))
-            {
-                week = 1;
-                year++;
-            }
             EXTEND(sp,2);
             PUSHs(sv_2mortal(newSViv((IV)week)));
             PUSHs(sv_2mortal(newSViv((IV)year)));
@@ -373,7 +366,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("3.1",0)));
+        PUSHs(sv_2mortal(newSVpv("3.2",0)));
     }
 
 

@@ -1,5 +1,5 @@
                    ========================================
-                     Package "Date::DateCalc" Version 3.1
+                     Package "Date::DateCalc" Version 3.2
                    ========================================
                        for Perl version 5.000 and higher
 
@@ -23,7 +23,7 @@ Edit the file "Makefile.PL" and change the line
 
     'VERSION_FROM'	=> 'DateCalc.pm',
 to
-    'VERSION'		=> '3.1',
+    'VERSION'		=> '3.2',
 
 Then edit the file "DateCalc.pm" and change the line
 
@@ -43,7 +43,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-3.1/").
+    package ("DateCalc-3.2/").
 
  2) Type "perl Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).

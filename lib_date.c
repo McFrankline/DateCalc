@@ -44,9 +44,10 @@ boolean calc_new_date_time
 baseptr date_to_short(N_int year, N_int mm, N_int dd);
 baseptr date_to_string(N_int year, N_int mm, N_int dd);
 
-N_int   week_number(N_int year, N_int mm, N_int dd);
-boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd);
 N_int   weeks_in_year(N_int year);
+N_int   week_number(N_int year, N_int mm, N_int dd);
+boolean week_of_year(N_int *week, N_int *year, N_int  mm, N_int  dd);
+boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd);
 
 N_int   decode_day(baseptr buffer, N_int len);
 N_int   decode_month(baseptr buffer, N_int len);
@@ -406,6 +407,11 @@ baseptr date_to_string(N_int year, N_int mm, N_int dd)
 }
 /*****************************************************************************/
 
+N_int weeks_in_year(N_int year)
+{
+    return(52 + ((day_of_week(year,1,1)==4) or (day_of_week(year,12,31)==4)));
+}
+
 N_int week_number(N_int year, N_int mm, N_int dd)
 {
     N_int first;
@@ -413,6 +419,22 @@ N_int week_number(N_int year, N_int mm, N_int dd)
     first = day_of_week(year,1,1) - 1;
     return( (N_int) ( (dates_difference(year,1,1, year,mm,dd) + first) / 7L ) +
       (first < 4) );
+}
+
+boolean week_of_year(N_int *week, N_int *year, N_int mm, N_int dd)
+{
+    if (check_date(*year,mm,dd))
+    {
+        *week = week_number(*year,mm,dd);
+        if (*week == 0) *week = weeks_in_year(--(*year));
+        else if (*week > weeks_in_year(*year))
+        {
+            *week = 1;
+            (*year)++;
+        }
+        return(true);
+    }
+    return(false);
 }
 
 boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd)
@@ -423,11 +445,6 @@ boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd)
     first = day_of_week(*year,1,1) - 1;
     if (first < 4) week--;
     return(calc_new_date(year,mm,dd, (week * 7L - first) ));
-}
-
-N_int weeks_in_year(N_int year)
-{
-    return(52 + ((day_of_week(year,1,1)==4) or (day_of_week(year,12,31)==4)));
 }
 /*****************************************************************************/
 
@@ -636,12 +653,13 @@ void annihilate(baseptr buffer)
 /*****************************************************************************/
 /*  AUTHOR:  Steffen Beyer                                                   */
 /*****************************************************************************/
-/*  VERSION:  3.0                                                            */
+/*  VERSION:  3.2                                                            */
 /*****************************************************************************/
 /*  VERSION HISTORY:                                                         */
 /*****************************************************************************/
 /*    01.11.93    Created                                                    */
 /*    16.02.97    Version 3.0                                                */
+/*    15.06.97    Version 3.2                                                */
 /*****************************************************************************/
 /*  COPYRIGHT (C) 1993-1997 BY:  Steffen Beyer                               */
 /*****************************************************************************/

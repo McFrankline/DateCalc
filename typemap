@@ -1,12 +1,12 @@
 ################################################################
 #
-#  Typemap for module "Date::DateCalc" version 3.1
+#  Typemap for module "Date::DateCalc" version 3.2
 #
 #  Copyright (c) 1995, 1996, 1997 by Steffen Beyer. All rights reserved.
 #  This package is free software; you can redistribute it and/or modify
 #  it under the same terms as Perl itself.
 #
-#  Last modified 12-Jun-1997
+#  Last modified 15-Jun-1997
 #
 ################################################################
 

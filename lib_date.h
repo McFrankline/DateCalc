@@ -44,9 +44,10 @@ boolean calc_new_date_time
 baseptr date_to_short(N_int year, N_int mm, N_int dd);
 baseptr date_to_string(N_int year, N_int mm, N_int dd);
 
-N_int   week_number(N_int year, N_int mm, N_int dd);
-boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd);
 N_int   weeks_in_year(N_int year);
+N_int   week_number(N_int year, N_int mm, N_int dd);
+boolean week_of_year(N_int *week, N_int *year, N_int  mm, N_int  dd);
+boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd);
 
 N_int   decode_day(baseptr buffer, N_int len);
 N_int   decode_month(baseptr buffer, N_int len);
@@ -93,12 +94,13 @@ extern blockdef(rsrc_date_003,64); /* = "<no date>"; verbose form */
 /*****************************************************************************/
 /*  AUTHOR:  Steffen Beyer                                                   */
 /*****************************************************************************/
-/*  VERSION:  3.0                                                            */
+/*  VERSION:  3.2                                                            */
 /*****************************************************************************/
 /*  VERSION HISTORY:                                                         */
 /*****************************************************************************/
 /*    01.11.93    Created                                                    */
 /*    16.02.97    Version 3.0                                                */
+/*    15.06.97    Version 3.2                                                */
 /*****************************************************************************/
 /*  COPYRIGHT (C) 1993-1997 BY:  Steffen Beyer                               */
 /*****************************************************************************/

@@ -13,10 +13,10 @@ use Date::DateCalc;
 print "1..2\n";
 
 $n = 1;
-if (Date::DateCalc::Version() eq "3.1")
+if (Date::DateCalc::Version() eq "3.2")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if ($Date::DateCalc::VERSION eq "3.1")
+if ($Date::DateCalc::VERSION eq "3.2")
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

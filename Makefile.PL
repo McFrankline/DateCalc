@@ -6,8 +6,8 @@ WriteMakefile(
     'VERSION_FROM'	=> 'DateCalc.pm',
     'DISTNAME'		=> 'DateCalc',
     'OBJECT'		=> '$(O_FILES)',
-    'LIBS'		=> [''],   # e.g., '-lm' 
-    'DEFINE'		=> '',     # e.g., '-DHAVE_SOMETHING' 
-    'INC'		=> '',     # e.g., '-I/opt/pkg/perl5.003/dist' 
+    'LIBS'		=> [''],   # e.g., '-lm'
+    'DEFINE'		=> '',     # e.g., '-DHAVE_SOMETHING'
+    'INC'		=> '',     # e.g., '-I/opt/pkg/perl5.003/dist'
     'dist'		=> { COMPRESS=>"gzip -9", SUFFIX=>"gz" }
 );

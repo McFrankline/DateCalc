@@ -14,12 +14,12 @@ require Exporter;
 
 @EXPORT = qw();
 
-@EXPORT_OK = qw( nth_wday_of_month_year decode_date_us
-decode_date_eu year_month_day_offset parse_date easter_sunday );
+@EXPORT_OK = qw( nth_wday_of_month_year decode_date_us decode_date_eu
+year_month_day_offset parse_date easter_sunday calendar );
 
 %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
-$VERSION = '1.0';
+$VERSION = '3.1';
 
 use Carp;
 
@@ -377,6 +377,55 @@ sub easter_sunday  #  Gauss'sche Regel (Gauss' Rule)
 # Whitmonday / Pfingstmontag / Lundi de Pentecote       : Easter Sunday + 50
 # Feast of Corpus Christi / Fronleichnam / Fete-Dieu    : Easter Sunday + 60
 
+sub calendar
+{
+    croak "Usage: \$string = calendar(\$year,\$month);"
+      if (@_ != 2);
+
+    my($year,$month) = @_;
+    my($first,$last);
+    my($i,$j);
+    my($cal);
+
+    return()
+      if (($month < 1) || ($month > 12) || ($year < 1));
+
+    $cal = center((month_name_tab($month) . ' ' . $year), 27);
+    $cal .= "\nMon Tue Wed Thu Fri Sat Sun\n";
+
+    $first = day_of_week($year,$month,1);
+    $last = days_in_month($year,$month);
+
+    $j = $first - 1;
+
+    $cal .= ('    ' x $j);
+
+    for ( $i = 1; $i <= $last; $i++, $j++ )
+    {
+        if ($j >= 7)
+        {
+            $j = 0;
+            $cal .= "\n";
+        }
+        $cal .= sprintf(" %2d ", $i);
+    }
+    $cal .= "\n";
+    return($cal);
+}
+
+sub center
+{
+    my($string,$width) = @_;
+    my($length,$left,$right);
+
+    $length = length($string);
+    return($string) if ($length >= $width);
+    $length = $width - $length;
+    $left = int($length / 2);
+    $right = $length - $left;
+    return( (' ' x $left) . $string . (' ' x $right) );
+}
+
 1;
 
 __END__
@@ -395,7 +444,7 @@ Library of useful date calculation functions
 
 C<use Date::DateCalcLib qw( nth_wday_of_month_year>
 C<decode_date_us decode_date_eu year_month_day_offset>
-C<parse_date easter_sunday );>
+C<parse_date easter_sunday calendar );>
 
 =item *
 
@@ -424,6 +473,10 @@ C<($year,$mm,$dd) = parse_date(`/bin/date`);>
 =item *
 
 C<($year,$mm,$dd) = easter_sunday($year);>
+
+=item *
+
+C<$string = calendar($year,$month);>
 
 =back
 
@@ -456,6 +509,10 @@ parsing the current date or the submission date of an e-mail message
 
 calculating easter sunday and all the related christian feast days
 
+=item *
+
+printing a calendar for a given month and year
+
 =back
 
 For a detailed description of each function, see below:
@@ -466,7 +523,7 @@ For a detailed description of each function, see below:
 
 C<use Date::DateCalcLib qw( nth_wday_of_month_year>
 C<decode_date_us decode_date_eu year_month_day_offset>
-C<parse_date easter_sunday );>
+C<parse_date easter_sunday calendar );>
 
 Use this statement to make the functions of this module
 available in your module or script.
@@ -933,23 +990,43 @@ All authored by
 
 =back
 
+=over 4
+
+=item *
+
+C<$string = calendar($year,$month);>
+
+This function returns a string containing a calendar for the given
+month and year (which looks pretty much like the output of the UNIX
+"cal" command).
+
+The calendar is not printed directly but rather returned as a string
+in order to make post-processing possible, i.e., like staggering multiple
+month calendars together on one page to produce a calendar of a complete
+year, or transforming the day numbers into hyperlinks for incorporation
+of the calendar (with clickable day numbers) into an HTML page.
+
+The function returns an empty list if the given month or year is invalid.
+
+=back
+
 =head1 SEE ALSO
 
-Date::DateCalc(3)
+Date::DateCalc(3).
 
 =head1 VERSION
 
-This man page documents Date::DateCalcLib version 1.0.
+This man page documents "Date::DateCalcLib" version 3.1.
 
 =head1 AUTHOR
 
-Steffen Beyer <sb@sdm.de>
+Steffen Beyer <sb@sdm.de>.
 
 =head1 COPYRIGHT
 
 Copyright (c) 1997 by Steffen Beyer. All rights reserved.
 
-=head1 LICENSE AGREEMENT
+=head1 LICENSE
 
 This package is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.

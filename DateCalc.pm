@@ -23,7 +23,7 @@ decode_day decode_month decode_date days_in_month );
 # "Version" is available but not exported!
 # Call with "Date::DateCalc::Version()"!
 
-$VERSION = '3.0';
+$VERSION = '3.1';
 
 bootstrap Date::DateCalc $VERSION;
 
@@ -213,7 +213,7 @@ always exactly 9 characters long.
 
 This function returns the (theoretical) number of days between
 the first of january of the year one and the given date *plus one*.
- 
+
 I.e., the value returned for the first of january of the year one
 is 1, the value returned for the second of january of the year one
 is 2, and so on.
@@ -782,17 +782,17 @@ perlmod(1), perlxs(1), perlxstut(1), perlguts(1).
 
 =head1 VERSION
 
-This man page documents Date::DateCalc version 3.0.
+This man page documents "Date::DateCalc" version 3.1.
 
 =head1 AUTHOR
 
-Steffen Beyer <sb@sdm.de>
+Steffen Beyer <sb@sdm.de>.
 
 =head1 COPYRIGHT
 
 Copyright (c) 1995, 1996, 1997 by Steffen Beyer. All rights reserved.
 
-=head1 LICENSE AGREEMENT
+=head1 LICENSE
 
 This package is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

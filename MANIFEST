@@ -1,9 +1,16 @@
+ARTISTIC
+CHANGES
+COPYING
+CREDITS
 DateCalc.pm
 DateCalc.xs
 DateCalcLib.pm
+INSTALL
+LICENSE
 MANIFEST
 Makefile.PL
 README
+cal.c_
 demo
 demo2
 demo_us
@@ -43,4 +50,5 @@ t/g003.t
 t/g004.t
 t/g005.t
 t/g006.t
+t/g007.t
 typemap

@@ -66,7 +66,7 @@ unless (($year,$mm,$dd) = year_month_day_offset(1,1,1,-1,0,0))
 $n++;
 
 ($year,$mm,$dd) = (1997,2,26); ($y,$m,$d) = (0,-1,17);
- 
+
 if ((($year,$mm,$dd) = year_month_day_offset($year,$mm,$dd, $y,$m,$d)) &&
 ($year==1997) && ($mm==2) && ($dd==15))
 {print "ok $n\n";} else {print "not ok $n\n";}

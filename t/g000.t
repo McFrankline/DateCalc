@@ -12,7 +12,7 @@ use Date::DateCalcLib;
 print "1..1\n";
 
 $n = 1;
-if ($Date::DateCalcLib::VERSION eq "1.0")
+if ($Date::DateCalcLib::VERSION eq "3.1")
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

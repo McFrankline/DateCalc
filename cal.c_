@@ -1,0 +1,103 @@
+
+/*
+  Copyright (c) 1997 by Steffen Beyer. All rights reserved.
+  This program is free software; you can redistribute it
+  and/or modify it under the same terms as Perl itself.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "lib_defs.h"
+#include "lib_date.h"
+
+#define BUFLEN 80
+
+void center(baseptr string, N_int width)
+{
+    blockdef(buffer,BUFLEN);
+    blockdef(buf_l,BUFLEN);
+    blockdef(buf_r,BUFLEN);
+    N_int length;
+    N_int left;
+    N_int right;
+
+    if (width > BUFLEN) return;
+    length = strlen(string);
+    if (length >= width) return;
+    length = width - length;
+    left = (N_int) (length / 2);
+    right = length - left;
+    for ( length = 0; length < BUFLEN; length++ )
+    {
+        buf_l[length] = ' ';
+        buf_r[length] = ' ';
+    }
+    buf_l[left] = '\0';
+    buf_r[right] = '\0';
+    sprintf(buffer, "%s%s%s", buf_l, string, buf_r);
+    strcpy(string, buffer);
+}
+
+void cal(N_int month, N_int year)
+{
+    blockdef(buffer,BUFLEN);
+    N_int first;
+    N_int last;
+    N_int i,j;
+
+    if ((month < 1) or (month > 12) or (year < 1))
+    {
+        if (year < 1)
+            fprintf(stderr, "The given year (%u) is invalid!\n", year);
+        else
+            fprintf(stderr, "The given month (%u) is invalid!\n", month);
+    }
+    else
+    {
+        printf("\n");
+        sprintf(buffer, "%s %u", month_name[month], year);
+        center(buffer, 27);
+        printf("%s\n", buffer);
+        printf("Mon Tue Wed Thu Fri Sat Sun\n");
+
+        first = day_of_week(year, month, 1);
+        last = month_length[leap(year)][month];
+
+        j = first - 1;
+
+        for ( i = 0; i < j; i++ )
+        {
+            printf("    ");
+        }
+
+        for ( i = 1; i <= last; i++, j++ )
+        {
+            if (j >= 7)
+            {
+                j = 0;
+                printf("\n");
+            }
+            printf(" %2u ", i);
+        }
+        printf("\n\n");
+    }
+}
+
+void main(int argc, char *argv[])
+{
+    N_int month;
+    N_int year;
+
+    if (argc != 3)
+    {
+        fprintf(stderr, "Usage: cal <month> <year>\n");
+    }
+    else
+    {
+        month = (N_int) atoi(argv[1]);
+        year  = (N_int) atoi(argv[2]);
+        cal(month, year);
+    }
+}
+

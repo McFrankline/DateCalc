@@ -1,7 +1,8 @@
+
 /*
-  Copyright (c) 1996 Steffen Beyer. All rights reserved.
-  This program is free software; you can redistribute it and/or
-  modify it under the same terms as Perl itself.
+  Copyright (c) 1995, 1996, 1997 by Steffen Beyer. All rights reserved.
+  This program is free software; you can redistribute it and/or modify
+  it under the same terms as Perl itself.
 */
 
 #include "EXTERN.h"
@@ -294,7 +295,7 @@ first_in_week(week,year)
 N_int
 weeks_in_year(year)
     N_int	year
- 
+
 
 N_int
 decode_day(buffer)
@@ -372,7 +373,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("3.0",0)));
+        PUSHs(sv_2mortal(newSVpv("3.1",0)));
     }
 
 

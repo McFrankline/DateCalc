@@ -3,35 +3,23 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( check_date );
+use Date::DateCalc qw( compressed_to_short );
 
 # ======================================================================
-#   $flag = check_date($year,$mm,$dd);
+#   $datestr = compressed_to_short($date);
 # ======================================================================
 
-print "1..11\n";
+print "1..5\n";
 
 $n = 1;
-if (check_date(1,1,1) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
+if (compressed_to_short(48163) eq "03-Jan-64") {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (check_date(0,1,1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (compressed_to_short(    0) eq "<no date>") {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (check_date(1,0,1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (compressed_to_short(13170) eq "18-Nov-95") {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (check_date(1,1,0) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (compressed_to_short(12892) eq "28-Feb-95") {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (check_date(-1,1,1) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if (check_date(1,-1,1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if (check_date(1,1,-1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if (check_date(1964,1,3)  == 1) {print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if (check_date(1964,2,29) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if (check_date(1995,2,28) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if (check_date(1995,2,29) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (compressed_to_short(12893) eq "<no date>") {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

@@ -3,20 +3,16 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc;
+use Date::DateCalcLib;
 
 # ======================================================================
-#   $version = Date::DateCalc::Version();
-#   $version = $Date::DateCalc::VERSION;
+#   $version = $Date::DateCalcLib::VERSION;
 # ======================================================================
 
-print "1..2\n";
+print "1..1\n";
 
 $n = 1;
-if (Date::DateCalc::Version() eq "3.0")
-{print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if ($Date::DateCalc::VERSION eq "3.0")
+if ($Date::DateCalcLib::VERSION eq "1.0")
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

@@ -40,12 +40,15 @@ uncompress(date)
         N_int	yy;
         N_int	mm;
         N_int	dd;
-        uncompress(date,&cc,&yy,&mm,&dd);
-        EXTEND(sp,4);
-        PUSHs(sv_2mortal(newSViv((IV)cc)));
-        PUSHs(sv_2mortal(newSViv((IV)yy)));
-        PUSHs(sv_2mortal(newSViv((IV)mm)));
-        PUSHs(sv_2mortal(newSViv((IV)dd)));
+        if (uncompress(date,&cc,&yy,&mm,&dd))
+        {
+            EXTEND(sp,4);
+            PUSHs(sv_2mortal(newSViv((IV)cc)));
+            PUSHs(sv_2mortal(newSViv((IV)yy)));
+            PUSHs(sv_2mortal(newSViv((IV)mm)));
+            PUSHs(sv_2mortal(newSViv((IV)dd)));
+        }
+        /* else return empty list */
     }
 
 
@@ -59,7 +62,7 @@ compressed_to_short(date)
     N_int	date
     PPCODE:
     {
-        byteptr	datestr;
+        baseptr	datestr;
         datestr = compressed_to_short(date);
         if (datestr != NULL)
         {
@@ -115,11 +118,14 @@ calc_new_date(year,mm,dd,offset)
         y = year;
         m = mm;
         d = dd;
-        calc_new_date(&y,&m,&d,offset);
-        EXTEND(sp,3);
-        PUSHs(sv_2mortal(newSViv((IV)y)));
-        PUSHs(sv_2mortal(newSViv((IV)m)));
-        PUSHs(sv_2mortal(newSViv((IV)d)));
+        if (calc_new_date(&y,&m,&d,offset))
+        {
+            EXTEND(sp,3);
+            PUSHs(sv_2mortal(newSViv((IV)y)));
+            PUSHs(sv_2mortal(newSViv((IV)m)));
+            PUSHs(sv_2mortal(newSViv((IV)d)));
+        }
+        /* else return empty list */
     }
 
 
@@ -143,12 +149,17 @@ date_time_difference(year1,month1,day1,hh1,mm1,ss1,year2,month2,day2,hh2,mm2,ss2
         Z_int	hh;
         Z_int	mm;
         Z_int	ss;
-        date_time_difference(&days,&hh,&mm,&ss,year1,month1,day1,hh1,mm1,ss1,year2,month2,day2,hh2,mm2,ss2);
-        EXTEND(sp,4);
-        PUSHs(sv_2mortal(newSViv((IV)days)));
-        PUSHs(sv_2mortal(newSViv((IV)hh)));
-        PUSHs(sv_2mortal(newSViv((IV)mm)));
-        PUSHs(sv_2mortal(newSViv((IV)ss)));
+        if (date_time_difference(&days,&hh,&mm,&ss,
+            year1,month1,day1,hh1,mm1,ss1,
+            year2,month2,day2,hh2,mm2,ss2))
+        {
+            EXTEND(sp,4);
+            PUSHs(sv_2mortal(newSViv((IV)days)));
+            PUSHs(sv_2mortal(newSViv((IV)hh)));
+            PUSHs(sv_2mortal(newSViv((IV)mm)));
+            PUSHs(sv_2mortal(newSViv((IV)ss)));
+        }
+        /* else return empty list */
     }
 
 
@@ -178,14 +189,18 @@ calc_new_date_time(year,month,day,hour,min,sec,days_offset,hh_offset,mm_offset,s
         h = hour;
         m = min;
         s = sec;
-        calc_new_date_time(&yy,&mm,&dd,&h,&m,&s,days_offset,hh_offset,mm_offset,ss_offset);
-        EXTEND(sp,6);
-        PUSHs(sv_2mortal(newSViv((IV)yy)));
-        PUSHs(sv_2mortal(newSViv((IV)mm)));
-        PUSHs(sv_2mortal(newSViv((IV)dd)));
-        PUSHs(sv_2mortal(newSViv((IV)h)));
-        PUSHs(sv_2mortal(newSViv((IV)m)));
-        PUSHs(sv_2mortal(newSViv((IV)s)));
+        if (calc_new_date_time(&yy,&mm,&dd,&h,&m,&s,
+            days_offset,hh_offset,mm_offset,ss_offset))
+        {
+            EXTEND(sp,6);
+            PUSHs(sv_2mortal(newSViv((IV)yy)));
+            PUSHs(sv_2mortal(newSViv((IV)mm)));
+            PUSHs(sv_2mortal(newSViv((IV)dd)));
+            PUSHs(sv_2mortal(newSViv((IV)h)));
+            PUSHs(sv_2mortal(newSViv((IV)m)));
+            PUSHs(sv_2mortal(newSViv((IV)s)));
+        }
+        /* else return empty list */
     }
 
 
@@ -196,7 +211,7 @@ date_to_short(year,mm,dd)
     N_int	dd
     PPCODE:
     {
-        byteptr	datestr;
+        baseptr	datestr;
         datestr = date_to_short(year,mm,dd);
         if (datestr != NULL)
         {
@@ -214,7 +229,7 @@ date_to_string(year,mm,dd)
     N_int	dd
     PPCODE:
     {
-        byteptr	datestr;
+        baseptr	datestr;
         datestr = date_to_string(year,mm,dd);
         if (datestr != NULL)
         {
@@ -232,19 +247,21 @@ week_number(year,mm,dd)
     N_int	dd
     PPCODE:
     {
-        N_int	yy;
-        N_int	ww;
-        yy = year;
-        ww = week_number(yy,mm,dd);
-        if (ww == 0) ww = weeks_in_year(--yy);
-        else if (ww > weeks_in_year(yy))
+        N_int	week;
+        if (check_date(year,mm,dd))
         {
-            ww = 1;
-            yy++;
+            week = week_number(year,mm,dd);
+            if (week == 0) week = weeks_in_year(--year);
+            else if (week > weeks_in_year(year))
+            {
+                week = 1;
+                year++;
+            }
+            EXTEND(sp,2);
+            PUSHs(sv_2mortal(newSViv((IV)week)));
+            PUSHs(sv_2mortal(newSViv((IV)year)));
         }
-        EXTEND(sp,2);
-        PUSHs(sv_2mortal(newSViv((IV)ww)));
-        PUSHs(sv_2mortal(newSViv((IV)yy)));
+        /* else return empty list */
     }
 
 
@@ -257,13 +274,20 @@ first_in_week(week,year)
         N_int	yy;
         N_int	mm;
         N_int	dd;
-        yy = year;
-        mm = dd = 0;
-        first_in_week(week,&yy,&mm,&dd);
-        EXTEND(sp,3);
-        PUSHs(sv_2mortal(newSViv((IV)yy)));
-        PUSHs(sv_2mortal(newSViv((IV)mm)));
-        PUSHs(sv_2mortal(newSViv((IV)dd)));
+        if ((year > 0) and (week > 0) and (week <= weeks_in_year(year)))
+        {
+            yy = year;
+            mm = dd = 0;
+            if (first_in_week(week,&yy,&mm,&dd))
+            {
+                EXTEND(sp,3);
+                PUSHs(sv_2mortal(newSViv((IV)yy)));
+                PUSHs(sv_2mortal(newSViv((IV)mm)));
+                PUSHs(sv_2mortal(newSViv((IV)dd)));
+            }
+            /* else return empty list */
+        }
+        /* else return empty list */
     }
 
 
@@ -274,7 +298,7 @@ weeks_in_year(year)
 
 N_int
 decode_day(buffer)
-    byteptr	buffer
+    baseptr	buffer
     CODE:
         RETVAL = decode_day(buffer,strlen((char *)buffer));
     OUTPUT:
@@ -283,7 +307,7 @@ decode_day(buffer)
 
 N_int
 decode_month(buffer)
-    byteptr	buffer
+    baseptr	buffer
     CODE:
         RETVAL = decode_month(buffer,strlen((char *)buffer));
     OUTPUT:
@@ -292,20 +316,20 @@ decode_month(buffer)
 
 void
 decode_date(buffer)
-    byteptr	buffer
+    baseptr	buffer
     PPCODE:
     {
         N_int	year;
         N_int	mm;
         N_int	dd;
-        if (!decode_date(buffer,&year,&mm,&dd))
+        if (decode_date(buffer,&year,&mm,&dd))
         {
-            year = mm = dd = 0;
+            EXTEND(sp,3);
+            PUSHs(sv_2mortal(newSViv((IV)year)));
+            PUSHs(sv_2mortal(newSViv((IV)mm)));
+            PUSHs(sv_2mortal(newSViv((IV)dd)));
         }
-        EXTEND(sp,3);
-        PUSHs(sv_2mortal(newSViv((IV)year)));
-        PUSHs(sv_2mortal(newSViv((IV)mm)));
-        PUSHs(sv_2mortal(newSViv((IV)dd)));
+        /* else return empty list */
     }
 
 
@@ -348,7 +372,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("2.3",0)));
+        PUSHs(sv_2mortal(newSVpv("3.0",0)));
     }
 
 

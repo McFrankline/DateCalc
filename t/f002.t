@@ -3,25 +3,35 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( compress );
+use Date::DateCalc qw( check_date );
 
 # ======================================================================
-#   $date = compress($yy,$mm,$dd);
+#   $flag = check_date($year,$mm,$dd);
 # ======================================================================
 
-print "1..6\n";
+print "1..11\n";
 
 $n = 1;
-if (compress(64,1,3)     == 48163) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_date(1,1,1) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (compress(1964,1,3)   ==     0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_date(0,1,1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (compress(95,11,18)   == 13170) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_date(1,0,1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (compress(1995,11,18) == 13170) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_date(1,1,0) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (compress(1995,2,28)  == 12892) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_date(-1,1,1) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (compress(1995,2,29)  ==     0) {print "ok $n\n";} else {print "not ok $n\n";}
+if (check_date(1,-1,1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (check_date(1,1,-1) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (check_date(1964,1,3)  == 1) {print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (check_date(1964,2,29) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (check_date(1995,2,28) == 1) {print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if (check_date(1995,2,29) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

@@ -8,6 +8,6 @@ WriteMakefile(
     'OBJECT'		=> '$(O_FILES)',
     'LIBS'		=> [''],   # e.g., '-lm' 
     'DEFINE'		=> '',     # e.g., '-DHAVE_SOMETHING' 
-    'INC'		=> '',     # e.g., '-I/opt/pkg/perl5.002/dist' 
+    'INC'		=> '',     # e.g., '-I/opt/pkg/perl5.003/dist' 
     'dist'		=> { COMPRESS=>"gzip -9", SUFFIX=>"gz" }
 );

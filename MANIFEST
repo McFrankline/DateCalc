@@ -1,5 +1,6 @@
 DateCalc.pm
 DateCalc.xs
+DateCalcLib.pm
 MANIFEST
 Makefile.PL
 README
@@ -9,7 +10,6 @@ demo_us
 lib_date.c
 lib_date.h
 lib_defs.h
-parse_date.pl
 t/f000.t
 t/f001.t
 t/f002.t
@@ -36,4 +36,11 @@ t/f022.t
 t/f023.t
 t/f024.t
 t/f025.t
+t/g000.t
+t/g001.t
+t/g002.t
+t/g003.t
+t/g004.t
+t/g005.t
+t/g006.t
 typemap

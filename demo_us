@@ -3,12 +3,9 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw(:all);
+use Date::DateCalc qw(date_to_short dates_difference);
 
-%months = (
- 'Jan' => 1, 'Feb' => 2, 'Mar' => 3, 'Apr' => 4,  'May' => 5,  'Jun' => 6,
- 'Jul' => 7, 'Aug' => 8, 'Sep' => 9, 'Oct' => 10, 'Nov' => 11, 'Dec' => 12
- );
+use Date::DateCalcLib qw(decode_date_us);
 
 print "\n";
 
@@ -18,8 +15,7 @@ while (! $ok)
     print "Please enter the date of your birthday (month-day-year): ";
     $date = <STDIN>;
     print "\n";
-    ($yy1,$mm1,$dd1) = decode_date_us($date);
-    if ($yy1)
+    if (($yy1,$mm1,$dd1) = decode_date_us($date))
     {
         $datestr = date_to_short($yy1,$mm1,$dd1);
         print "Your date is: $datestr\n";
@@ -39,8 +35,7 @@ while (! $ok)
     print "Please enter today's date (month-day-year): ";
     $date = <STDIN>;
     print "\n";
-    ($yy2,$mm2,$dd2) = decode_date_us($date);
-    if ($yy2)
+    if (($yy2,$mm2,$dd2) = decode_date_us($date))
     {
         $datestr = date_to_short($yy2,$mm2,$dd2);
         print "Your date is: $datestr\n";
@@ -58,100 +53,5 @@ $days = dates_difference($yy1,$mm1,$dd1,$yy2,$mm2,$dd2);
 print "You are $days days old.\n";
 print "\n";
 
-exit;
-
-sub decode_date_us
-{
-    my($buffer) = @_;
-    my($yy,$mm,$dd,$tt);
-    my($found,$unique,$same,$i);
-
-    unless ($buffer =~ /^[^A-Za-z0-9]*([A-Za-z]{1,3}|\d{1,2})[^A-Za-z0-9]*(\d{1,2})\D*(\d{1,4})\D*$/)
-    {
-        return(0,0,0); # error: no match!
-    }
-    ($mm,$dd,$yy) = ($1,$2,$3);
-    if ($buffer =~ /^\D*(\d+)\D*$/)
-    {
-        $buffer = $1;
-        $i = length($buffer);
-        if    ($i == 3)
-        {
-            $mm = substr($buffer,0,1);
-            $dd = substr($buffer,1,1);
-            $yy = substr($buffer,2,1);
-        }
-        elsif ($i == 4)
-        {
-            $mm = substr($buffer,0,1);
-            $dd = substr($buffer,1,1);
-            $yy = substr($buffer,2,2);
-        }
-        elsif ($i == 5)
-        {
-            $mm = substr($buffer,0,1);
-            $dd = substr($buffer,1,2);
-            $yy = substr($buffer,3,2);
-        }
-        elsif ($i == 6)
-        {
-            $mm = substr($buffer,0,2);
-            $dd = substr($buffer,2,2);
-            $yy = substr($buffer,4,2);
-        }
-        elsif ($i == 7)
-        {
-            $mm = substr($buffer,0,1);
-            $dd = substr($buffer,1,2);
-            $yy = substr($buffer,3,4);
-        }
-        elsif ($i == 8)
-        {
-            $mm = substr($buffer,0,2);
-            $dd = substr($buffer,2,2);
-            $yy = substr($buffer,4,4);
-        }
-        else
-        {
-            return(0,0,0); # error: wrong number of digits!
-        }
-    }
-    elsif ($mm !~ /^\d+$/)
-    {
-        $found = 0;
-        $unique = 1;
-        foreach $tt (keys %months)
-        {
-            $same = 1;
-            for ( $i=0; $same && $i<length($mm); $i++ )
-            {
-                $same = (lc(substr($mm,$i,1)) eq lc(substr($tt,$i,1)))
-            }
-            if ($same)
-            {
-                if ($found)
-                {
-                    $unique = 0;
-                }
-                $found = $months{$tt}; # relies on month's number being > 0
-            }
-        }
-        unless ($found && $unique)
-        {
-            return(0,0,0); # error: can't decode month!
-        }
-        $mm = $found;
-    }
-    else { }
-    if ($yy < 100) { $yy += 1900; }
-    if (check_date($yy,$mm,$dd)) # calls Date::DateCalc module
-    {
-        return($yy,$mm,$dd);
-    }
-    else
-    {
-        return(0,0,0); # error: not a valid date!
-    }
-}
-
 __END__
+

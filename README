@@ -1,97 +1,112 @@
-=======================================
-  Module "Date::DateCalc" Version 2.3
-=======================================
-
-------------------------------------------------------------------------------
- Extension Module for Perl 5.002 (should work with Perl 5.000 and up as well)
-------------------------------------------------------------------------------
-
+========================================
+  Package "Date::DateCalc" Version 3.0
+========================================
+    for Perl version 5.000 or higher
+ 
+ 
+Contents of this file:
+----------------------
+ 
+    -   Legal stuff
+    -   Requirements
+    -   Most important differences between versions 2.x and 3.0
+    -   Most important differences between versions 1.x and 2.x
+    -   What does it do
+    -   Preliminary steps for use with Perl prior to version 5.002
+    -   How to install it
+    -   Version history
+    -   Credits
+    -   Final note
+ 
 
 Legal stuff:
 ------------
 
-Copyright (c) 1996 by Steffen Beyer. All rights reserved.
-This package is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
+Copyright (c) 1995, 1996, 1997 by Steffen Beyer. All rights reserved.
+This package is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 
 Requirements:
 -------------
 
-Perl version 5.000 or higher, a compiler complying with ANSI C standards (!).
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-What does it do:
-----------------
-
-The package provides a Perl interface to a C library which offers a wide
-variety of date calculations based on the Gregorian calendar (the one
-used in all western countries today), complying with the ISO/R 2015-1971
-and DIN 1355 standards which specify things as what leap years are, when
-they occur, how the week numbers are defined, what's the first day of the
-week, how many weeks (52 or 53) a given year has, and so on.
- 
-Although the Gregorian calendar was only adopted 1582 by most (not all)
-European countries (some countries continued to use the Julian calendar
-until as late as the end of the 18th century!), this package allows to
-project the Gregorian calendar back until the year 1 (independently of
-how much sense this makes).
-
-This module is not intended to be the most comfortable approach to every
-date calculation problem there is, but instead it's meant to be a *minimal*
-and *complete* (in the sense of computation theory!) set of tools to solve
-any date calculation problem you might ever encounter.
-
-Therefore, the interfaces of these routines are designed for a maximum of
-flexibility and a minimum of overhead. Just like the UNIX commands "cat",
-"grep" and so on which do very simple tasks but can do many useful jobs
-when combined in a cunning way, the routines in this package are intended
-to be *elementary*, i.e., undivisible basic functions.
-
-Moreover, the module is mainly written in C so that the C part can be used
-as a stand-alone library in other applications than Perl. (!!!)
-
-To give you an idea of what the package can do, here a list of all the
-functions it exports:
-
-  $flag = leap($year);
-  $date = compress($yy,$mm,$dd);
-  ($cc,$yy,$mm,$dd) = uncompress($date);
-  $flag = check_compressed($date);
-  $datestr = compressed_to_short($date);
-  $flag = check_date($year,$mm,$dd);
-  $days = calc_days($year,$mm,$dd);
-  $weekday = day_of_week($year,$mm,$dd);
-  $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
-  ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
-  ($days,$hh,$mm,$ss) = date_time_difference
-  (
-      $year1,$month1,$day1,$hh1,$mm1,$ss1,
-      $year2,$month2,$day2,$hh2,$mm2,$ss2
-  );
-  ($year,$month,$day,$hh,$mm,$ss) = calc_new_date_time
-  (
-      $year,$month,$day,$hh,$mm,$ss,
-      $days_offset,$hh_offset,$mm_offset,$ss_offset
-  );
-  $datestr = date_to_short($year,$mm,$dd);
-  $datestr = date_to_string($year,$mm,$dd);
-  ($week,$year) = week_number($year,$mm,$dd);
-  ($year,$mm,$dd) = first_in_week($week,$year);
-  $weeks = weeks_in_year($year);
-  $day_name = day_name_tab($weekday);
-  $month_name = month_name_tab($month);
-  $weekday = decode_day($day_name);
-  $month = decode_month($month_name);
-  ($year,$mm,$dd) = decode_date($date);
-  $days = days_in_month($year,$mm);
-  $version = Date::DateCalc::Version();
-
-For more details, see the Date::DateCalc(3) man page!
+Perl version 5.000 or higher, a C compiler capable of the ANSI C standard (!)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-What are the most important differences between versions 1.x and 2.x:
----------------------------------------------------------------------
+Most important differences between versions 2.x and 3.0:
+--------------------------------------------------------
+
+In version 3.0 of the "Date::DateCalc" module, the convention for unsuccess-
+ful return has been changed for all functions which return a LIST of values:
+instead of returning zeros in all list items as in previous versions, an
+EMPTY LIST is now returned.
+
+Affected functions are:
+
+    +   ($cc,$yy,$mm,$dd) = uncompress($date);
+
+    +   ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
+
+    +   ($days,$hh,$mm,$ss) = date_time_difference
+        (
+            $year1,$month1,$day1,$hh1,$mm1,$ss1,
+            $year2,$month2,$day2,$hh2,$mm2,$ss2
+        );
+
+    +   ($year,$month,$day,$hh,$mm,$ss) = calc_new_date_time
+        (
+            $year,$month,$day,$hh,$mm,$ss,
+            $days_offset,$hh_offset,$mm_offset,$ss_offset
+        );
+
+    +   ($week,$year) = week_number($year,$mm,$dd);
+
+    +   ($year,$mm,$dd) = first_in_week($week,$year);
+
+    +   ($year,$mm,$dd) = decode_date($date);
+
+This way it is now possible to assign the return values to a list of
+variables or an array and to test wether the function call was success-
+ful at the same time, i.e.:
+
+        if (($year,$mm,$dd) = decode_date($date))
+        {
+            # do something with the data returned...
+        }
+        else
+        {
+            # issue an error message or do something else...
+        }
+
+(Note that the "demo" program has been changed accordingly!)
+
+Note also that these changes had deep repercussions into the associated
+C library (file "lib_date.c"). The code of the corresponding C functions
+has changed significantly in some places, as well as their return values
+(from "void" to "boolean").
+
+Moreover, in version 3.0 of the "Date::DateCalc" package, a new module
+called "Date::DateCalcLib" has been added which offers some useful date
+calculation functions for some special problems like the nth weekday in
+a given month and year, calculating a new date with year, month and day
+offsets, calculating easter sunday, and more. (See the "Date::DateCalcLib"
+man page for more details!)
+
+This module incorporates a couple of functions that previously were loosely
+spread over a number of perl script files, i.e., it now contains the func-
+tions previously implemented in "demo2" and "demo_us", which now rather use
+this module, and the functionality of the "parse_date.pl" script, which has
+become obsolete and is gone in this version.
+
+Note that the functions in this module which return lists also follow the
+new convention for return values in case of error and return an empty list
+if their arguments are illegal. Note further that the programs "demo2" and
+"demo_us" have been adapted accordingly.
+
+
+Most important differences between versions 1.x and 2.x:
+--------------------------------------------------------
 
 The two functions "day_short_tab" and "month_short_tab" are gone,
 these tables are not needed any longer internally. Substitute them
@@ -111,7 +126,7 @@ The function "day_of_week" has been changed. It now returns values
 in the range 1..7 (as opposed to 0..6 previously). This is to make
 things more consistent and to make the function "decode_day" work
 exactly as "decode_month" (which was already present in previous
-versions but was not exported, btw).
+versions but was not exported).
 
 Since the table "day_name_tab" has been changed accordingly, you
 probably won't need to change existing code.
@@ -139,20 +154,100 @@ file DateCalc.pm in POD format, where it will automatically be found
 and installed in your "man" directory by "make install".
 
 
+What does it do:
+----------------
+
+The package provides a Perl interface to a C library which offers a wide
+variety of date calculations based on the Gregorian calendar (the one
+used in all western countries today), complying with the ISO/R 2015-1971
+and DIN 1355 standards which specify things as what leap years are, when
+they occur, how the week numbers are defined, what's the first day of the
+week, how many weeks (52 or 53) a given year has, and so on.
+ 
+Although the Gregorian calendar was only adopted 1582 by most (not all)
+European countries (some countries continued to use the Julian calendar
+until as late as the beginning of the 20th century!), this package allows
+you to extrapolate the Gregorian calendar back until the year 1.
+
+This module is not intended to be the most comfortable approach to every
+date calculation problem there is, but instead it's meant to be a *minimal*
+and *complete* (in the sense of computation theory!) set of tools to solve
+any date calculation problem you might ever encounter.
+
+Therefore, the interfaces of these routines are designed for a maximum of
+flexibility and a minimum of overhead. Just like the UNIX commands "cat",
+"grep" and so on which do very simple tasks but can do many useful jobs
+when combined in a cunning way, the routines in this package are intended
+to be *elementary*, i.e., indivisible basic functions.
+
+Moreover, the module is mainly written in C so that the C part can be used
+as a stand-alone library in other applications than Perl. (!!!)
+
+A library of useful date calculation functions is available for some special
+problems like the nth weekday in a given month and year, calculating a new
+date with year, month and day offsets, calculating easter sunday, and more.
+(See the "Date::DateCalcLib" man page for more details!)
+
+To give you an idea of what the "Date:DateCalc" module can do, here a list
+of all the functions it exports:
+
+  $flag = leap($year);
+  $flag = check_date($year,$mm,$dd);
+  $date = compress($yy,$mm,$dd);
+  ($cc,$yy,$mm,$dd) = uncompress($date);
+  $flag = check_compressed($date);
+  $datestr = compressed_to_short($date);
+  $days = calc_days($year,$mm,$dd);
+  $weekday = day_of_week($year,$mm,$dd);
+  $days = dates_difference($year1,$mm1,$dd1,$year2,$mm2,$dd2);
+  ($year,$mm,$dd) = calc_new_date($year,$mm,$dd,$offset);
+  ($days,$hh,$mm,$ss) = date_time_difference
+  (
+      $year1,$month1,$day1,$hh1,$mm1,$ss1,
+      $year2,$month2,$day2,$hh2,$mm2,$ss2
+  );
+  ($year,$month,$day,$hh,$mm,$ss) = calc_new_date_time
+  (
+      $year,$month,$day,$hh,$mm,$ss,
+      $days_offset,$hh_offset,$mm_offset,$ss_offset
+  );
+  $datestr = date_to_short($year,$mm,$dd);
+  $datestr = date_to_string($year,$mm,$dd);
+  ($week,$year) = week_number($year,$mm,$dd);
+  ($year,$mm,$dd) = first_in_week($week,$year);
+  $weeks = weeks_in_year($year);
+  $day_name = day_name_tab($weekday);
+  $month_name = month_name_tab($month);
+  $weekday = decode_day($day_name);
+  $month = decode_month($month_name);
+  ($year,$mm,$dd) = decode_date($date);
+  $days = days_in_month($year,$mm);
+  $version = Date::DateCalc::Version();
+
+For more details, see the "Date::DateCalc" man page!
+
+
 Preliminary steps for use with Perl prior to version 5.002:
 -----------------------------------------------------------
 
 Edit the file "Makefile.PL" in this package and the change the line
+
     'VERSION_FROM'	=> 'DateCalc.pm',
+
 to
-    'VERSION'		=> '2.3',
+
+    'VERSION'		=> '3.0',
 
 Then edit the file "DateCalc.pm" and change the line
+
     bootstrap Date::DateCalc $VERSION;
+
 to
+
     bootstrap Date::DateCalc;
 
 Finally, edit the file "DateCalc.xs" and delete the line
+
     PROTOTYPES: DISABLE
 
 
@@ -163,7 +258,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-2.3").
+    package ("DateCalc-3.0/").
 
  2) Type "perl Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
@@ -178,11 +273,8 @@ tree!!
 
     Please refer to the MakeMaker documentation for instructions on how
     to build a new Perl with statically linked libraries (invoke "perldoc
-    ExtUtils::MakeMaker" for this), if your system DOESN'T support dynamic
+    ExtUtils::MakeMaker" for this), if your system does NOT support dynamic
     linking!
-
-    (Note, however, that I didn't test this since my system does support
-    dynamic linking.)
 
     Should you encounter any compiler warnings or errors (like the redefini-
     tion of certain types already defined by your system), please contact
@@ -211,11 +303,11 @@ tree!!
 
     then edit the file Makefile.PL and change the line
 
-    'INC'	=> '',     # e.g., '-I/opt/pkg/perl5.002/dist' 
+    'INC'	=> '',     # e.g., '-I/opt/pkg/perl5.003/dist' 
 
     in such a way that it points to your Perl 5 distribution tree, e.g.,
 
-    'INC'	=> '-I/usr/ctr/dlt/private/perl/perl5.002',
+    'INC'	=> '-I/usr/ctr/dlt/private/perl/perl5.003',
 
     or the like, and start over with the generation of the Makefile at 2).
 
@@ -223,10 +315,10 @@ tree!!
 
     The output should look somewhat like this:
 
-    PERL_DL_NONLAZY=1 /opt/bin/perl -I./blib/arch -I./blib/lib
-    -I/opt/lib/perl5.002/ sun4-sunos/5.002 -I/opt/lib/perl5.002
-    -e 'use Test::Harness qw(&runtests $verbose); $verbose=0;
-    runtests @ARGV;' t/*.t
+    PERL_DL_NONLAZY=1 /usr/bin/perl -I./blib/arch -I./blib/lib
+    -I/e/www/sw/pkg/perl/ lib/i386-freebsd/5.003 -I/e/www/sw/pkg/perl/lib
+    -e 'use Test::Harness qw(&runtests $verbose); $verbose=0; runtests @ARGV;'
+    t/*.t
     t/f000..............ok
     t/f001..............ok
     t/f002..............ok
@@ -253,8 +345,15 @@ tree!!
     t/f023..............ok
     t/f024..............ok
     t/f025..............ok
+    t/g000..............ok
+    t/g001..............ok
+    t/g002..............ok
+    t/g003..............ok
+    t/g004..............ok
+    t/g005..............ok
+    t/g006..............ok
     All tests successful.
-    Files=26,  Tests=299,  8 secs ( 4.05 cusr  2.02 csys =  6.07 cpu)
+    Files=33,  Tests=1154,  3 secs ( 5.70 cusr  1.27 csys =  6.97 cpu)
 
  5) At last, type "make install".
         
@@ -269,8 +368,8 @@ tree!!
 
     "demo_us" is (in principle) the same program as "demo", but it expects
     dates in U.S. american format in the order month - day - year. Moreover,
-    the decoding is done entirely in Perl, whereas "demo" uses the package's
-    C function "decode_date".
+    the decoding is done almost entirely in Perl, whereas "demo" uses the
+    package's C function "decode_date".
 
     Finally, the program "demo2" lets you find out about, for instance,
     the second thursday of a given month and year.
@@ -301,7 +400,7 @@ tree!!
     28 29 30
 
 
- 7) Enjoy!
+ 7) Share and enjoy!
 
 
 Version history:
@@ -397,23 +496,33 @@ arrays explicitly, element by element:
 
 Since version 2.2, this workaround is obsolete.
 
-Version 2.3 fixes a problem with unbalanced "malloc" and "free" calls
+Version 2.3 fixed a problem with unbalanced "malloc" and "free" calls
 which was discovered only with Perl version 5.003: Calling "malloc" in
 the C kernel of my module (compiled without the "perl.h" header file so
 that you can also use it independently from Perl) and "free" in the XSUB
 of my module (where the Perl "free" gets called!) produced a "bad free()
 ignored" warning.
 
+Version 3.0 adds a library of useful functions to solve special problems,
+functions that have been kept in additional "demo" files until now.
+Their (most important) contents (plus some new functions) have been moved
+to the new "Date::DateCalcLib" module, which the demo programs now use.
 
-Thanks:
--------
+Moreover, the convention for unsuccessful return has been changed: instead
+of returning zeros in all return values, an empty list is returned. That
+way it is possible to use the assigment to a list from a function call
+as the condition in an "if" statement, which wasn't possible before.
+
+
+Credits:
+--------
 
 Many thanks to Andreas Koenig for his efforts as upload-manager for the
 CPAN, his patience, and lots of very good advice and suggestions! Thank
 you for doing such a tremendous (and very time-consuming) job!!
 
-Also many thanks to David Jenkins for reviewing this README file and the
-english man page.
+Also many thanks to David Jenkins for reviewing the first version of this
+README file and the english man page.
 
 Thanks to Jarkko Hietaniemi for suggesting the "days_in_month" function.
 
@@ -446,6 +555,26 @@ Many thanks to Tim Zingelman <zingelman@fnal.gov> for reporting the problem
 fixed in version 2.3 and for testing an intermediate new version of this
 module on his machine!
 
+Many thanks to Jonas Liljegren <jonas@cultcom.se> for posting a subroutine
+for calculating easter monday in news:comp.lang.perl.modules and thereby
+triggering my writing of the new "Date::DateCalcLib" module which has been
+added in version 3.0 of the "Date::DateCalc" distribution.
+
+Also many thanks to Claus Tondering <c-t@pip.dknet.dk> for his excellent
+web pages and FAQ in news:news.answers about calendars and how to calcu-
+late easter sunday.
+
+Thanks to Reinhold Stansich <dynaconsult@netway.at> for posting a list
+of christian feast days and their offsets from easter sunday in news:
+comp.databases.ms-access and to Tammo Schnieder <schniede@hh.sdm.de>
+for sending me his posting.
+
+Many thanks to Max Ruffert <mor@mpa-garching.mpg.de> at the Max Planck
+Institute for Astrophysics in Garching for looking up Gauss' Rule for
+calculating easter sunday (the algorithm which is implemented in the
+"Date::DateCalcLib" module) for me and dictating it to me over the
+phone!
+
 
 Final note:
 -----------
@@ -456,9 +585,24 @@ then please don't hesitate to send me a mail:
 
 sb@sdm.de (Steffen Beyer)
 
+In fact I'd be glad if you could drop me an e-mail when you are using this
+package, so I can see how much interest exists in it and how much time is
+reasonable to spend on its further development.
+
+Therefore, I would also be glad to know what you liked and what you disliked
+about this package!
+
+And I would also be very interested to know what your application is in
+which you found this package to be useful, just to get an idea what can
+all be done with it and in which direction it should be developed further.
+
+Many thanks in advance!!
+
 With kind regards,
 --
-Steffen Beyer ________________________ C:\ONGRATLN.W95 _______________________
-mailto:sb@sdm.de         |s  |d &|m  | software design & management GmbH&Co.KG
-phone: +49 89 63812-244  |   |   |   | Thomas-Dehler-Str. 27
-fax:   +49 89 63812-150  |   |   |   | 81737 Munich, Germany.
+          _____        _____      .__        
+        _/ ____\____ _/ ____\____ |__|______ 
+        \   __\\__  \\   __\/    \|  \_  __ \       Steffen Beyer
+         |  |   / __ \|  | |   |  \  ||  | \/         sb@sdm.de
+         |__|  (____  /__| |___|  /__||__|           sb@en.muc.de
+                    \/          \/           

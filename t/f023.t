@@ -13,75 +13,77 @@ use Date::DateCalc qw( date_time_difference );
 #   );
 # ======================================================================
 
-print "1..17\n";
+print "1..21\n";
 
 $n = 1;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,58,31);
-if (($dd == 0) && ($h == -10) && ($m == -13) && ($s == -37))
+if ((($dd,$h,$m,$s) = date_time_difference(1995,2,28,7,58,31,1995,2,28,18,12,8)) &&
+($dd == 0) && ($h == 10) && ($m == 13) && ($s == 37))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,29,18,12,8,1995,2,28,7,58,31);
-if (($dd == 728352) && ($h == 7) && ($m == 58) && ($s == 31))
+if ((($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,58,31)) &&
+($dd == 0) && ($h == -10) && ($m == -13) && ($s == -37))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,29,7,58,31);
-if (($dd == -728352) && ($h == -18) && ($m == -12) && ($s == -8))
+if ((($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,3,1,7,58,31)) &&
+($dd == 0) && ($h == 13) && ($m == 46) && ($s == 23))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,29,18,12,8,1995,2,29,7,58,31);
-if (($dd == 0) && ($h == 0) && ($m == 0) && ($s == 0))
+if ((($dd,$h,$m,$s) = date_time_difference(1995,3,1,18,12,8,1995,2,28,7,58,31)) &&
+($dd == -1) && ($h == -10) && ($m == -13) && ($s == -37))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,-1,12,8,1995,2,28,7,58,31);
-if (($dd == 728352) && ($h == 7) && ($m == 58) && ($s == 31))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,29,18,12,8,1995,2,28,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,-1,8,1995,2,28,7,58,31);
-if (($dd == 728352) && ($h == 7) && ($m == 58) && ($s == 31))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,29,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,-1,1995,2,28,7,58,31);
-if (($dd == 728352) && ($h == 7) && ($m == 58) && ($s == 31))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,29,18,12,8,1995,2,29,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,-1,58,31);
-if (($dd == -728352) && ($h == -18) && ($m == -12) && ($s == -8))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,-1,12,8,1995,2,28,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,-1,31);
-if (($dd == -728352) && ($h == -18) && ($m == -12) && ($s == -8))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,-1,8,1995,2,28,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,58,-1);
-if (($dd == -728352) && ($h == -18) && ($m == -12) && ($s == -8))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,-1,1995,2,28,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,24,12,8,1995,2,28,7,58,31);
-if (($dd == 728352) && ($h == 7) && ($m == 58) && ($s == 31))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,-1,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,60,8,1995,2,28,7,58,31);
-if (($dd == 728352) && ($h == 7) && ($m == 58) && ($s == 31))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,-1,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,60,1995,2,28,7,58,31);
-if (($dd == 728352) && ($h == 7) && ($m == 58) && ($s == 31))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,58,-1))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,24,58,31);
-if (($dd == -728352) && ($h == -18) && ($m == -12) && ($s == -8))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,24,12,8,1995,2,28,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,60,31);
-if (($dd == -728352) && ($h == -18) && ($m == -12) && ($s == -8))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,60,8,1995,2,28,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,58,60);
-if (($dd == -728352) && ($h == -18) && ($m == -12) && ($s == -8))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,60,1995,2,28,7,58,31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,60,1995,2,28,7,58,60);
-if (($dd == 0) && ($h == 0) && ($m == 0) && ($s == 0))
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,24,58,31))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,60,31))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+unless (($dd,$h,$m,$s) = date_time_difference(1995,2,28,18,12,8,1995,2,28,7,58,60))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($dd,$h,$m,$s) = date_time_difference(1964,1,3,11,4,0,1997,2,13,22,51,31)) &&
+($dd == 12095) && ($h == 11) && ($m == 47) && ($s == 31))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($dd,$h,$m,$s) = date_time_difference(1997,2,13,22,51,31,1964,1,3,11,4,0)) &&
+($dd == -12095) && ($h == -11) && ($m == -47) && ($s == -31))
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__
+

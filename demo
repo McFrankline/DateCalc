@@ -3,7 +3,7 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw(:all);
+use Date::DateCalc qw(decode_date date_to_short dates_difference);
 
 print "\n";
 
@@ -13,8 +13,7 @@ while (! $ok)
     print "Please enter the date of your birthday (day-month-year): ";
     $date = <STDIN>;
     print "\n";
-    ($yy1,$mm1,$dd1) = decode_date($date);
-    if ($yy1)
+    if (($yy1,$mm1,$dd1) = decode_date($date))
     {
         $datestr = date_to_short($yy1,$mm1,$dd1);
         print "Your date is: $datestr\n";
@@ -34,8 +33,7 @@ while (! $ok)
     print "Please enter today's date (day-month-year): ";
     $date = <STDIN>;
     print "\n";
-    ($yy2,$mm2,$dd2) = decode_date($date);
-    if ($yy2)
+    if (($yy2,$mm2,$dd2) = decode_date($date))
     {
         $datestr = date_to_short($yy2,$mm2,$dd2);
         print "Your date is: $datestr\n";
@@ -54,3 +52,4 @@ print "You are $days days old.\n";
 print "\n";
 
 __END__
+

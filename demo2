@@ -3,41 +3,27 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw(:all);
+use Date::DateCalc qw(day_name_tab month_name_tab date_to_string);
 
-$times = shift;
-$dayow = shift;
+use Date::DateCalcLib qw(nth_wday_of_month_year);
+
+$n = shift;
+$wday = shift;
 $month = shift;
 $year = shift;
 
 %ordinal = ( 1 => '1st', 2 => '2nd', 3 => '3rd' );
 
-($yy,$mm,$dd) = x_th_y_day_of_month_year($times,$dayow,$month,$year);
-
-$n_th = $ordinal{$times} ? $ordinal{$times} : $times . "th";
-
-print "The $n_th ", day_name_tab($dayow), " in ", month_name_tab($month), " $year is ", date_to_string($yy,$mm,$dd), "\n";
-
-exit 0;
-
-sub x_th_y_day_of_month_year
+if (($yy,$mm,$dd) = nth_wday_of_month_year($n,$wday,$month,$year))
 {
-    my($x_th,$y_day,$month,$year) = @_;
-    my($first,$offset);
-    my($yy,$mm,$dd);
+    $nth = $ordinal{$n} ? $ordinal{$n} : $n . "th";
 
-    return(0,0,0) if $x_th < 1 || $x_th > 5 || $y_day < 1 || $y_day > 7;
-
-    $first = day_of_week($year,$month,1);
-
-    $offset = $y_day - $first;
-    $offset += 7 if $offset < 0;
-    $offset += --$x_th * 7;
-
-    ($yy,$mm,$dd) = calc_new_date($year,$month,1,$offset);
-
-    return(0,0,0) if $mm != $month;
-    return($yy,$mm,$dd);
+    print "The $nth ", day_name_tab($wday), " in ", month_name_tab($month),
+      " $year is ", date_to_string($yy,$mm,$dd), "\n";
+}
+else
+{
+    die "Invalid entries! Please try again.\n";
 }
 
 __END__

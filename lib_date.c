@@ -1,63 +1,62 @@
 #ifndef DATE_CALCULATIONS
 #define DATE_CALCULATIONS
-/**************************************/
-/* MODULE   lib_date.c          (lib) */
-/**************************************/
-/*  Date calculations complying with  */
-/* ISO/R 2015-1971 and DIN 1355 stdds */
-/**************************************/
-/* IMPORTS                            */
-/**************************************/
-#include    <stdlib.h>       /* (sys) */
-#include    <string.h>       /* (sys) */
-#include    <ctype.h>        /* (sys) */
-#include    "lib_defs.h"     /* (dat) */
-/**************************************/
-/* INTERFACE                          */
-/**************************************/
+/*****************************************************************************/
+/*  MODULE NAME:  lib_date.c                            MODULE TYPE:  (lib)  */
+/*****************************************************************************/
+/*  Date calculations complying with ISO/R 2015-1971 and DIN 1355 standards  */
+/*****************************************************************************/
+/*  MODULE IMPORTS:                                                          */
+/*****************************************************************************/
+#include <stdlib.h>                                 /*  MODULE TYPE:  (sys)  */
+#include <string.h>                                 /*  MODULE TYPE:  (sys)  */
+#include <ctype.h>                                  /*  MODULE TYPE:  (sys)  */
+#include "lib_defs.h"                               /*  MODULE TYPE:  (dat)  */
+/*****************************************************************************/
+/*  MODULE INTERFACE:                                                        */
+/*****************************************************************************/
 /*
 boolean leap(N_int year);
+boolean check_date(N_int year, N_int mm, N_int dd);
 
 N_int   compress(N_int yy, N_int mm, N_int dd);
-void    uncompress(N_int date, N_int *cc, N_int *yy, N_int *mm, N_int *dd);
+boolean uncompress(N_int date, N_int *cc, N_int *yy, N_int *mm, N_int *dd);
 boolean check_compressed(N_int date);
-byteptr compressed_to_short(N_int date);
+baseptr compressed_to_short(N_int date);
 
-boolean check_date(N_int year, N_int mm, N_int dd);
 Z_long  calc_days(N_int year, N_int mm, N_int dd);
 N_int   day_of_week(N_int year, N_int mm, N_int dd);
 Z_long  dates_difference(N_int year1, N_int mm1, N_int dd1,
                          N_int year2, N_int mm2, N_int dd2);
-void    calc_new_date(N_int *year, N_int *mm, N_int *dd, Z_long offset);
+boolean calc_new_date(N_int *year, N_int *mm, N_int *dd, Z_long offset);
 
-void    date_time_difference
+boolean date_time_difference
 (
     Z_long *days, Z_int *hh, Z_int *mm, Z_int *ss,
     N_int year1, N_int month1, N_int day1, N_int hh1, N_int mm1, N_int ss1,
     N_int year2, N_int month2, N_int day2, N_int hh2, N_int mm2, N_int ss2
 );
-void    calc_new_date_time
+boolean calc_new_date_time
 (
     N_int *year, N_int *month, N_int *day, N_int *hh, N_int *mm, N_int *ss,
     Z_long days_offset, Z_long hh_offset, Z_long mm_offset, Z_long ss_offset
 );
 
-byteptr date_to_short(N_int year, N_int mm, N_int dd);
-byteptr date_to_string(N_int year, N_int mm, N_int dd);
+baseptr date_to_short(N_int year, N_int mm, N_int dd);
+baseptr date_to_string(N_int year, N_int mm, N_int dd);
 
 N_int   week_number(N_int year, N_int mm, N_int dd);
-void    first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd);
+boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd);
 N_int   weeks_in_year(N_int year);
 
-N_int   decode_day(byteptr buffer, N_int len);
-N_int   decode_month(byteptr buffer, N_int len);
-boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd);
+N_int   decode_day(baseptr buffer, N_int len);
+N_int   decode_month(baseptr buffer, N_int len);
+boolean decode_date(baseptr buffer, N_int *year, N_int *mm, N_int *dd);
 
-void    annihilate(byteptr buffer);
+void    annihilate(baseptr buffer);
 */
-/**************************************/
-/* RESOURCES                          */
-/**************************************/
+/*****************************************************************************/
+/*  MODULE RESOURCES:                                                        */
+/*****************************************************************************/
 
 N_int   month_length[2][13] =
     {
@@ -81,9 +80,9 @@ blockdef(rsrc_date_001,16) = "<no date>"; /* exactly 9 chars long */
 blockdef(rsrc_date_002,32) = "<no date>"; /* short form */
 blockdef(rsrc_date_003,64) = "<no date>"; /* verbose form */
 
-/**************************************/
-/* IMPLEMENTATION                     */
-/**************************************/
+/*****************************************************************************/
+/*  MODULE IMPLEMENTATION:                                                   */
+/*****************************************************************************/
 
 #define     YEAR0       70              /* year of reference (epoch) */
 #define     CENT0       1900            /* century of reference (epoch) */
@@ -94,18 +93,25 @@ static  N_int   days_in_months[2][14] =
         { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
     };
 
-/****************************************************************************/
+static Z_long year_to_days(N_int year)
+{
+    return( year * 365L + (year / 4) - (year / 100) + (year / 400) );
+}
+/*****************************************************************************/
 
 boolean leap(N_int year)
 {
     return((((year % 4) == 0) and ((year % 100) != 0)) or ((year % 400) == 0));
 }
 
-static Z_long year_to_days(N_int year)
+boolean check_date(N_int year, N_int mm, N_int dd)
 {
-    return( year * 365L + (year / 4) - (year / 100) + (year / 400) );
+    if (year < 1) return(false);
+    if ((mm < 1) or (mm > 12)) return(false);
+    if ((dd < 1) or (dd > month_length[leap(year)][mm])) return(false);
+    return(true);
 }
-/****************************************************************************/
+/*****************************************************************************/
 
 N_int compress(N_int yy, N_int mm, N_int dd)
 {
@@ -135,7 +141,7 @@ N_int compress(N_int yy, N_int mm, N_int dd)
     return( (yy SHL 9) OR (mm SHL 5) OR dd );
 }
 
-void uncompress(N_int date, N_int *cc, N_int *yy, N_int *mm, N_int *dd)
+boolean uncompress(N_int date, N_int *cc, N_int *yy, N_int *mm, N_int *dd)
 {
     if (date > 0)
     {
@@ -143,21 +149,23 @@ void uncompress(N_int date, N_int *cc, N_int *yy, N_int *mm, N_int *dd)
         *mm = (date AND 0x01FF) SHR 5;
         *dd = date AND 0x001F;
 
-        if (*yy < 100-YEAR0)
+        if (*yy < 100)
         {
-            *cc = CENT0;
-            *yy += YEAR0;
+            if (*yy < 100-YEAR0)
+            {
+                *cc = CENT0;
+                *yy += YEAR0;
+            }
+            else
+            {
+                *cc = CENT0+100;
+                *yy -= 100-YEAR0;
+            }
+            return(check_date(*cc+*yy,*mm,*dd));
         }
-        else
-        {
-            *cc = CENT0+100;
-            *yy -= 100-YEAR0;
-        }
+        else return(false);
     }
-    else
-    {
-        *cc = *yy = *mm = *dd = 0;
-    }
+    else return(false);
 }
 
 boolean check_compressed(N_int date)
@@ -167,45 +175,26 @@ boolean check_compressed(N_int date)
     N_int mm;
     N_int dd;
 
-    if (date > 0)
-    {
-        uncompress(date, &cc, &yy, &mm, &dd);
-        return(date == compress(cc+yy, mm, dd));
-    }
-    else return(false);
+    return(uncompress(date,&cc,&yy,&mm,&dd));
 }
 
-byteptr compressed_to_short(N_int date)
+baseptr compressed_to_short(N_int date)
 {
     N_int cc;
     N_int yy;
     N_int mm;
     N_int dd;
-    byteptr datestr;
+    baseptr datestr;
 
-    datestr = (byteptr) malloc(16);
+    datestr = (baseptr) malloc(16);
     if (datestr == NULL) return(NULL);
-    if (date > 0)
-    {
-        uncompress(date, &cc, &yy, &mm, &dd);
-        if (date == compress(cc+yy, mm, dd))
-        {
-            sprintf((char *)datestr,"%02d-%.3s-%02d",dd,month_name[mm],yy);
-            return(datestr);
-        }
-    }
-    strcpy((char *)datestr,(char *)rsrc_date_001);
+    if (uncompress(date,&cc,&yy,&mm,&dd))
+        sprintf((char *)datestr,"%02d-%.3s-%02d",dd,month_name[mm],yy);
+    else
+        strcpy((char *)datestr,(char *)rsrc_date_001);
     return(datestr);
 }
-/****************************************************************************/
-
-boolean check_date(N_int year, N_int mm, N_int dd)
-{
-    if (year < 1) return(false);
-    if ((mm < 1) or (mm > 12)) return(false);
-    if ((dd < 1) or (dd > month_length[leap(year)][mm])) return(false);
-    return(true);
-}
+/*****************************************************************************/
 
 Z_long calc_days(N_int year, N_int mm, N_int dd)
 {
@@ -237,7 +226,7 @@ Z_long dates_difference(N_int year1, N_int mm1, N_int dd1,
     return( calc_days(year2, mm2, dd2) - calc_days(year1, mm1, dd1) );
 }
 
-void calc_new_date(N_int *year, N_int *mm, N_int *dd, Z_long offset)
+boolean calc_new_date(N_int *year, N_int *mm, N_int *dd, Z_long offset)
 {
     Z_long  days;
     boolean lp;
@@ -257,7 +246,7 @@ void calc_new_date(N_int *year, N_int *mm, N_int *dd, Z_long offset)
             *dd -= days_in_months[lp][13];
             lp = leap(++(*year));
         }
-        for ( *mm=12; *mm>0; (*mm)-- )
+        for ( *mm = 12; *mm > 0; (*mm)-- )
         {
             if (*dd > days_in_months[lp][*mm])
             {
@@ -265,15 +254,13 @@ void calc_new_date(N_int *year, N_int *mm, N_int *dd, Z_long offset)
                 break;
             }
         }
+        return(true);
     }
-    else
-    {
-        *year = *mm = *dd = 0;
-    }
+    return(false);
 }
-/****************************************************************************/
+/*****************************************************************************/
 
-void date_time_difference
+boolean date_time_difference
 (
     Z_long *days, Z_int *hh, Z_int *mm, Z_int *ss,
     N_int year1, N_int month1, N_int day1, N_int hh1, N_int mm1, N_int ss1,
@@ -284,16 +271,16 @@ void date_time_difference
     Z_long  quot;
     boolean sign;
 
-    *hh = *mm = *ss = 0;
+    *days = *hh = *mm = *ss = 0;
     if ((ss1 >= 60) or (mm1 >= 60) or (hh1 >= 24) or
-        !check_date(year1,month1,day1))
+        (!check_date(year1,month1,day1)))
     {
-        year1 = month1 = day1 = hh1 = mm1 = ss1 = 0;
+        return(false);
     }
     if ((ss2 >= 60) or (mm2 >= 60) or (hh2 >= 24) or
-        !check_date(year2,month2,day2))
+        (!check_date(year2,month2,day2)))
     {
-        year2 = month2 = day2 = hh2 = mm2 = ss2 = 0;
+        return(false);
     }
     diff = ((((hh2 * 60L) + mm2) * 60L) + ss2) -
            ((((hh1 * 60L) + mm1) * 60L) + ss1);
@@ -338,9 +325,10 @@ void date_time_difference
             *hh = -(*hh);
         }
     }
+    return(true);
 }
 
-void calc_new_date_time
+boolean calc_new_date_time
 (
     N_int *year, N_int *month, N_int *day, N_int *hh, N_int *mm, N_int *ss,
     Z_long days_offset, Z_long hh_offset, Z_long mm_offset, Z_long ss_offset
@@ -381,24 +369,17 @@ void calc_new_date_time
         {
             *hh = *mm = *ss = 0;
         }
-        calc_new_date(year, month, day, days_offset);
-        if (*year == 0)
-        {
-            *year = *month = *day = *hh = *mm = *ss = 0;
-        }
+        return(calc_new_date(year,month,day,days_offset));
     }
-    else
-    {
-        *year = *month = *day = *hh = *mm = *ss = 0;
-    }
+    return(false);
 }
-/****************************************************************************/
+/*****************************************************************************/
 
-byteptr date_to_short(N_int year, N_int mm, N_int dd)
+baseptr date_to_short(N_int year, N_int mm, N_int dd)
 {
-    byteptr datestr;
+    baseptr datestr;
 
-    datestr = (byteptr) malloc(32);
+    datestr = (baseptr) malloc(32);
     if (datestr == NULL) return(NULL);
     if (check_date(year,mm,dd))
         sprintf((char *)datestr,"%.3s %d-%.3s-%d",
@@ -409,11 +390,11 @@ byteptr date_to_short(N_int year, N_int mm, N_int dd)
     return(datestr);
 }
 
-byteptr date_to_string(N_int year, N_int mm, N_int dd)
+baseptr date_to_string(N_int year, N_int mm, N_int dd)
 {
-    byteptr datestr;
+    baseptr datestr;
 
-    datestr = (byteptr) malloc(64);
+    datestr = (baseptr) malloc(64);
     if (datestr == NULL) return(NULL);
     if (check_date(year,mm,dd))
         sprintf((char *)datestr,"%s, %d %s %d",
@@ -423,7 +404,7 @@ byteptr date_to_string(N_int year, N_int mm, N_int dd)
         strcpy((char *)datestr,(char *)rsrc_date_003);
     return(datestr);
 }
-/****************************************************************************/
+/*****************************************************************************/
 
 N_int week_number(N_int year, N_int mm, N_int dd)
 {
@@ -434,23 +415,23 @@ N_int week_number(N_int year, N_int mm, N_int dd)
       (first < 4) );
 }
 
-void first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd)
+boolean first_in_week(N_int week, N_int *year, N_int *mm, N_int *dd)
 {
     N_int first;
 
     *mm = *dd = 1;
     first = day_of_week(*year,1,1) - 1;
     if (first < 4) week--;
-    calc_new_date(year, mm, dd, (week * 7L - first) );
+    return(calc_new_date(year,mm,dd, (week * 7L - first) ));
 }
 
 N_int weeks_in_year(N_int year)
 {
     return(52 + ((day_of_week(year,1,1)==4) or (day_of_week(year,12,31)==4)));
 }
-/****************************************************************************/
+/*****************************************************************************/
 
-static boolean scan(byteptr s, Z_int len, Z_int i, boolean alpha)
+static boolean scan(baseptr s, Z_int len, Z_int i, boolean alpha)
 {
     if ((s != NULL) and (i >= 0) and (i < len))
         return( (isdigit(s[i]) != 0) XOR alpha );
@@ -458,7 +439,7 @@ static boolean scan(byteptr s, Z_int len, Z_int i, boolean alpha)
         return( false );
 }
 
-static boolean scanx(byteptr s, Z_int len, Z_int i, boolean delim)
+static boolean scanx(baseptr s, Z_int len, Z_int i, boolean delim)
 {
     if ((s != NULL) and (i >= 0) and (i < len))
         return( (isalnum(s[i]) != 0) XOR delim );
@@ -466,7 +447,7 @@ static boolean scanx(byteptr s, Z_int len, Z_int i, boolean delim)
         return( false );
 }
 
-static N_int getval(byteptr src, Z_int len)
+static N_int getval(baseptr src, Z_int len)
 {
     blockdef(buf,5);
 
@@ -480,7 +461,7 @@ static N_int getval(byteptr src, Z_int len)
     else return(0);
 }
 
-N_int decode_day(byteptr buffer, N_int len) /* 0 = unable to decode day */
+N_int decode_day(baseptr buffer, N_int len) /* 0 = unable to decode day */
 {
     N_int   i,j;
     N_int   day;
@@ -509,7 +490,7 @@ N_int decode_day(byteptr buffer, N_int len) /* 0 = unable to decode day */
     else return(0);
 }
 
-N_int decode_month(byteptr buffer, N_int len) /* 0 = unable to decode month */
+N_int decode_month(baseptr buffer, N_int len) /* 0 = unable to decode month */
 {
     N_int   i,j;
     N_int   month;
@@ -538,7 +519,7 @@ N_int decode_month(byteptr buffer, N_int len) /* 0 = unable to decode month */
     else return(0);
 }
 
-boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
+boolean decode_date(baseptr buffer, N_int *year, N_int *mm, N_int *dd)
 {
     Z_int   i,j;
     Z_int   buflen;
@@ -624,7 +605,7 @@ boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
                                 }
                                 else return(false); /* month too long */
                             }
-                            else                /* try abbreviations for month */
+                            else            /* try abbreviations for month */
                             {
                                 *mm = decode_month(buffer,buflen);
                             }
@@ -646,19 +627,22 @@ boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
     }
     return(check_date(*year,*mm,*dd));
 }
-/****************************************************************************/
+/*****************************************************************************/
 
-void annihilate(byteptr buffer)
+void annihilate(baseptr buffer)
 {
     free((char *) buffer);
 }
-/**************************************/
-/* PROGRAMMER   Steffen Beyer         */
-/**************************************/
-/* CREATED      01.11.93              */
-/**************************************/
-/* MODIFIED     22.11.96              */
-/**************************************/
-/* COPYRIGHT    Steffen Beyer         */
-/**************************************/
+/*****************************************************************************/
+/*  AUTHOR:  Steffen Beyer                                                   */
+/*****************************************************************************/
+/*  VERSION:  3.0                                                            */
+/*****************************************************************************/
+/*  VERSION HISTORY:                                                         */
+/*****************************************************************************/
+/*    01.11.93    Created                                                    */
+/*    16.02.97    Version 3.0                                                */
+/*****************************************************************************/
+/*  COPYRIGHT (C) 1993-1997 BY:  Steffen Beyer                               */
+/*****************************************************************************/
 #endif

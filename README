@@ -1,5 +1,5 @@
 =======================================
-  Module "Date::DateCalc" Version 1.4
+  Module "Date::DateCalc" Version 1.5
 =======================================
 
 --------------------------------------------------------------------------------
@@ -13,6 +13,12 @@ Legal stuff:
 Copyright (c) 1995 by Steffen Beyer. All rights reserved.
 This package is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
+
+
+Requirements:
+-------------
+
+Perl version 5.001m or higher, a compiler complying with ANSI C standards.
 
 
 What does it do:
@@ -66,7 +72,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-1.4").
+    package ("DateCalc-1.5").
 
  2) Type "perl5 Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
@@ -167,6 +173,11 @@ tree!!
     to 3 letters) abbreviation for the month. You might try "03-Jan-1964",
     for example. Experiment!
 
+    "demo_us" is (in principle) the same program as "demo", but it expects
+    dates in U.S. american format in the order month - day - year. Moreover,
+    the decoding is done entirely in Perl, whereas "demo" uses the package's
+    C function "decode_date".
+
  8) Enjoy!
 
 
@@ -211,8 +222,12 @@ From version 1.3 on, the C library "lib_date.c" is compiled separately; it is
 no longer '#include'd in the XS file. Moreover, the function "days_in_month"
 was added.
 
-Version 1.4 fixes a bug in DateCalc.xs where the function newSVnv(double)
+Version 1.4 fixed a bug in DateCalc.xs where the function newSVnv(double)
 was used instead of newSViv(IV) although an integer value is passed to it.
+
+Version 1.5 includes a notice that you need a compiler capable of
+processing ANSI C in order to successfully compile this module, and
+contains a second demo for decoding dates in U.S. american format.
 
 
 Thanks:

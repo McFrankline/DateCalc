@@ -6,6 +6,7 @@ MANIFEST
 Makefile.PL
 README
 demo
+demo_us
 lib_date.c
 lib_date.h
 lib_defs.h

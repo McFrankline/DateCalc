@@ -282,7 +282,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("1.4",0)));
+        PUSHs(sv_2mortal(newSVpv("1.5",0)));
     }
 
 

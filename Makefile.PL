@@ -3,7 +3,7 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'	=> 'Date::DateCalc',
-    'VERSION'	=> '1.4',
+    'VERSION'	=> '1.5',
     'DISTNAME'	=> 'DateCalc',
     'OBJECT'	=> '$(O_FILES)',
     'LIBS'	=> [''],   # e.g., '-lm' 

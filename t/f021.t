@@ -3,169 +3,169 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( decode_month );
+use Date::Calc qw( Decode_Month );
 
 # ======================================================================
-#   $month_name = decode_month($month);
+#   $month_name = Decode_Month($month);
 # ======================================================================
 
 print "1..52\n";
 
 $n = 1;
-if (decode_month("j") == 0)
+if (Decode_Month("j") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("ja") == 1)
+if (Decode_Month("ja") == 1)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("jan") == 1)
+if (Decode_Month("jan") == 1)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("January") == 1)
+if (Decode_Month("January") == 1)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("f") == 2)
+if (Decode_Month("f") == 2)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("fe") == 2)
+if (Decode_Month("fe") == 2)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("feb") == 2)
+if (Decode_Month("feb") == 2)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("February") == 2)
+if (Decode_Month("February") == 2)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("m") == 0)
+if (Decode_Month("m") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("ma") == 0)
+if (Decode_Month("ma") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("mar") == 3)
+if (Decode_Month("mar") == 3)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("March") == 3)
+if (Decode_Month("March") == 3)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("a") == 0)
+if (Decode_Month("a") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("ap") == 4)
+if (Decode_Month("ap") == 4)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("apr") == 4)
+if (Decode_Month("apr") == 4)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("April") == 4)
+if (Decode_Month("April") == 4)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("m") == 0)
+if (Decode_Month("m") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("ma") == 0)
+if (Decode_Month("ma") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("may") == 5)
+if (Decode_Month("may") == 5)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("May") == 5)
+if (Decode_Month("May") == 5)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("j") == 0)
+if (Decode_Month("j") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("ju") == 0)
+if (Decode_Month("ju") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("jun") == 6)
+if (Decode_Month("jun") == 6)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("June") == 6)
+if (Decode_Month("June") == 6)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("j") == 0)
+if (Decode_Month("j") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("ju") == 0)
+if (Decode_Month("ju") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("jul") == 7)
+if (Decode_Month("jul") == 7)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("July") == 7)
+if (Decode_Month("July") == 7)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("a") == 0)
+if (Decode_Month("a") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("au") == 8)
+if (Decode_Month("au") == 8)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("aug") == 8)
+if (Decode_Month("aug") == 8)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("August") == 8)
+if (Decode_Month("August") == 8)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("s") == 9)
+if (Decode_Month("s") == 9)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("se") == 9)
+if (Decode_Month("se") == 9)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("sep") == 9)
+if (Decode_Month("sep") == 9)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("September") == 9)
+if (Decode_Month("September") == 9)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("o") == 10)
+if (Decode_Month("o") == 10)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("oc") == 10)
+if (Decode_Month("oc") == 10)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("oct") == 10)
+if (Decode_Month("oct") == 10)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("October") == 10)
+if (Decode_Month("October") == 10)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("n") == 11)
+if (Decode_Month("n") == 11)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("no") == 11)
+if (Decode_Month("no") == 11)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("nov") == 11)
+if (Decode_Month("nov") == 11)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("November") == 11)
+if (Decode_Month("November") == 11)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("d") == 12)
+if (Decode_Month("d") == 12)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("de") == 12)
+if (Decode_Month("de") == 12)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("dec") == 12)
+if (Decode_Month("dec") == 12)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("December") == 12)
+if (Decode_Month("December") == 12)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("Spring") == 0)
+if (Decode_Month("Spring") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("Summer") == 0)
+if (Decode_Month("Summer") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("Fall") == 0)
+if (Decode_Month("Fall") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (decode_month("Winter") == 0)
+if (Decode_Month("Winter") == 0)
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__

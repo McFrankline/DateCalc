@@ -3,94 +3,110 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( month_name_tab );
+use Date::Calc qw( Month_to_Text );
 
 # ======================================================================
-#   $month = month_name_tab($mm);
+#   $month = Month_to_Text($mm);
 # ======================================================================
 
 print "1..27\n";
 
 $n = 1;
-if (month_name_tab(0) eq "Error")
+eval { Month_to_Text(0); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(1) eq "January")
+if (Month_to_Text(1) eq "January")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(2) eq "February")
+if (Month_to_Text(2) eq "February")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(3) eq "March")
+if (Month_to_Text(3) eq "March")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(4) eq "April")
+if (Month_to_Text(4) eq "April")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(5) eq "May")
+if (Month_to_Text(5) eq "May")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(6) eq "June")
+if (Month_to_Text(6) eq "June")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(7) eq "July")
+if (Month_to_Text(7) eq "July")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(8) eq "August")
+if (Month_to_Text(8) eq "August")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(9) eq "September")
+if (Month_to_Text(9) eq "September")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(10) eq "October")
+if (Month_to_Text(10) eq "October")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(11) eq "November")
+if (Month_to_Text(11) eq "November")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(12) eq "December")
+if (Month_to_Text(12) eq "December")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(13) eq "Error")
+eval { Month_to_Text(13); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(14) eq "January")
+eval { Month_to_Text(14); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(15) eq "February")
+eval { Month_to_Text(15); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(16) eq "March")
+eval { Month_to_Text(16); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(17) eq "April")
+eval { Month_to_Text(17); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(18) eq "May")
+eval { Month_to_Text(18); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(19) eq "June")
+eval { Month_to_Text(19); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(20) eq "July")
+eval { Month_to_Text(20); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(21) eq "August")
+eval { Month_to_Text(21); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(22) eq "September")
+eval { Month_to_Text(22); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(23) eq "October")
+eval { Month_to_Text(23); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(24) eq "November")
+eval { Month_to_Text(24); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(25) eq "December")
+eval { Month_to_Text(25); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (month_name_tab(26) eq "Error")
+eval { Month_to_Text(26); };
+if ($@ =~ /month out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__
+

@@ -3,64 +3,75 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( day_name_tab );
+use Date::Calc qw( Day_of_Week_to_Text );
 
 # ======================================================================
-#   $day = day_name_tab($weekday);
+#   $day = Day_of_Week_to_Text($weekday);
 # ======================================================================
 
 print "1..17\n";
 
 $n = 1;
-if (day_name_tab(0) eq "Error")
+eval { Day_of_Week_to_Text(0); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(1) eq "Monday")
+if (Day_of_Week_to_Text(1) eq "Monday")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(2) eq "Tuesday")
+if (Day_of_Week_to_Text(2) eq "Tuesday")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(3) eq "Wednesday")
+if (Day_of_Week_to_Text(3) eq "Wednesday")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(4) eq "Thursday")
+if (Day_of_Week_to_Text(4) eq "Thursday")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(5) eq "Friday")
+if (Day_of_Week_to_Text(5) eq "Friday")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(6) eq "Saturday")
+if (Day_of_Week_to_Text(6) eq "Saturday")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(7) eq "Sunday")
+if (Day_of_Week_to_Text(7) eq "Sunday")
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(8) eq "Error")
+eval { Day_of_Week_to_Text(8); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(9) eq "Monday")
+eval { Day_of_Week_to_Text(9); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(10) eq "Tuesday")
+eval { Day_of_Week_to_Text(10); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(11) eq "Wednesday")
+eval { Day_of_Week_to_Text(11); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(12) eq "Thursday")
+eval { Day_of_Week_to_Text(12); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(13) eq "Friday")
+eval { Day_of_Week_to_Text(13); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(14) eq "Saturday")
+eval { Day_of_Week_to_Text(14); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(15) eq "Sunday")
+eval { Day_of_Week_to_Text(15); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if (day_name_tab(16) eq "Error")
+eval { Day_of_Week_to_Text(16); };
+if ($@ =~ /day of week out of range/)
 {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__
+

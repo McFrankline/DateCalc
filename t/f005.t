@@ -3,7 +3,7 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( check_compressed );
+use Date::Calc qw( check_compressed );
 
 # ======================================================================
 #   $flag = check_compressed($date);
@@ -23,3 +23,4 @@ $n++;
 if (check_compressed(12893) == 0) {print "ok $n\n";} else {print "not ok $n\n";}
 
 __END__
+

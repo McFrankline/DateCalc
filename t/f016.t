@@ -3,69 +3,117 @@
 use strict;
 no strict "vars";
 
-use Date::DateCalc qw( decode_date );
+use Date::Calc qw( Decode_Date_EU Decode_Date_US );
 
 # ======================================================================
-#   ($year,$mm,$dd) = decode_date($buffer);
+#   ($year,$mm,$dd) = Decode_Date_EU($buffer);
+#   ($year,$mm,$dd) = Decode_Date_US($buffer);
 # ======================================================================
 
-print "1..14\n";
+print "1..25\n";
 
 $n = 1;
-if ((($year,$mm,$dd) = decode_date("3.1.64")) &&
+if ((($year,$mm,$dd) = Decode_Date_EU("3.1.64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_EU("3 1 64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_EU("03.01.64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_EU("03/01/64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_EU("3. Jan 1964")) &&
 ($year==1964)&&($mm==1)&&($dd==3))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if ((($year,$mm,$dd) = decode_date("3 1 64")) &&
+if ((($year,$mm,$dd) = Decode_Date_EU("Birthday: 3. Jan '64 in Backnang/Germany")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_EU("03-Jan-64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_EU("3.Jan1964")) &&
 ($year==1964)&&($mm==1)&&($dd==3))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if ((($year,$mm,$dd) = decode_date("03.01.64")) &&
-($year==1964)&&($mm==1)&&($dd==3))
+if ((($year,$mm,$dd) = Decode_Date_EU("3Jan64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if ((($year,$mm,$dd) = decode_date("03/01/64")) &&
-($year==1964)&&($mm==1)&&($dd==3))
+if ((($year,$mm,$dd) = Decode_Date_EU("030164")) &&
+($year==2064)&&($mm==1)&&($dd==3))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if ((($year,$mm,$dd) = decode_date("3. Jan 1964")) &&
-($year==1964)&&($mm==1)&&($dd==3))
+if ((($year,$mm,$dd) = Decode_Date_EU("3ja64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if ((($year,$mm,$dd) = decode_date("3. Jan '64")) &&
-($year==1964)&&($mm==1)&&($dd==3))
+if ((($year,$mm,$dd) = Decode_Date_EU("3164")) &&
+($year==2064)&&($mm==1)&&($dd==3))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-if ((($year,$mm,$dd) = decode_date("03-Jan-64")) &&
-($year==1964)&&($mm==1)&&($dd==3))
-{print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if ((($year,$mm,$dd) = decode_date("3.Jan1964")) &&
-($year==1964)&&($mm==1)&&($dd==3))
-{print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if ((($year,$mm,$dd) = decode_date("3Jan64")) &&
-($year==1964)&&($mm==1)&&($dd==3))
-{print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if ((($year,$mm,$dd) = decode_date("3ja64")) &&
-($year==1964)&&($mm==1)&&($dd==3))
-{print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if ((($year,$mm,$dd) = decode_date("030164")) &&
-($year==1964)&&($mm==1)&&($dd==3))
-{print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if ((($year,$mm,$dd) = decode_date("3164")) &&
-($year==1964)&&($mm==1)&&($dd==3))
-{print "ok $n\n";} else {print "not ok $n\n";}
-$n++;
-if ((($year,$mm,$dd) = decode_date("28.2.1995")) &&
+
+if ((($year,$mm,$dd) = Decode_Date_EU("28.2.1995")) &&
 ($year==1995)&&($mm==2)&&($dd==28))
 {print "ok $n\n";} else {print "not ok $n\n";}
 $n++;
-unless (($year,$mm,$dd) = decode_date("29.2.1995"))
+unless (($year,$mm,$dd) = Decode_Date_EU("29.2.1995"))
 {print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+
+if ((($year,$mm,$dd) = Decode_Date_US("1 3 64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("01/03/64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("Jan 3 '64")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("Jan 3 1964")) &&
+($year==1964)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("===> January 3rd 1964 (birthday)")) &&
+($year==1964)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("Jan31964")) &&
+($year==1964)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("Jan364")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("ja364")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+if ((($year,$mm,$dd) = Decode_Date_US("1364")) &&
+($year==2064)&&($mm==1)&&($dd==3))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+
+if ((($year,$mm,$dd) = Decode_Date_US("2.28.1995")) &&
+($year==1995)&&($mm==2)&&($dd==28))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
+unless (($year,$mm,$dd) = Decode_Date_US("2.29.1995"))
+{print "ok $n\n";} else {print "not ok $n\n";}
+$n++;
 
 __END__
 

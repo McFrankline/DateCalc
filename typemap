@@ -1,28 +1,20 @@
-################################################################
-#
-#  Typemap for module "Date::DateCalc" version 3.2
-#
-#  Copyright (c) 1995, 1996, 1997 by Steffen Beyer. All rights reserved.
-#  This package is free software; you can redistribute it and/or modify
-#  it under the same terms as Perl itself.
-#
-#  Last modified 15-Jun-1997
-#
-################################################################
+
+###############################################################################
+##                                                                           ##
+##    Typemap for module "Date::Calc" version 4.3.                           ##
+##                                                                           ##
+##    Copyright (c) 1995 - 2000 by Steffen Beyer.                            ##
+##    All rights reserved.                                                   ##
+##                                                                           ##
+##    This package is free software; you can redistribute it                 ##
+##    and/or modify it under the same terms as Perl itself.                  ##
+##                                                                           ##
+###############################################################################
 
 TYPEMAP
 
 boolean	T_IV
-
-N_char	T_U_CHAR
-N_int	T_IV
-N_long	T_IV
-N_short	T_IV
-
-Z_char	T_CHAR
 Z_int	T_IV
 Z_long	T_IV
-Z_short	T_IV
-
-baseptr	T_PV
+charptr	T_PV
 

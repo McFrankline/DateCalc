@@ -1,13 +1,30 @@
+
+###############################################################################
+##                                                                           ##
+##    Copyright (c) 1995 - 2000 by Steffen Beyer.                            ##
+##    All rights reserved.                                                   ##
+##                                                                           ##
+##    This package is free software; you can redistribute it                 ##
+##    and/or modify it under the same terms as Perl itself.                  ##
+##                                                                           ##
+###############################################################################
+
 use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
+
+use Config;
+
 WriteMakefile(
-    'NAME'		=> 'Date::DateCalc',
-    'VERSION_FROM'	=> 'DateCalc.pm',
-    'DISTNAME'		=> 'DateCalc',
-    'OBJECT'		=> '$(O_FILES)',
-    'LIBS'		=> [''],   # e.g., '-lm'
-    'DEFINE'		=> '',     # e.g., '-DHAVE_SOMETHING'
-    'INC'		=> '',     # e.g., '-I/opt/pkg/perl5.003/dist'
-    'dist'		=> { COMPRESS=>"gzip -9", SUFFIX=>"gz" }
+    'NAME'              => 'Date::Calc',
+    'VERSION_FROM'      => 'Calc.pm',
+    'OBJECT'            => '$(O_FILES)',
+    'LIBS'              => [''],   # e.g., '-lm'
+    'DEFINE'            => '',     # e.g., '-DHAVE_SOMETHING'
+    'INC'               => '',     # e.g., '-I/usr/include/other'
+#   ($] >= 5.005 ?
+#       ('ABSTRACT'     => 'Gregorian calendar date calculations',
+#        'AUTHOR'       => 'Steffen Beyer (sb@engelschall.com)') : ()),
+#   ($] >= 5.005 && $ eq 'MSWin32' && $Config{archname} =~ /-object\b/i ?
+#       ('CAPI'         => 'TRUE') : ()),
+    'dist'              => { COMPRESS => "gzip -9", SUFFIX => "gz" }
 );
+

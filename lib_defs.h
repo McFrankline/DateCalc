@@ -80,8 +80,6 @@ typedef             union       /********************************/
 
 typedef enum { false = FALSE , true = TRUE } boolean;
 
-#define mod         %       /* arithmetic operators */
-
 #define and         &&      /* logical (boolean) operators: lower case */
 #define or          ||
 #define not         !
@@ -94,6 +92,8 @@ typedef enum { false = FALSE , true = TRUE } boolean;
 #define SHR         >>
 
 #ifdef EXTENDED_LIB_DEFINITIONS
+
+#define mod         %       /* arithmetic operators */
 
 #define BELL        '\a'    /* bell             0x07 */
 #define BEL         '\a'    /* bell             0x07 */
@@ -131,7 +131,7 @@ typedef enum { false = FALSE , true = TRUE } boolean;
 /**************************************/
 /* CREATED      01.11.93              */
 /**************************************/
-/* MODIFIED     22.11.95              */
+/* MODIFIED     22.11.96              */
 /**************************************/
 /* COPYRIGHT    Steffen Beyer         */
 /**************************************/

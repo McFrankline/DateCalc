@@ -19,7 +19,7 @@ require DynaLoader;
 # "Version" is available but not exported!
 # Call with "Date::DateCalc::Version()"!
 
-$VERSION = '2.2';
+$VERSION = '2.3';
 
 bootstrap Date::DateCalc $VERSION;
 
@@ -747,7 +747,7 @@ perl(1), perlsub(1), perlmod(1), perlxs(1), perlxstut(1), perlguts(1).
 
 =head1 VERSION
 
-This man page documents Date::DateCalc, version 2.2.
+This man page documents Date::DateCalc, version 2.3.
 
 =head1 AUTHOR
 

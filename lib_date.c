@@ -52,6 +52,8 @@ N_int   weeks_in_year(N_int year);
 N_int   decode_day(byteptr buffer, N_int len);
 N_int   decode_month(byteptr buffer, N_int len);
 boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd);
+
+void    annihilate(byteptr buffer);
 */
 /**************************************/
 /* RESOURCES                          */
@@ -83,8 +85,8 @@ blockdef(rsrc_date_003,64) = "<no date>"; /* verbose form */
 /* IMPLEMENTATION                     */
 /**************************************/
 
-#define     YEAR0       70              /* year of reference */
-#define     CENT0       1900            /* century of reference */
+#define     YEAR0       70              /* year of reference (epoch) */
+#define     CENT0       1900            /* century of reference (epoch) */
 
 static  N_int   days_in_months[2][14] =
     {
@@ -644,12 +646,18 @@ boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd)
     }
     return(check_date(*year,*mm,*dd));
 }
+/****************************************************************************/
+
+void annihilate(byteptr buffer)
+{
+    free((char *) buffer);
+}
 /**************************************/
 /* PROGRAMMER   Steffen Beyer         */
 /**************************************/
 /* CREATED      01.11.93              */
 /**************************************/
-/* MODIFIED     27.05.96              */
+/* MODIFIED     22.11.96              */
 /**************************************/
 /* COPYRIGHT    Steffen Beyer         */
 /**************************************/

@@ -53,6 +53,8 @@ N_int   decode_day(byteptr buffer, N_int len);
 N_int   decode_month(byteptr buffer, N_int len);
 boolean decode_date(byteptr buffer, N_int *year, N_int *mm, N_int *dd);
 
+void    annihilate(byteptr buffer);
+
 /**************************************/
 /* RESOURCES                          */
 /**************************************/
@@ -94,7 +96,7 @@ extern blockdef(rsrc_date_003,64); /* = "<no date>"; verbose form */
 /**************************************/
 /* CREATED      01.11.93              */
 /**************************************/
-/* MODIFIED     26.05.96              */
+/* MODIFIED     22.11.96              */
 /**************************************/
 /* COPYRIGHT    Steffen Beyer         */
 /**************************************/

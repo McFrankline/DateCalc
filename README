@@ -1,5 +1,5 @@
 =======================================
-  Module "Date::DateCalc" Version 2.2
+  Module "Date::DateCalc" Version 2.3
 =======================================
 
 ------------------------------------------------------------------------------
@@ -25,11 +25,31 @@ What does it do:
 ----------------
 
 The package provides a Perl interface to a C library which offers a wide
-variety of date calculations, complying with the ISO/R 2015-1971 and DIN
-1355 standards which specify things as what leap years are, when they
-occur, how the week numbers are defined, what's the first day of the week,
-how many weeks (52 or 53) a given year has, and so on (Gregorian calendar,
-as opposed to the Julian calendar, which was used until 1582).
+variety of date calculations based on the Gregorian calendar (the one
+used in all western countries today), complying with the ISO/R 2015-1971
+and DIN 1355 standards which specify things as what leap years are, when
+they occur, how the week numbers are defined, what's the first day of the
+week, how many weeks (52 or 53) a given year has, and so on.
+ 
+Although the Gregorian calendar was only adopted 1582 by most (not all)
+European countries (some countries continued to use the Julian calendar
+until as late as the end of the 18th century!), this package allows to
+project the Gregorian calendar back until the year 1 (independently of
+how much sense this makes).
+
+This module is not intended to be the most comfortable approach to every
+date calculation problem there is, but instead it's meant to be a *minimal*
+and *complete* (in the sense of computation theory!) set of tools to solve
+any date calculation problem you might ever encounter.
+
+Therefore, the interfaces of these routines are designed for a maximum of
+flexibility and a minimum of overhead. Just like the UNIX commands "cat",
+"grep" and so on which do very simple tasks but can do many useful jobs
+when combined in a cunning way, the routines in this package are intended
+to be *elementary*, i.e., undivisible basic functions.
+
+Moreover, the module is mainly written in C so that the C part can be used
+as a stand-alone library in other applications than Perl. (!!!)
 
 To give you an idea of what the package can do, here a list of all the
 functions it exports:
@@ -70,13 +90,13 @@ functions it exports:
 For more details, see the Date::DateCalc(3) man page!
 
 
-What's new in version 2.0:
---------------------------
+What are the most important differences between versions 1.x and 2.x:
+---------------------------------------------------------------------
 
 The two functions "day_short_tab" and "month_short_tab" are gone,
 these tables are not needed any longer internally. Substitute them
 with substr(day_name_tab($dd),0,3) and substr(month_name_tab($mm),0,3),
-respectively.
+respectively, if you do need them.
 
 The functions "encode", "decode", "valid_date" and "date_string"
 have been renamed to "compress", "uncompress", "check_compressed"
@@ -100,7 +120,7 @@ Two more functions are new: "date_time_difference" and "calc_new_date_time".
 They allow to calculate differences in dates and new dates which include not
 only year, month and day, but also hour, minute, and second. They are exten-
 sions of the functions "dates_difference" and "calc_new_date" (which they
-also use).
+call themselves).
 
 A utility has been added to the package ("parse_date.pl") which allows
 you to parse dates as returned by the UNIX "date" command. You can also
@@ -109,11 +129,10 @@ mine the time the mail took to arrive, or you can automatically increase
 the priority of problem reports as time passes by, for instance. (This
 latter tool can be obtained by sending me a mail to <sb@sdm.de>.)
 
-The german man-page is gone, it is too much effort to maintain two
-versions of the man-page. Sorry.
+The german man page is gone, it is too much effort to maintain two versions
+of the man page. Sorry.
 
-What's new in version 2.1:
---------------------------
+Since version 2.1:
 
 The man page is no separate file anymore, it is now included in the
 file DateCalc.pm in POD format, where it will automatically be found
@@ -126,7 +145,7 @@ Preliminary steps for use with Perl prior to version 5.002:
 Edit the file "Makefile.PL" in this package and the change the line
     'VERSION_FROM'	=> 'DateCalc.pm',
 to
-    'VERSION'		=> '2.2',
+    'VERSION'		=> '2.3',
 
 Then edit the file "DateCalc.pm" and change the line
     bootstrap Date::DateCalc $VERSION;
@@ -144,7 +163,7 @@ Please unpack and build this package OUTSIDE the Perl source and distribution
 tree!!
 
  1) Change directory to the directory that has been created by unpacking this
-    package ("DateCalc-2.2").
+    package ("DateCalc-2.3").
 
  2) Type "perl Makefile.PL" (or whatever the name and path of your Perl 5
     binary is).
@@ -196,7 +215,7 @@ tree!!
 
     in such a way that it points to your Perl 5 distribution tree, e.g.,
 
-    'INC'       => '-I/usr/ctr/dlt/private/perl/perl5.002',
+    'INC'	=> '-I/usr/ctr/dlt/private/perl/perl5.002',
 
     or the like, and start over with the generation of the Makefile at 2).
 
@@ -364,7 +383,7 @@ right:    if ((*ss < 60) and (*mm < 60) and (*hh < 24) and
 among other minor adjustments in orthography and style, plus
 adaptations to conform with new Perl 5.002 module standards.
 
-Version 2.2 fixes a bug concerning arrays as parameters: enabling
+Version 2.2 fixed a bug concerning arrays as parameters: enabling
 prototypes in DateCalc.xs caused
 
     ($year,$mm,$dd) = first_in_week(week_number($year,$mm,$dd));
@@ -376,7 +395,14 @@ arrays explicitly, element by element:
     @w = week_number($year,$mm,$dd);
     ($year,$mm,$dd) = first_in_week( $w[0], $w[1] );
 
-With version 2.2, this workaround is obsolete.
+Since version 2.2, this workaround is obsolete.
+
+Version 2.3 fixes a problem with unbalanced "malloc" and "free" calls
+which was discovered only with Perl version 5.003: Calling "malloc" in
+the C kernel of my module (compiled without the "perl.h" header file so
+that you can also use it independently from Perl) and "free" in the XSUB
+of my module (where the Perl "free" gets called!) produced a "bad free()
+ignored" warning.
 
 
 Thanks:
@@ -416,18 +442,23 @@ Many thanks to Jonathan Lemon <jlemon@americantv.com> for reporting
 the bug (and how to fix it!) concerning arrays as parameters, fixed
 in version 2.2!
 
+Many thanks to Tim Zingelman <zingelman@fnal.gov> for reporting the problem
+fixed in version 2.3 and for testing an intermediate new version of this
+module on his machine!
+
 
 Final note:
 -----------
 
-Please report any comments, problems, suggestions, findings, complaints,
-questions, insights, compliments or donations ;-) and so on to:
+If you need any assistance or have any comments, problems, suggestions,
+findings, complaints, questions, insights, compliments or donations to give ;-)
+then please don't hesitate to send me a mail:
 
 sb@sdm.de (Steffen Beyer)
 
 With kind regards,
 --
-Steffen Beyer
-mailto:sb@sdm.de        |s  |d &|m  |  software design & management GmbH&Co.KG
-phone: +49 89 63812-244 |   |   |   |  Thomas-Dehler-Str. 27
-fax:   +49 89 63812-150 |   |   |   |  81737 Munich, Germany.
+Steffen Beyer ________________________ C:\ONGRATLN.W95 _______________________
+mailto:sb@sdm.de         |s  |d &|m  | software design & management GmbH&Co.KG
+phone: +49 89 63812-244  |   |   |   | Thomas-Dehler-Str. 27
+fax:   +49 89 63812-150  |   |   |   | 81737 Munich, Germany.

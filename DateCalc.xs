@@ -65,7 +65,7 @@ compressed_to_short(date)
         {
             EXTEND(sp,1);
             PUSHs(sv_2mortal(newSVpv((char *)datestr,0)));
-            free(datestr);
+            annihilate(datestr);
         }
     }
 
@@ -202,7 +202,7 @@ date_to_short(year,mm,dd)
         {
             EXTEND(sp,1);
             PUSHs(sv_2mortal(newSVpv((char *)datestr,0)));
-            free(datestr);
+            annihilate(datestr);
         }
     }
 
@@ -220,7 +220,7 @@ date_to_string(year,mm,dd)
         {
             EXTEND(sp,1);
             PUSHs(sv_2mortal(newSVpv((char *)datestr,0)));
-            free(datestr);
+            annihilate(datestr);
         }
     }
 
@@ -348,7 +348,7 @@ Version()
     PPCODE:
     {
         EXTEND(sp,1);
-        PUSHs(sv_2mortal(newSVpv("2.2",0)));
+        PUSHs(sv_2mortal(newSVpv("2.3",0)));
     }
 
 

@@ -1,7 +1,6 @@
 DateCalc
 ========
 
-Release history of DateCalc
+This is a command-line utility to perform date calculations.
 
-Just forked, haven't started working on it yet. 
-Trying to update to latest version of perl.
+
